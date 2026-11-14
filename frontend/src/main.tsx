@@ -71,7 +71,7 @@ import './release.css';
 const PersonalResearchEntry=lazy(()=>import('./PersonalResearchEntry'));
 const IndustryAutomationRoute=lazy(()=>import('./IndustryAutomation').then(m=>({default:m.IndustryAutomationRoute})));
 function AccountPreferences({children}:{children:ReactNode}){return <AccountScope><PreferenceStartup ready/>{children}</AccountScope>;}
-function Layout(){const me=useQuery({...publicQuery('/api/me',300000),retry:false});return <OnboardingProvider account={String(me.data?.user?.id||'guest')} ready={!me.isPending&&!!me.data?.user}><LayoutContent user={me.data?.user}/></OnboardingProvider>;}
+function Layout(){const me=useQuery({...publicQuery('/api/me',300000),retry:false});return <OnboardingProvider edition="harness" account={String(me.data?.user?.id||'guest')} ready={!me.isPending&&!!me.data?.user}><LayoutContent user={me.data?.user}/></OnboardingProvider>;}
 function LayoutContent({user}:{user:any}){
  const [boardSupport,setBoardSupport]=useState<any>(null);
  const openStock=useOpenStock();
@@ -87,7 +87,7 @@ function LayoutContent({user}:{user:any}){
   <Sidebar brand={<div className="sidebar-brand-row"><Link to="/" className="brand"><img src="/v2/assets/imgGuanlanLogoMarkHdPng.png?v=dd1f792049fc" alt="观澜品牌标识"/><div><strong>观澜 <span className="brand-beta" title="观澜 v1.0.0-beta.1">内测版</span></strong><small>v1.0.0 · A股研究平台</small></div></Link><MarketStatus calendarUrl={location.pathname==='/'?'/api/data/free?view=home':'/api/data/free?view=watch'}/></div>}>
    <nav aria-label="主导航" data-tour="navigation">
     <NavLink to="/" end aria-label="首页"><Home/><SidebarLabel>首页</SidebarLabel></NavLink>
-    <NavLink to="/monitor" aria-label="盯盘" className={isMonitor?'active':''}><Activity/><SidebarLabel>盯盘</SidebarLabel></NavLink>
+    <NavLink to="/monitor" aria-label="盯盘" data-tour="monitor" className={isMonitor?'active':''}><Activity/><SidebarLabel>盯盘</SidebarLabel></NavLink>
     {isMonitor&&<div className="subnav"><NavLink to="/monitor">实时动态</NavLink><NavLink to="/relay">异动接力</NavLink><NavLink to="/auction">竞价盘中</NavLink></div>}
     <NavLink to="/market-observation" aria-label="复盘" data-tour="review" className={isReview?'active':''}><History/><SidebarLabel>复盘</SidebarLabel></NavLink>
     {isReview&&<ReviewNavigation/>}

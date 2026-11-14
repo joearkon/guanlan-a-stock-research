@@ -7,7 +7,7 @@ export default function LocalAIStatus({mobile=false,topbar=false}:{mobile?:boole
  const {account}=usePreferences(),query=useLocalConnection(),value=query.data;
  const kind=account==='guest'?'signed_out':query.error?'unknown':query.isPending?'checking':value?.kind||'unknown',label=account==='guest'?'登录后配置':query.error?'状态未确认':query.isPending?'正在检测':value?.label||'状态未确认',name=names[value?.engine]||'尚未配置';
  const title=[name,label,value?.billingSource,query.error?'本机服务状态读取失败，未自动调用模型。':value?.detail,value?.verifiedAt?'验证时间 '+new Date(value.verifiedAt).toLocaleString('zh-CN',{timeZone:'Asia/Shanghai',hour12:false}):''].filter(Boolean).join(' · ');
- return <NavLink to="/local-ai" className={'local-ai-status'+(mobile?' mobile-local-ai-status':'')+(topbar?' topbar-local-ai-status':'')} aria-label={'本地 AI Agent · '+name+' · '+label+'，打开配置'} title={title} data-connection-state={kind}>
+ return <NavLink to="/local-ai" data-tour="local-ai" className={'local-ai-status'+(mobile?' mobile-local-ai-status':'')+(topbar?' topbar-local-ai-status':'')} aria-label={'本地 AI Agent · '+name+' · '+label+'，打开配置'} title={title} data-connection-state={kind}>
   <span className="local-ai-status-icon"><Cpu size={19}/><i aria-hidden="true"/></span>{topbar?<span className="topbar-local-ai-name">{shortEngineName(value?.engine)}</span>:<span className="local-ai-status-copy"><span className="local-ai-status-heading">本地 AI Agent<span className="local-ai-status-label">{label}</span></span><small>{name}</small></span>}
  </NavLink>;
 }
