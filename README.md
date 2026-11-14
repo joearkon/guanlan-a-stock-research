@@ -11,7 +11,7 @@
 
 本仓库是 **Local Harness 本地版**：界面在自己的电脑运行，市场资料连接观澜共享数据，AI 分析使用自己配置的 Codex、WorkBuddy / CodeBuddy、Claude Code 或 DeepSeek。
 
-[快速开始](#快速开始) · [功能介绍](#功能介绍) · [详细使用指南](docs/USAGE.md) · [在线版（试运营）](https://guanlan-research.kunkun1023.xyz/next/)
+[快速开始](#快速开始) · [功能介绍](#功能介绍) · [详细使用指南](docs/USAGE.md) · [更新日志](CHANGELOG.md) · [版本发布](https://github.com/joearkon/guanlan-a-stock-research/releases) · [在线版（试运营）](https://guanlan-research.kunkun1023.xyz/next/)
 
 ## 快速开始
 
