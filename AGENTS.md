@@ -2,6 +2,8 @@
 
 用户授权在 D:/AI/Project 下建立独立本地项目，云端 SaaS 不因本项目自动变更。
 
+2026-11-14用户明确授权将`joearkon/guanlan-a-stock-research`设为公开，并确认个人自用（含自己的投资研究）、学习和修改免费，机构业务及对外商用需书面授权；自有部分以根LICENSE为准，第三方保留原许可。对外称“源码开放、商用需授权”，不得冒称OSI标准开源。公开前仍须核对历史敏感资料与发行范围，公开不代表部署SaaS或授予数据/API再分发权。
+
 - 界面基线必须是已核验的 Cloudflare 正式流量版本，不以未上线候选或旧仓库代替。见 baseline/production.json。
 - 保留观澜导航、表格、抽屉、明暗主题、手机交互和缺数据语义；不得以占位界面冒充功能等价。
 - 本地模型支持 Codex、WorkBuddy/CodeBuddy、Claude Code 与 DeepSeek 官方 API。由用户本人完成官方 CLI 登录；不复制认证文件，不接受从网页传入任意命令。DeepSeek Key 只在本机表单提供并使用 Windows CurrentUser DPAPI 加密，接口不回显；其他系统没有明文回退。

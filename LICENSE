@@ -1,0 +1,85 @@
+Guanlan Personal Use and Commercial Authorization License 1.0
+观澜个人使用与商业授权许可证 1.0
+
+Copyright (c) 2026 joearkon
+
+本项目采用源码开放（source-available）许可，不属于 OSI 定义的开源许可。
+在使用、复制、修改或分发本许可覆盖的软件之前，请阅读以下条件。
+
+一、适用范围
+
+本许可仅适用于项目维护者有权许可、且没有另行标明许可条件的自有代码与文档。
+第三方代码、依赖、数据、品牌及其他素材遵循其原有许可或权利声明；本许可不
+限制第三方原许可已经授予的权利。详见 NOTICE.md 和 THIRD_PARTY_NOTICES.md。
+
+二、免费的个人使用
+
+在遵守本许可的前提下，自然人可免费为自己进行学习、实验、测试、个人兴趣、
+个人投资研究，使用、复制和修改本软件。个人投资研究包括研究自己资金的投资，
+不因个人投资可能产生收益而单独要求商业授权。
+
+前述许可不包括为雇主、机构、客户或第三方履行业务，也不包括代客研究、
+代客投资、收费咨询或商业经营。个人或个体经营者以业务身份使用不属于上述
+免费的个人使用。
+
+三、非商业分享与修改
+
+允许非商业地分享本软件或基于本软件的修改版本，但须同时保留本许可、版权
+及第三方声明，明确标注重要修改，不得把本许可覆盖部分改为允许未经授权的
+商业使用，不得使接收者误以为修改版本是观澜官方服务。
+
+本条不授予原本未获授权的机构业务使用或商业经营权利。用于个人学习、代码
+审阅和评估的浏览或复制，不等于获得将本软件投入机构业务的许可。
+
+四、商业使用须另行授权
+
+以下用途须先联系项目维护者，并取得明确的书面商业授权：
+
+1. 企业、基金、投研机构或其他组织将本软件用于内部业务、经营、投研或客户
+   工作，不论是否直接对外收费；
+2. 销售、转售、付费分发本软件或基于其自有代码的衍生产品；
+3. 将本软件用于对外提供商业网站、托管服务、SaaS、API、收费研究或咨询；
+4. 将本软件作为商业产品、交付项目或其他商业服务的一部分使用；
+5. 其他超出第二、三条免费许可范围的商业经营用途。
+
+商业联系入口：
+https://github.com/joearkon/guanlan-a-stock-research/issues
+请以“商业授权 / Commercial License”为题说明拟使用方式；涉及保密信息时，
+先请求私下沟通渠道，不要在公开 issue 中提供密钥、客户资料或商业秘密。
+提出请求、等待回复或获得代码访问权限，不代表已获得商业授权。
+
+五、独立的服务与第三方权利
+
+本许可不附带观澜在线服务的账号权限、数据服务承诺、AI额度或技术支持，不
+授予绕过认证、配额或其他访问控制的权利。市场资料及第三方服务的使用和
+再分发仍须遵守各自条款。
+
+不因获得代码许可而取得“观澜”品牌的所有权、冒充官方服务的权利，或其他
+未明确授予的商标、专利或第三方权利。依法允许的说明性引用不受影响。
+
+六、免责声明
+
+在适用法律允许的范围内，本软件按现状提供，不承诺准确、及时、完整、适合
+特定目的或持续可用，不构成投资建议，不承诺收益。使用者须独立核验数据与
+模型输出，并自行决定是否及如何使用；软件不提供自动下单授权。
+在适用法律允许的范围内，权利人不对因使用本软件产生的损失承担责任。
+
+七、终止与其他
+
+超出免费许可范围而没有书面商业授权，或不遵守本许可条件的，不再享有本
+许可授予的使用权，应停止相应使用；适用法律和已单独签署的协议另有规定的，
+依相应规定或协议处理。没有明确授予的权利由相应权利人保留。
+
+本许可不要求贡献者转让版权。外部贡献如需纳入维护者的商业授权范围，应
+另行确认相应授权，不能仅因提交代码即推定维护者取得全部再许可权。
+
+中文条款为本许可的正式文本。下述英文仅为摘要，不替代上述条款。
+
+English summary (non-binding): Source-available. Free personal use, including
+research concerning the individual's own investments, is permitted. Institutional
+business use, resale, and commercial products or services require a separate
+written license. Preserve notices when sharing noncommercial modifications.
+Third-party materials retain their original licenses and rights. No warranty,
+investment advice, platform subscription, market-data redistribution rights,
+or AI allowance is included. Contact the maintainer through the repository's
+commercial-license issue channel.

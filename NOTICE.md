@@ -1,6 +1,6 @@
 # 第三方与发布边界
 
-本项目当前私有、未公开，未为自有/原 SaaS 全量代码擅自选定开源许可证。
+用户于2026-11-14授权公开本地Harness仓库，自有且有权许可的部分采用[观澜个人使用与商业授权许可证](LICENSE)：个人自用（含自己的投资研究）、学习和修改免费；机构业务、售卖与商业服务须另行授权。这是source-available源码开放许可，不是OSI标准开源许可，也不是对线上SaaS后端或运营配置的授权发布。
 
 ## Vibe-Research
 
@@ -12,9 +12,9 @@
 
 ## 前端依赖
 
-React、Vite、Radix、TanStack、图表、图标、OCR 与其他依赖保持原包各自许可证。Tesseract 的许可证随本地 OCR 资源一起准备在 `frontend/public/ocr/`，其他已有声明在 `frontend/public/licenses/`。完整依赖以锁文件为准，发行前仍需做完整 SBOM / 许可证核对。
+React、Vite、Radix、TanStack、图表、图标、OCR 与其他依赖保持原包各自许可证。Tesseract 的许可证随本地 OCR 资源一起准备在 `frontend/public/ocr/`，其他已有声明在 `frontend/public/licenses/`。完整依赖以锁文件为准，本次源码公开的锁定许可清单见[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)及其机器可读附件；这不是发布已编译二进制或依赖包的许可审计证明。
 
-本机原生答案使用 `react-markdown` 10.1.0 与 `remark-gfm` 4.0.1（两者均 MIT）展示 Markdown 表格、链接、列表与代码块。默认不执行模型 HTML，外部图片改为显式链接，不自动加载。依赖包各自 LICENSE 随 npm 安装保留；公开发行仍须汇总全部传递依赖许可。
+本机原生答案使用 `react-markdown` 10.1.0 与 `remark-gfm` 4.0.1（两者均 MIT）展示 Markdown 表格、链接、列表与代码块。默认不执行模型 HTML，外部图片改为显式链接，不自动加载。依赖包各自 LICENSE 随 npm 安装保留；将来若另行发布编译包或捆绑依赖，应重新核对其完整许可与再分发义务。
 
 ## 禁止进入公开发行包
 

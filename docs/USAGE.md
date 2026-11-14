@@ -4,7 +4,7 @@
 
 ## 安装与启动
 
-当前实测环境为 Windows / Node.js 24.15.0；需要 Node.js 24+、npm、Git、私有仓库访问权限和观澜账号。
+当前实测环境为 Windows / Node.js 24.15.0；需要 Node.js 24+、npm、Git和观澜账号。个人自用免费，机构业务与商业服务使用前请先取得[商业授权](../COMMERCIAL.md)。
 
 ```powershell
 git clone https://github.com/joearkon/guanlan-a-stock-research.git
@@ -124,4 +124,4 @@ docs/       使用指南与配图
 
 UI起始基线为已核验的SaaS `2026.11.13.7`，本地独立迭代，不自动随SaaS发布替换代码。见[溯源](../baseline/production.json)。
 
-仓库目前私有，自有代码公开范围和许可证待确认，第三方依赖保留各自许可，见[NOTICE](../NOTICE.md)。配图是公开历史资料或隔离演示，不含真实私人研究，不是全部功能已验收的证明。
+项目采用[个人使用与商业授权许可证](../LICENSE)：个人自用（含自己的投资研究）、学习和修改免费，机构业务及对外商用需授权。属于源码开放，不是OSI标准开源许可；第三方依赖保留各自许可，见[第三方清单](../THIRD_PARTY_NOTICES.md)与[NOTICE](../NOTICE.md)。配图是公开历史资料或隔离演示，不含真实私人研究，不是全部功能已验收的证明。
