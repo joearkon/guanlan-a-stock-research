@@ -1,0 +1,7 @@
+import {useState} from 'react';
+import {number} from './api';
+export default function FundsRelativeStrength({data,onPick,pageLimit,onMore}:{data:any;onPick:(row:any)=>void;pageLimit?:number;onMore?:()=>void}){
+ const [localLimit,setLimit]=useState(10),limit=pageLimit||localLimit,r=data?.relativeStrength;
+ const valid=r?.period==='today'&&r?.unit==='%';
+ return <section aria-label="今日相对强度"><h2>今日主力净占比</h2><p className="provenance">只使用来源原生今日主力净占比；不从净额除以未知成交额估算，不随3日或5日榜改变口径。</p>{valid?<><div className="funds-radar-ranks">{(['inflow','outflow'] as const).map(side=>{const rows=(Array.isArray(r[side])?r[side]:[]).filter((x:any)=>x.rankEligible!==false&&typeof x.netRatio==='number'&&Number.isFinite(x.netRatio));return <section key={side}><h3>{side==='inflow'?'正净占比':'负净占比'}<small>今日 · %</small></h3><table><thead><tr><th>板块</th><th>主力净占比</th></tr></thead><tbody>{rows.slice(0,limit).map((x:any)=><tr key={x.code}><td><button className="funds-radar-board" onClick={()=>onPick(x)}>{x.name}</button></td><td className={x.netRatio>0?'up':'down'}>{x.netRatio>0?'+':''}{number(x.netRatio)}%</td></tr>)}</tbody></table>{!rows.length&&<p className="empty">本批没有可核验的{side==='inflow'?'正':'负'}净占比记录；缺值不填0。</p>}{(data?.page?.totals?.["relativeStrength."+side]??rows.length)>limit&&<button className="outline-button" onClick={()=>onMore?onMore():setLimit(n=>n+10)}>再显示10个</button>}</section>;})}</div><p className="provenance">{r.basis}</p></>:<p className="empty">当前共享快照尚未提供可核验的今日净占比，不从绝对净额推算。</p>}</section>;
+}

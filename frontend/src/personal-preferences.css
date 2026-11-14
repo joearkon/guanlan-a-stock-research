@@ -1,0 +1,8 @@
+:root[data-ui-motion=reduced]{--motion-fast:0ms;--motion-ui:0ms;--motion-panel:0ms}
+:root[data-ui-motion=reduced] :where(.primary,.outline-button,.quiet-button,.icon-button):active{transform:none!important}
+:root[data-ui-motion=reduced] :is(.quote-flash-up,.quote-flash-down){background:transparent}
+:root[data-ui-motion=reduced] :is(.spin,.skeleton *){animation:none!important}
+:root[data-density=compact] .portfolio-quotes tbody tr,:root[data-density=compact] .portfolio-quotes td{height:44px}
+:root[data-density=compact] .portfolio-quotes :is(th,td){padding-top:2px;padding-bottom:2px}
+:root[data-density=compact] .widget{padding:12px}
+:root[data-density=compact] .home-compact-quotes td{padding-top:4px;padding-bottom:4px}

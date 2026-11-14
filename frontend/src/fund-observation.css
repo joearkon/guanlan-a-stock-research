@@ -1,0 +1,34 @@
+.screener-view-switch{margin-bottom:16px;overflow-x:auto;max-width:100%}
+.fund-sort{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.fund-sort select{max-width:160px}
+.fund-table{min-width:1060px}
+.fund-table td{vertical-align:top}
+.fund-table td:nth-child(4){min-width:130px}
+.fund-table .fund-sort-heading{display:flex;align-items:center;justify-content:flex-end;gap:6px;width:100%;min-height:32px;padding:0;border:0;background:transparent;color:inherit;font:inherit;white-space:nowrap;cursor:pointer}
+.fund-table .fund-sort-heading:hover{color:var(--text)}
+.fund-table .fund-sort-heading:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:3px}
+.fund-table .fund-sort-heading:disabled{cursor:wait}
+.fund-table th:nth-child(2) .fund-sort-heading{justify-content:flex-start}
+.fund-table th[aria-sort=ascending] .fund-sort-heading,.fund-table th[aria-sort=descending] .fund-sort-heading{color:var(--accent)}
+.fund-heading-meta{display:flex;justify-content:flex-end;align-items:center;gap:6px;font-size:12px;line-height:20px}
+.fund-heading-meta small{font-size:12px}
+.fund-table th:nth-child(2) .fund-heading-meta{justify-content:flex-start}
+.fund-scope-badge{padding:0 5px;border:1px solid var(--line);border-radius:4px;font-size:12px;line-height:18px;color:var(--muted)}
+.fund-scope-note{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 16px;margin:0 0 12px;font-size:12px;color:var(--muted)}
+.fund-scope-note>p{margin:0;line-height:20px}
+.fund-scope-note details{max-width:100%}
+.fund-scope-note summary{display:flex;align-items:center;gap:5px;min-height:32px;cursor:pointer;color:var(--accent);width:fit-content}
+.fund-scope-note details[open]{flex-basis:100%}
+.fund-scope-note details>div{max-width:80ch;line-height:1.7;padding:0 0 4px}
+.fund-scope-note details p{margin:4px 0}
+@media(max-width:767px){.fund-scope-note summary{min-height:44px}}
+.fund-row-status{display:block;max-width:190px;margin-bottom:6px;white-space:normal;font-size:12px;color:var(--muted)}
+.fund-evidence-section{margin-top:20px}
+.fund-evidence-section h3{font-size:15px;margin-bottom:12px}
+.fund-evidence-day{border:1px solid var(--line);border-radius:8px;padding:12px;margin:12px 0;overflow-wrap:anywhere}
+.fund-evidence-day h4{margin:0 0 8px;font-size:14px}
+.fund-evidence-day p{line-height:1.7}
+.fund-evidence-day a{display:inline-block;color:var(--accent);margin:6px 12px 0 0;text-decoration:underline}
+.fund-evidence-seat{display:grid;gap:4px;padding:10px 0;border-top:1px solid var(--line);font-size:13px}
+.fund-evidence-seat small{color:var(--muted);line-height:1.6}
+@media(max-width:767px){.screener-view-switch .segmented{width:max-content}.screener-view-switch button,.fund-observation button,.fund-observation select,.fund-observation input{min-height:44px}.fund-sort{font-size:12px}.fund-sort select{max-width:130px}.fund-observation .screener-heading{align-items:flex-start}.fund-observation .screener-heading>button{font-size:12px}.fund-evidence-day{padding:10px}}

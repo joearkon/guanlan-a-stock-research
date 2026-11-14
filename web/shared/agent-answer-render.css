@@ -1,0 +1,14 @@
+/* Natural answer display: segment + safe Markdown, never rewrite source meaning. */
+.agent-answer-text{overflow-wrap:anywhere;color:var(--text,var(--ink,#c2cbd4));font-size:13px;line-height:1.75}
+.agent-answer-text .agent-answer-seg{margin:0 0 12px;white-space:pre-wrap}
+.agent-answer-text .agent-answer-seg:last-of-type{margin-bottom:8px}
+.agent-answer-text .agent-answer-h{margin:16px 0 8px;font-size:14px;font-weight:600;color:var(--text,var(--ink,#e5ebf1));line-height:1.5}
+.agent-answer-text .agent-answer-h:first-child{margin-top:0}
+.agent-answer-text .agent-answer-list{margin:0 0 12px;padding-left:1.4em}
+.agent-answer-text .agent-answer-list li{margin:4px 0}
+.agent-answer-text strong{font-weight:700;color:var(--text,var(--ink,#e5ebf1))}
+.agent-answer-text em{font-style:italic}
+.agent-answer-text code{font-family:var(--f-mono,ui-monospace,Consolas,monospace);font-size:12px;padding:1px 5px;border-radius:4px;background:var(--surface-2,var(--sidebar,#181E21))}
+.agent-answer-text .agent-answer-full{margin-top:10px;font-size:12px;color:var(--muted,#778997)}
+.agent-answer-text .agent-answer-full summary{cursor:pointer;color:var(--muted,#778997);list-style-position:inside}
+.agent-answer-text .agent-answer-full-pre{margin:8px 0 0;padding:10px 12px;border:1px solid var(--line,var(--border,#2a3338));border-radius:6px;background:var(--surface-2,var(--sidebar,#181E21));white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;color:var(--muted,#778997);max-height:240px;overflow:auto}

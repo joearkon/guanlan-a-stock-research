@@ -1,0 +1,15 @@
+.stock-list-table{min-width:0;max-width:100%;font-variant-numeric:tabular-nums}
+.stock-list-table .data-table th:first-child,.stock-list-table .data-table th:last-child{width:auto}
+.stock-list-table .data-table :is(th,td){padding:8px 10px;line-height:20px;vertical-align:middle}
+.stock-list-table .data-table :is(th,td):nth-child(-n+3){white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stock-list-table .data-table :is(th,td):nth-child(2),.stock-list-table .data-table :is(th,td):nth-child(3){text-align:right}
+.stock-list-table .stock-link{max-width:100%;text-align:left;overflow:hidden;text-overflow:ellipsis}
+.stock-list-table .stock-link small{display:block;margin:0;color:var(--muted);font-size:12px;line-height:20px}
+.stock-list-table .data-table td:nth-child(3) small{white-space:normal;overflow-wrap:break-word}
+.stock-list-table .virtual-table-row>[role=cell]:nth-child(2){justify-content:flex-end}
+.stock-list-table .virtual-table-head>[role=columnheader]:nth-child(2){text-align:right}
+.stock-list-table .support-role{min-width:0!important;max-width:none!important;white-space:normal}
+.stock-list-table .stock-list-structure{display:block;font-size:12px;line-height:20px;color:var(--accent)}
+html[data-navigation-layout=mobile] .stock-list-table .data-table :is(th,td){padding:6px;line-height:20px}
+html[data-navigation-layout=mobile] .stock-list-table :is(.virtual-table-head,.virtual-table-row)>div{padding:6px}
+html[data-navigation-layout=mobile] .concept-members{padding-left:8px;padding-right:8px}

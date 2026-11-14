@@ -1,0 +1,14 @@
+/* Foreground and background travel together; generic body color is unsafe
+   on a heat tile. Theme changes do not alter values or ranking. */
+:root{--heat-positive-bg:#733138;--heat-negative-bg:#24523d;--heat-neutral-bg:#26323c;--heat-name:#f8fafc;--heat-positive-text:#ffe4e6;--heat-negative-text:#dcfce7;--heat-neutral-text:#e2e8f0}
+:root[data-theme=light]{--heat-positive-bg:#fff1f2;--heat-negative-bg:#ecfdf5;--heat-neutral-bg:#f1f5f9;--heat-name:#334155;--heat-positive-text:#9f1239;--heat-negative-text:#166534;--heat-neutral-text:#475569}
+.sector-heat article{color:var(--heat-name);border:1px solid var(--line)}
+.sector-heat article.heat-up{background:var(--heat-positive-bg)}
+.sector-heat article.heat-down{background:var(--heat-negative-bg)}
+.sector-heat article:is(.heat-flat,.heat-empty){background:var(--heat-neutral-bg)}
+.sector-heat article>span,.home-heat>button>span{color:var(--heat-name)}
+.sector-heat article.heat-up>strong,.home-heat>button.heat-up>strong{color:var(--heat-positive-text)}
+.sector-heat article.heat-down>strong,.home-heat>button.heat-down>strong{color:var(--heat-negative-text)}
+.sector-heat article:is(.heat-flat,.heat-empty)>strong,.home-heat>button:is(.heat-flat,.heat-empty)>strong{color:var(--heat-neutral-text)}
+.home-heat>button{background:var(--heat-bg,var(--heat-neutral-bg));color:var(--heat-name)}
+:root[data-theme=light] .home-heat>button{background:var(--heat-neutral-bg);background:color-mix(in srgb,var(--heat-bg,var(--heat-neutral-bg)) 12%,var(--surface))}

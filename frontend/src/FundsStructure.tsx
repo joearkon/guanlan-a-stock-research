@@ -1,0 +1,32 @@
+import {useState} from 'react';
+import {Segmented} from './components';
+import {number} from './api';
+import StockLink from './StockLink';
+import './funds-structure.css';
+const windows=[['today','今日'],['d3','近3日'],['d5','近5日'],['d10','近10日']];
+const value=(n:any,d=2)=>typeof n==='number'&&Number.isFinite(n)?number(n,d):'—';
+const evidenceTime=(v:any)=>{const d=typeof v==='number'?new Date(v):new Date(v||'');return Number.isFinite(d.getTime())?d.toLocaleString('sv-SE',{timeZone:'Asia/Shanghai'}):'未提供';};
+export function FundsMemberStatus({data}:{data:any}){return (data?.stockCacheStatus||data?.cacheStatus)==='stale'?<p role="status" className="funds-audit-warning">成员资金晚批刷新失败，保留原采样数据。成员采样（北京）{evidenceTime(data.stockFetchedAt??data.fetchedAt)}；板块刷新时间不代表成员数据已更新。</p>:null;}
+const statuses:Record<string,string>={insufficient_history:'尚不足两个有效交易日，连续天数待积累。',identical_snapshot:'两份快照完全一致，按重复数据处理，不判作市场没有变化。',calendar_missing:'交易日历未取得，不能确认连续在榜。',invalid:'台账参数未通过校验。',scope_changed:'方向排除口径版本已变化，不能跨版本计算连续在榜。'};
+const providers:Record<string,string>={eastmoney:'东方财富','tushare-dc':'TuShare · 东财',sina:'新浪'};
+function LedgerRows({data:l,code,historical=false}:{data:any;code?:string;historical?:boolean}){
+ const s=code?l.streaks?.[code]:null;
+ return <><p className="provenance">比较 {l.dates?.[1]} → {l.dates?.[0]}{s&&<> · {historical?'历史截止日':'截至数据日'}连续{s.lowerBound?'至少':''}{s.days}日在榜</>}</p>{(['entered','left','moved'] as const).map((key,i)=>{const rows=(l[key]||[]).filter(r=>!code||r.code===code).slice(0,10);return <div key={key}><h4>{['新进榜','掉出榜','名次变动≥5位'][i]}</h4>{rows.length?<ul>{rows.map(r=><li key={r.code}><strong>{r.name||r.code}</strong><span>{key==='left'?r.rank:r.oldRank??'未在旧目录'} → {key==='left'?r.newRank??'未在新目录':r.rank}</span></li>)}</ul>:<p className="provenance">此项没有已核验记录。</p>}</div>;})}</>;
+}
+export function FundsLedger({ledger,code}:{ledger:any;code?:string}){
+ const l=ledger,retained=l?.retained;
+ return <section className="funds-ledger"><h3>近5日榜台账</h3><p className="provenance">同来源、同分类，默认前{l?.top||60}名；读取发布时冻结的全量排名，不从当前数据补造历史。这里只表示排名变化，不表示真实资金转移。</p>
+ {!l?<p className="empty">台账资料未返回，请重试资金流；不能据此判断历史为空。</p>:<>{l.status!=='ok'?<div className="funds-ledger-state" role="status"><strong>当前台账暂不可连续比较</strong><p>{l.availability?.reason||statuses[l.status]||'台账暂不可核验。'}</p>{l.availability?.missingDate&&<p className="provenance">待核验日期 {l.availability.missingDate}</p>}{l.archive?.known===false?<p className="provenance">历史保存数量尚未返回，不按0日处理。</p>:l.archive?<p className="provenance">已保存 {l.archive.days} 个有效交易日{l.archive.lastDate?' · 最近 '+l.archive.lastDate:''}{l.archive.provider?' · '+(providers[l.archive.provider]||l.archive.provider):''}；保存日数不等于截至今天连续在榜。</p>:typeof l.days==='number'&&<p className="provenance">当前连续可用记录 {l.days} 日；不代表全部历史保存数量。</p>}</div>:<LedgerRows data={l} code={code}/>}
+ {retained&&<div className="funds-ledger-retained"><h4>最后有效台账</h4><p>历史截止 {retained.asof} · {providers[retained.provider]||retained.provider}</p><p className="provenance">尚不能确认 {l.requestedDate} 连续在榜；以下只展示当时冻结记录，不混入当前来源数据。</p>{retained.status==='ok'?<LedgerRows data={retained} code={code} historical/>:<p className="provenance">{retained.status==='insufficient_history'?`该历史截止日仅有 ${retained.days} 个连续有效记录，尚不足比较；已有记录保留，不补造新进榜或掉出榜。`:statuses[retained.status]||'该历史台账暂不可比较，原冻结记录已保留。'}</p>}</div>}</>}
+ </section>;
+}
+export default function FundsStructure({row,ledger}:{row:any;ledger:any}){
+ const [view,setView]=useState('tiers'),c=row?.concentration,t=row?.components;
+ return <div className="funds-structure"><FundsMemberStatus data={c}/><Segmented label="资金结构详情" value={view} options={[["tiers","四档拆解"],["concentration","集中度"],["ledger","连续在榜"]]} onChange={setView}/>
+ {view==='tiers'&&<section><h3>四档净额 <small>亿元</small></h3><p className="provenance">超大单≥100万；大单20–100万；中单4–20万；小单&lt;4万。主力＝超大单＋大单，不代表机构身份。</p>{typeof row?.amount==='number'&&Number.isFinite(row.amount)&&<p className="provenance">成交额{value(row.amount)}亿 · {row.amountSource||'来源尚未提供'}；仅用于四档体量门槛，不作为资金流入。</p>}<div className="funds-tier-scroll"><table><thead><tr><th>窗口</th><th>超大单</th><th>大单</th><th>中单</th><th>小单</th></tr></thead><tbody>{windows.map(([key,label])=>{const w=t?.windows?.[key];return <tr key={key}><th>{label}</th>{['xl','lg','md','sm'].map(k=><td key={k}>{value(w?.[k])}</td>)}</tr>;})}</tbody></table></div>
+ <p>{t?.eligible===true?'满足成交额≥10亿、今日主力净额绝对值≥1亿的体量门槛。':t?.eligible===false?'未达到四档筛选体量门槛，仅展示来源原值，不作主导构成筛选。':'成交额或主力净额未取得，体量门槛未核验，不作主导构成筛选。'}</p>
+ {windows.map(([key,label])=>{const w=t?.windows?.[key];return <p className="provenance" key={key}>{label}：{w?.mainStatus&&<span>主力子和：{w.mainStatus==='ok'?'匹配':w.mainStatus==='inconsistent'?'不一致':'未取得'}；</span>}{w?.zeroSumStatus&&<span className={w.zeroSumStatus==='inconsistent'?'funds-audit-warning':undefined}>四档零和：{w.zeroSumStatus==='ok'?'匹配':w.zeroSumStatus==='inconsistent'?'不一致':'未取得'}；</span>}{!w||w.status==='missing'?'四档字段未完整取得':w.mainStatus==='inconsistent'?'主力子和不匹配，不解释占比':w.opposing?'超大单与大单方向相反（↔ 对冲），不计算占比':w.share!=null&&(w.mainStatus==='ok'||w.status==='ok')?'同向两档中超大单占比 '+w.share+'%':w.status==='inconsistent'?'存在勾稽异常；占比条件未齐':'两档同向占比不适用'}{w?.mainResidual!=null&&<>；主力子和残差 {value(w.mainResidual,8)} 亿</>}{w?.residual!=null&&<>；四档合计残差 {value(w.residual,8)} 亿</>}</p>;})}</section>}
+ {view==='concentration'&&<section><h3>板块内部集中度</h3><p className="provenance">分母为所有正净流入成员的合计，不是板块净额，也不按涨幅挑样本。</p>{c?.status==='ok'?<><dl className="funds-concentration-grid"><div><dt>第一名占比</dt><dd>{value(c.top1Share,1)}%</dd></div><div><dt>前三名占比</dt><dd>{value(c.top3Share,1)}%</dd></div><div><dt>净流入参与</dt><dd>{c.participating} / {c.expected}</dd></div><div><dt>正净流入合计</dt><dd>{value(c.positiveTotal)} 亿</dd></div></dl>{c.top1&&<p>净流入第一名：<StockLink code={c.top1.code} name={c.top1.name}/></p>}{(c.flags||[]).map(s=><p key={s}>{s}</p>)}<p className="provenance">{c.listingCoverage<c.expected?'上市日期未完整取得，新股影响未核验。':'上市日期覆盖已核验。'}{(c.newListingFlags||[]).map(s=><span key={s.code}>{s.name||s.code}：上市不足60天且占正净流入超过10%。</span>)}</p></>:<p className="empty">成员资金覆盖不足，集中度不计算。已取得 {c?.received??'—'} / 应有 {c?.expected??'—'}；缺项不填0，等待后台共享核验。</p>}<details><summary>成员核验来源与批次</summary><p className="provenance">成员资金采样（北京）{evidenceTime(c?.stockFetchedAt)} · 业务日 {c?.date||'未提供'}。这是成员资金源，不冒充板块资金采样时点。</p><p className="provenance">成员版本 {c?.membershipVersion||'未提供'} · {c?.source||'来源未提供'}</p><p className="provenance">分母是已核验正净流入成员之和，不是板块净额。不同采样或聚合口径可能不一致，页面不将差额归因成新资金。</p></details></section>}
+ {view==='ledger'&&<FundsLedger ledger={ledger} code={row?.code}/>}
+ </div>;
+}

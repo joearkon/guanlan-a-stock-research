@@ -1,0 +1,384 @@
+[
+  {
+    "id": "lithography",
+    "headline": "EUV与DUV须分别研究；当前只核实海外整机产品，不把A股概念公司列为整机供应商。",
+    "url": "https://www.asml.com/en/products/euv-lithography-systems",
+    "source": "ASML产品目录",
+    "checkedAt": "2026-10-30",
+    "dateBasis": "checked_only",
+    "published": null,
+    "period": "官网产品目录（未标发布日期）",
+    "locator": "产品目录正文",
+    "business": [],
+    "metrics": [
+      {
+        "id": "euv-wavelength",
+        "label": "NXE光源波长",
+        "value": 13.5,
+        "unit": "nm",
+        "url": "https://www.asml.com/en/products/euv-lithography-systems",
+        "source": "ASML",
+        "scope": "NXE系列EUV光源规格，不是芯片制程节点。",
+        "checkedAt": "2026-10-30",
+        "dateBasis": "checked_only",
+        "published": null,
+        "period": "产品规格（非当期销售数据）",
+        "origin": "primary_disclosure",
+        "status": "sourced"
+      },
+      {
+        "id": "euv-na",
+        "label": "NXE数值孔径",
+        "value": 0.33,
+        "unit": "NA",
+        "url": "https://www.asml.com/en/products/euv-lithography-systems",
+        "source": "ASML",
+        "scope": "仅NXE系列，不与High-NA EXE混比。",
+        "checkedAt": "2026-10-30",
+        "dateBasis": "checked_only",
+        "published": null,
+        "period": "产品规格（非当期销售数据）",
+        "origin": "primary_disclosure",
+        "status": "sourced"
+      }
+    ],
+    "risk": "未核实A股整机供应商；零部件概念不能替代整机业务证明。"
+  },
+  {
+    "id": "coating",
+    "headline": "芯源微目录已列前道涂胶显影机，需继续核对客户产线导入及订单验收。",
+    "url": "https://www.kingsemi.com/index.php/Product/index?classid=3",
+    "source": "芯源微官网产品目录",
+    "checkedAt": "2026-10-30",
+    "dateBasis": "checked_only",
+    "published": null,
+    "period": "官网产品目录（未标发布日期）",
+    "locator": "产品目录正文",
+    "business": [
+      {
+        "code": "688037",
+        "name": "芯源微",
+        "role": "前道涂胶显影",
+        "basis": "产品目录列KS-FT200/300及KS-C300等涂胶显影平台。",
+        "url": "https://www.kingsemi.com/index.php/Product/index?classid=3",
+        "sourceLabel": "公司公开业务资料"
+      }
+    ],
+    "metrics": [
+      {
+        "id": "coating-wafer",
+        "label": "KS-FT适用晶圆",
+        "value": "8 / 12",
+        "unit": "英寸",
+        "url": "https://www.kingsemi.com/index.php/Product/index?classid=3",
+        "source": "芯源微",
+        "scope": "KS-FT200/300前道机型的产品范围，非已实现销量。",
+        "checkedAt": "2026-10-30",
+        "dateBasis": "checked_only",
+        "published": null,
+        "period": "产品规格（非当期销售数据）",
+        "origin": "primary_disclosure",
+        "status": "sourced"
+      }
+    ],
+    "risk": "产品业务关联不代表当期订单或估值结论。"
+  },
+  {
+    "id": "etch",
+    "headline": "按导体、介质与深硅等应用核对刻蚀能力，设备商总收入不能充当刻蚀收入。",
+    "url": "https://www.amec-inc.com/uploads/files/20250902/17568042727426.pdf",
+    "source": "中微公司产品介绍",
+    "checkedAt": "2026-10-30",
+    "dateBasis": "checked_only",
+    "published": null,
+    "period": "2025年版产品资料",
+    "locator": "产品目录正文",
+    "business": [
+      {
+        "code": "688012",
+        "name": "中微公司",
+        "role": "等离子体刻蚀",
+        "basis": "公司产品资料列示刻蚀设备；具体工艺覆盖和客户验证需按机型核对。",
+        "url": "https://www.amec-inc.com/uploads/files/20250902/17568042727426.pdf",
+        "sourceLabel": "公司公开业务资料"
+      },
+      {
+        "code": "002371",
+        "name": "北方华创",
+        "role": "刻蚀工艺设备",
+        "basis": "公司对应产品目录列示刻蚀设备。",
+        "url": "https://www.naura.com/product/details_82_1588.html",
+        "sourceLabel": "公司公开业务资料"
+      }
+    ],
+    "metrics": [],
+    "risk": "产品功能证明不等于当前扩产订单归属；选择比与良率没有同口径公开数值不混比。"
+  },
+  {
+    "id": "deposition",
+    "headline": "沉积要拆PECVD、ALD与PVD；拓荆和微导应按各自产品纳入，不能只保留两家平台设备商。",
+    "url": "https://www.piotech.cn/index.php/Pro/detail?id=132",
+    "source": "拓荆科技产品目录",
+    "checkedAt": "2026-10-30",
+    "dateBasis": "checked_only",
+    "published": null,
+    "period": "官网产品目录（未标发布日期）",
+    "locator": "产品目录正文",
+    "business": [
+      {
+        "code": "688072",
+        "name": "拓荆科技",
+        "role": "PECVD、ALD及填充沉积",
+        "basis": "官网列PECVD、ALD及Gap Fill系列；2026半年报另有逐项产品验证与出货披露。",
+        "url": "https://www.piotech.cn/",
+        "sourceLabel": "公司公开业务资料"
+      },
+      {
+        "code": "688147",
+        "name": "微导纳米",
+        "role": "半导体ALD / PEALD / CVD",
+        "basis": "2025年报描述以ALD为核心的薄膜设备业务；半导体与光伏必须分开统计。",
+        "url": "https://static.cninfo.com.cn/finalpage/2026-04-29/1225246676.PDF",
+        "sourceLabel": "公司公开业务资料"
+      },
+      {
+        "code": "002371",
+        "name": "北方华创",
+        "role": "PVD、CVD工艺设备",
+        "basis": "公司产品目录提供物理与化学气相沉积设备，范围不等于全部路线可替代。",
+        "url": "https://www.naura.com/product/details_82_1586.html",
+        "sourceLabel": "公司公开业务资料"
+      }
+    ],
+    "metrics": [
+      {
+        "id": "ald-coverage",
+        "label": "NF-300H台阶覆盖",
+        "value": 95,
+        "unit": "%",
+        "url": "https://www.piotech.cn/index.php/Pro/detail?id=132",
+        "source": "拓荆科技",
+        "scope": "厂商对NF-300H Astra高宽比条件下的产品声明；非行业均值，原页未给统一对比测试条件。",
+        "checkedAt": "2026-10-30",
+        "dateBasis": "checked_only",
+        "published": null,
+        "period": "产品规格（非当期销售数据）",
+        "origin": "primary_disclosure",
+        "status": "sourced"
+      }
+    ],
+    "risk": "需验证应用、机型、客户和收入；MOCVD、光伏ALD与集成电路沉积不混作一个市场。"
+  },
+  {
+    "id": "cleaning",
+    "headline": "盛美上海列示SAPS、TEBO、单片及组合清洗产品，应按清洗对象和客户验证核对需求。",
+    "url": "https://www.acmrcsh.com.cn/product.html?CatalogId=14&page=1",
+    "source": "盛美上海产品目录",
+    "checkedAt": "2026-10-30",
+    "dateBasis": "checked_only",
+    "published": null,
+    "period": "官网产品目录（未标发布日期）",
+    "locator": "产品目录正文",
+    "business": [
+      {
+        "code": "688082",
+        "name": "盛美上海",
+        "role": "单片、兆声波及组合清洗",
+        "basis": "官网按工艺列出SAPS、TEBO、TAHOE及单晶圆清洗设备。",
+        "url": "https://www.acmrcsh.com.cn/product.html?CatalogId=14&page=1",
+        "sourceLabel": "公司公开业务资料"
+      }
+    ],
+    "metrics": [],
+    "risk": "不同设备的去除效率、损伤控制与产能没有统一公开可比数值，不能用产品种类数替代竞争力。"
+  },
+  {
+    "id": "thermal",
+    "headline": "北方华创披露用于集成电路的RTP和立式炉，不能把光伏扩散炉指标搬作晶圆制造指标。",
+    "url": "https://www.naura.com/Public/Upload/file/20260520/17792584860311b0a2a026b647.pdf",
+    "source": "北方华创2025 ESG报告",
+    "checkedAt": "2026-10-30",
+    "dateBasis": "checked_only",
+    "published": null,
+    "period": "2025年报告",
+    "locator": "印刷页29",
+    "business": [
+      {
+        "code": "002371",
+        "name": "北方华创",
+        "role": "集成电路RTP及立式热处理",
+        "basis": "报告第29页列12英寸快速热处理及立式低温合金退火等产品。",
+        "url": "https://www.naura.com/Public/Upload/file/20260520/17792584860311b0a2a026b647.pdf",
+        "sourceLabel": "公司公开业务资料"
+      }
+    ],
+    "metrics": [
+      {
+        "id": "rtp-wafer",
+        "label": "RTP适用晶圆",
+        "value": 12,
+        "unit": "英寸",
+        "url": "https://www.naura.com/Public/Upload/file/20260520/17792584860311b0a2a026b647.pdf",
+        "source": "北方华创2025 ESG报告",
+        "scope": "第29页12英寸快速热处理设备；不代表所有晶圆温度精度与产能。",
+        "checkedAt": "2026-10-30",
+        "dateBasis": "checked_only",
+        "published": null,
+        "period": "2025年报告产品披露",
+        "origin": "primary_disclosure",
+        "status": "sourced",
+        "locator": "印刷页29"
+      }
+    ],
+    "risk": "仅为产品业务与适用规格证明，不能据此确认当前稼动率、订单或行业国产化率。"
+  },
+  {
+    "id": "implant",
+    "headline": "先导基电披露凯世通离子注入收入与交付，必须与其铋材料业务分开。",
+    "url": "https://dataclouds.cninfo.com.cn/shgonggao/investor/2026/20260519/393e3cad23a7eec7e9a7b0c480c9291f.pdf",
+    "source": "先导基电业绩说明会纪要",
+    "checkedAt": "2026-10-30",
+    "dateBasis": "publication",
+    "published": "2026-05-19",
+    "period": "2025全年及2026年一季度",
+    "locator": "PDF第1–3页",
+    "business": [
+      {
+        "code": "600641",
+        "name": "先导基电",
+        "role": "旗下凯世通离子注入设备",
+        "basis": "纪要明确证券代码及凯世通业务归属，列离子注入设备收入和量产交付。",
+        "url": "https://dataclouds.cninfo.com.cn/shgonggao/investor/2026/20260519/393e3cad23a7eec7e9a7b0c480c9291f.pdf",
+        "sourceLabel": "公司公开业务资料"
+      }
+    ],
+    "metrics": [
+      {
+        "id": "implant-sales",
+        "comparison": {"basis":"reported","kind":"yoy","value":44.55,"priorPeriod":"2024全年","source":"先导基电业绩说明会纪要","published":"2026-05-19","url":"https://dataclouds.cninfo.com.cn/shgonggao/investor/2026/20260519/393e3cad23a7eec7e9a7b0c480c9291f.pdf","locator":"PDF第2页，问答1"},
+        "label": "离子注入业务收入",
+        "value": 3.48,
+        "unit": "亿元",
+        "url": "https://dataclouds.cninfo.com.cn/shgonggao/investor/2026/20260519/393e3cad23a7eec7e9a7b0c480c9291f.pdf",
+        "source": "先导基电业绩说明会纪要",
+        "scope": "公司披露的凯世通2025年销售收入，非全公司收入或行业市场规模。",
+        "checkedAt": "2026-10-30",
+        "dateBasis": "publication",
+        "published": "2026-05-19",
+        "period": "2025全年",
+        "origin": "primary_disclosure",
+        "status": "sourced",
+        "locator": "PDF第2页，问答1"
+      },
+      {
+        "id": "implant-sales-growth",
+        "label": "离子注入收入同比",
+        "value": 44.55,
+        "unit": "%",
+        "url": "https://dataclouds.cninfo.com.cn/shgonggao/investor/2026/20260519/393e3cad23a7eec7e9a7b0c480c9291f.pdf",
+        "source": "先导基电业绩说明会纪要",
+        "scope": "同一纪要的业务收入同比，管理层披露口径。",
+        "checkedAt": "2026-10-30",
+        "dateBasis": "publication",
+        "published": "2026-05-19",
+        "period": "2025全年",
+        "origin": "primary_disclosure",
+        "status": "sourced",
+        "locator": "PDF第2页，问答1"
+      }
+    ],
+    "risk": "这些是历史公司业务值；先进机型的客户验证与已验收量产必须分开，不外推为全行业景气。"
+  },
+  {
+    "id": "cmp",
+    "headline": "华海清科提供CMP装备及相关服务，后续需按晶圆制造与先进封装区分产能和订单。",
+    "url": "https://www.hwatsing.com/",
+    "source": "华海清科官网",
+    "checkedAt": "2026-10-30",
+    "dateBasis": "checked_only",
+    "published": null,
+    "period": "官网产品目录（未标发布日期）",
+    "locator": "产品目录正文",
+    "business": [
+      {
+        "code": "688120",
+        "name": "华海清科",
+        "role": "CMP及相关装备",
+        "basis": "官网业务目录列CMP、Panel CMP、减薄、湿法及维保耗材。",
+        "url": "https://www.hwatsing.com/",
+        "sourceLabel": "公司公开业务资料"
+      }
+    ],
+    "metrics": [],
+    "risk": "CMP产品业务不等于同获所有扩产订单；与抛光液、抛光垫公司分开统计。"
+  },
+  {
+    "id": "metrology",
+    "headline": "中科飞测将缺陷检测与量测分别列示；膜厚、关键尺寸和套刻不是同一个指标。",
+    "url": "https://www.skyverse.cn/",
+    "source": "中科飞测官网产品目录",
+    "checkedAt": "2026-10-30",
+    "dateBasis": "checked_only",
+    "published": null,
+    "period": "官网产品目录（未标发布日期）",
+    "locator": "产品目录正文",
+    "business": [
+      {
+        "code": "688361",
+        "name": "中科飞测",
+        "role": "缺陷检测、膜厚与关键尺寸量测",
+        "basis": "官网列明暗场检测以及金属膜厚、介质薄膜膜厚、关键尺寸和套刻量测。",
+        "url": "https://www.skyverse.cn/",
+        "sourceLabel": "公司公开业务资料"
+      }
+    ],
+    "metrics": [],
+    "risk": "目录存在证明业务覆盖，不证明先进机型已通过客户验证；灵敏度、吞吐量与重复性需同条件比较。"
+  },
+  {
+    "id": "test-equipment",
+    "headline": "华峰测控按模拟、混合信号和SoC提供不同测试平台，不能把测试机与分选机混为一类。",
+    "url": "https://www.accotest.com/",
+    "source": "华峰测控AccoTEST官网",
+    "checkedAt": "2026-10-30",
+    "dateBasis": "checked_only",
+    "published": null,
+    "period": "官网产品目录（未标发布日期）",
+    "locator": "产品目录正文",
+    "business": [
+      {
+        "code": "688200",
+        "name": "华峰测控",
+        "role": "半导体自动测试系统",
+        "basis": "官网STS8200、STS8300及STS8600对应不同器件与测试应用。",
+        "url": "https://www.accotest.com/",
+        "sourceLabel": "公司公开业务资料"
+      }
+    ],
+    "metrics": [],
+    "risk": "产品上市或软件升级不等于新增客户订单；需再核验装机、并测能力与利用率。"
+  },
+  {
+    "id": "components",
+    "headline": "富创精密的工艺零部件、结构件、气体系统与模组需分开研究，不把它称为整机厂。",
+    "url": "https://www.fortune-semi.com/",
+    "source": "富创精密官网",
+    "checkedAt": "2026-10-30",
+    "dateBasis": "checked_only",
+    "published": null,
+    "period": "官网产品目录（未标发布日期）",
+    "locator": "产品目录正文",
+    "business": [
+      {
+        "code": "688409",
+        "name": "富创精密",
+        "role": "精密零部件、气体传输与模组",
+        "basis": "官网产品覆盖设备零部件、气体传输系统和模组，证券代码在官网列明。",
+        "url": "https://www.fortune-semi.com/",
+        "sourceLabel": "公司公开业务资料"
+      }
+    ],
+    "metrics": [],
+    "risk": "未取得具体机型供应协议，不能把设备商每个BOM节点自动映射到该公司；服务客户和收入集中度需独立核验。"
+  }
+]

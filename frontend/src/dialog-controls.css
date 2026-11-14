@@ -1,0 +1,21 @@
+/* Dialog controls share a frame, not a global border on every clickable label.
+   Result cards, tabs, stock links and menu items keep their own interaction. */
+:root .drawer :is(button,a).outline-button,
+:root .drawer :is(button,a).dialog-secondary,
+:root .drawer .local-error button:not([class]),
+:root .drawer .stock-chart-controls>button:not([class]),
+:root .drawer>button:not([class]){display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:8px 14px;margin-top:0;border:1px solid var(--line);border-radius:6px;background:var(--input);color:var(--body);font:inherit;font-size:14px;line-height:20px;text-decoration:none;cursor:pointer}
+:root .drawer>button:not([class]){margin:12px 8px 12px 0}
+:root .drawer :is(button,a).primary{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:8px 14px;font-size:14px;line-height:20px;text-decoration:none}
+:root .drawer :is(button,a).outline-button:hover:not(:disabled),
+:root .drawer :is(button,a).dialog-secondary:hover:not(:disabled){border-color:var(--accent);color:var(--accent);background:var(--active)}
+:root .drawer :is(button,a):is(.outline-button,.dialog-secondary):focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+:root .drawer button:is(.outline-button,.dialog-secondary):disabled{opacity:.5;cursor:not-allowed}
+.dialog-action-row{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:12px;margin-top:20px}
+.drawer>header{align-items:center;gap:16px}
+.drawer>header h2{margin:0;min-width:0;overflow-wrap:anywhere}
+.drawer>header .drawer-close-button{display:inline-flex;align-items:center;justify-content:center;flex:none;width:36px;height:36px;padding:8px;border:1px solid var(--line);border-radius:6px;color:var(--muted);background:transparent}
+.drawer>header .drawer-close-button:hover{color:var(--heading);background:var(--raised);border-color:var(--accent)}
+.drawer>header .drawer-close-button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+@media(max-width:500px){.dialog-action-row{gap:8px}.dialog-action-row>:is(button,a){flex:1;min-width:100px}}
+@media(max-width:767px){:root .drawer :is(button,a):is(.outline-button,.dialog-secondary,.primary){min-height:44px}}

@@ -1,0 +1,12 @@
+import{useState}from'react';
+import{useQuery}from'@tanstack/react-query';
+import{publicQuery}from'./api';
+import{Drawer,Widget,RefreshButton}from'./components';
+const kinds:Record<string,string>={render:'页面渲染',resource:'页面文件',runtime:'脚本执行',promise:'未处理异步异常'};
+export default function ClientErrorLog(){
+ const[open,setOpen]=useState(false);return <><button className="outline-button" onClick={()=>setOpen(true)}>页面故障日志</button><Drawer open={open} onOpenChange={setOpen} title="页面故障日志">{open&&<ErrorList/>}</Drawer></>;
+}
+function ErrorList(){
+ const[days,setDays]=useState('7'),[offset,setOffset]=useState(0),q=useQuery({...publicQuery('/api/ops/client-errors?'+new URLSearchParams({days,offset:String(offset)}),15000),retry:false,refetchOnWindowFocus:false,placeholderData:p=>p}),d=q.data;
+ return <><p>仅记录启用后的已登录故障，不补造历史。保留14天，可能因离线、限流、脚本尚未启动而未收到；没有记录不代表没有发生故障。时间为服务器收到的时间。</p><div className="ops-actions"><label>故障范围<select aria-label="故障范围" value={days} onChange={e=>{setDays(e.target.value);setOffset(0);}}><option value="1">今日</option><option value="7">近7天</option></select></label><RefreshButton label="刷新故障日志" busy={q.isFetching} onClick={()=>q.refetch()}/></div><Widget title="最近故障" loading={q.isPending} refreshing={!!d&&q.isFetching} error={q.error?.message} retry={()=>q.refetch()}>{(d?.errors||[]).map((r:any)=><article key={r.id} className="ops-notes"><strong>{kinds[r.kind]||'页面异常'} · {r.errorType}{r.reactCode?' · React #'+r.reactCode:''}</strong><p style={{overflowWrap:'anywhere'}}>{r.page}</p><small>{new Date(r.createdAt*1000).toLocaleString('zh-CN',{timeZone:'Asia/Shanghai',hour12:false})} · 账号 #{r.userId} · {r.viewport} · {r.online?'在线':'离线'}</small><p style={{overflowWrap:'anywhere'}}>错误编号 {r.id}<br/>入口 {r.entry}{r.asset?' · 资源 '+r.asset:''}</p><details><summary>代码位置</summary><pre style={{whiteSpace:'pre-wrap',overflowWrap:'anywhere'}}>{r.frames?.length?r.frames.map((f:any)=>`${f.file}:${f.line}:${f.column}`).join('\n'):'没有可用的代码位置；需结合版本与复现核对。'}</pre></details></article>)}{d&&!d.errors?.length&&<p className="empty">此区间尚未收到页面故障记录。</p>}</Widget><div className="ops-pagination"><span>{d?'共 '+d.total+' 条':'正在读取'}</span><button className="outline-button" disabled={!offset||q.isFetching} onClick={()=>setOffset(v=>Math.max(0,v-25))}>上一页故障</button><button className="outline-button" disabled={!d||offset+25>=d.total||q.isFetching} onClick={()=>setOffset(v=>v+25)}>下一页故障</button></div><p className="provenance">不展示原始错误正文、完整网址、IP、提示词或研究内容。客户端诊断是排查线索，不是对根因的确认；查看日志不调用模型。</p></>;
+}

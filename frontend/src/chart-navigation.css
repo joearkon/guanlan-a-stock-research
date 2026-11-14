@@ -1,0 +1,8 @@
+.financial-chart .chart-navigation{display:flex;align-items:flex-end;flex-wrap:wrap;gap:12px;padding:8px 0;min-width:0}
+.chart-navigation-buttons,.chart-navigation-location,.chart-navigation-location form{display:flex;align-items:flex-end;flex-wrap:wrap;gap:8px;min-width:0;max-width:100%}
+.chart-navigation-location{margin-left:auto}.chart-navigation-location label{display:grid;gap:4px;color:var(--muted);font-size:12px;min-width:0}
+.chart-navigation .outline-button{display:inline-flex;align-items:center;justify-content:center;gap:4px;min-height:34px;padding:6px 10px;border:1px solid var(--line);border-radius:6px;font-size:14px;line-height:20px;white-space:nowrap}
+.chart-navigation :is(input,select){min-height:34px;max-width:100%;padding:6px 8px;border:1px solid var(--line);border-radius:6px;font-size:14px;background:var(--input);color:var(--body)}
+.chart-navigation-note{margin:4px 0 12px;min-height:20px}.financial-chart-canvas:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media(max-width:760px){.chart-navigation-location{margin-left:0;width:100%;display:grid;grid-template-columns:minmax(88px,.9fr) minmax(0,1.6fr);align-items:start}.chart-navigation-location form{display:flex;flex-direction:column;align-items:flex-start;gap:8px}.chart-navigation-location form label{min-width:0;width:100%}.chart-navigation-location input{width:100%;min-width:0}.chart-navigation-buttons{gap:6px}.chart-navigation-buttons .outline-button{padding:6px 8px}.chart-navigation-location select{min-width:0;width:100%}}
+.ma-legend-value{margin-left:6px;font-variant-numeric:tabular-nums;opacity:.9}.financial-chart-toolbar [aria-label="均线显示"]{display:flex;flex-wrap:wrap;gap:6px}

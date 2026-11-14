@@ -1,0 +1,59 @@
+/* Navigation is one quiet chrome surface; separators remain inside business panels. */
+body{background:var(--chrome)}
+.sidebar{border-right:0;background:var(--chrome)}
+.sidebar .brand{border-bottom:0;padding:0 20px}
+.topbar{border-bottom:0;background:var(--chrome);gap:12px;padding:0 24px}
+.topbar .breadcrumb{min-width:0;overflow:hidden;max-width:32%}
+.topbar .breadcrumb strong{overflow:hidden;text-overflow:ellipsis;font-weight:500}
+.topbar .search{flex:1 1 300px;width:auto;max-width:440px;min-width:140px;border-radius:8px;height:38px}
+.topbar .search kbd{white-space:nowrap}
+.topbar>.user-button,.topbar .account-control,.topbar>.primary,.topbar>.icon-button{flex:none}
+.topbar .user-button{white-space:nowrap;min-height:38px;border-radius:8px;gap:8px}
+.route-content{margin-top:68px;padding:24px 24px 66px;min-height:calc(100dvh - 68px);background:var(--canvas);border-radius:14px 0 0 0;box-shadow:0 0 0 1px color-mix(in srgb,var(--line) 45%,transparent)}
+.sidebar nav{padding:16px 12px}
+.sidebar nav>a{height:44px;margin-bottom:6px;border-radius:8px;color:var(--muted)}
+.sidebar nav>a.active{background:color-mix(in srgb,var(--accent) 11%,var(--chrome));box-shadow:inset 3px 0 var(--accent)}
+.sidebar nav>a:hover{background:var(--raised);color:var(--heading)}
+.sidebar nav>a.active:hover{background:var(--active);color:var(--accent)}
+.sidebar .subnav{margin:2px 0 12px 40px;gap:2px}
+.sidebar .subnav a{position:relative;min-height:36px;padding:8px 12px;border-radius:6px;line-height:20px;font-size:14px}
+.sidebar .subnav a.active{background:color-mix(in srgb,var(--accent) 9%,var(--chrome));color:var(--accent)}
+.sidebar .subnav a.active::before{content:'';position:absolute;left:0;top:10px;bottom:10px;width:2px;border-radius:2px;background:var(--accent)}
+.sidebar .subnav .industry-nested{margin-left:12px}
+.sidebar .sidebar-controls{border-top:0;padding:12px}
+.sidebar .sidebar-controls button{height:40px;border-radius:8px}
+.sidebar[data-expanded=false] nav>a{height:44px;margin-bottom:8px;border-radius:8px}
+.sidebar[data-expanded=false] .sidebar-controls{padding:12px 8px}
+.sidebar .brand strong{font-size:24px;line-height:30px}
+.sidebar .brand img{max-width:56px}
+@media(max-width:1200px){
+ .topbar{padding:0 16px;gap:8px}
+ .topbar .breadcrumb{max-width:24%}
+ .topbar .search{max-width:none;flex-basis:220px}
+ .topbar .search kbd{display:none}
+ .topbar time{display:none}
+}
+@media(max-width:850px){
+ .topbar .breadcrumb{display:none}
+ .topbar .search{margin-left:0;min-width:120px}
+ .route-content{padding:20px 16px 66px}
+}
+@media(max-width:700px){
+ .topbar{height:56px;gap:4px;padding:0 8px}
+ .topbar .search{display:flex;position:relative;inset:auto;min-width:0;width:auto;max-width:none;margin:0;height:34px;padding:0 8px;gap:6px;flex:1 1 90px}
+ .topbar .search input{font-size:12px}
+ .topbar .search>svg{display:none}
+ .topbar .user-button{display:inline-flex;min-height:34px;padding:6px;font-size:0;gap:0}
+ .topbar .user-button svg{width:17px;height:17px}
+ .topbar .primary{width:auto;height:34px;padding:6px 8px;gap:0}
+ .topbar .primary svg{display:none}
+ .topbar>.icon-button{padding:6px}
+ .route-content{margin-top:56px;padding:16px 12px 62px;min-height:calc(100dvh - 56px);border-radius:12px 0 0 0}
+ .sidebar .brand{height:56px}
+ .sidebar .subnav a{font-size:14px}
+ .sidebar[data-expanded=false] nav{padding-top:16px}
+ .sidebar[data-expanded=true] nav>a{height:44px}
+ .sidebar .brand img{max-width:48px}
+ .topbar .security-options{position:fixed;left:72px;right:8px;top:52px;max-height:min(360px,65dvh)}
+ .route-content .anchor-tabs{top:56px}
+}

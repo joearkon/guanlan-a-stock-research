@@ -1,0 +1,295 @@
+[
+  {
+    "id": "cleanroom",
+    "headline": "洁净室与机电系统承接建厂需求；有历史客户名单不代表拿到本轮新项目。",
+    "url": "https://www.lkeng.com.cn/fan/gsjj/gyyx/",
+    "source": "亚翔集成官网",
+    "business": [
+      {
+        "code": "603929",
+        "name": "亚翔集成",
+        "role": "洁净室与机电系统集成",
+        "basis": "官网介绍洁净工程与机电工程能力，列晶圆厂项目客户；具体新项目金额以公告为准。",
+        "url": "https://www.lkeng.com.cn/fan/gsjj/gyyx/",
+        "sourceLabel": "公司公开业务资料",
+        "processes": [
+          "construction",
+          "utilities"
+        ]
+      }
+    ],
+    "metrics": [],
+    "risk": "项目建设、合同签订、收入确认和回款是不同阶段，客户历史合作不能算新增订单。",
+    "checkedAt": "2026-10-30",
+    "dateBasis": "checked_only",
+    "published": null,
+    "period": "公开业务资料；非行业统计",
+    "locator": "来源正文"
+  },
+  {
+    "id": "equipment",
+    "headline": "按11类工艺核实具体产品与经营证据；不同设备没有统一的国产化率。",
+    "url": "https://www.seaj.or.jp/english/statistics/4777967556197.pdf",
+    "source": "SEAJ / SEMI",
+    "business": [],
+    "metrics": [],
+    "risk": "全球设备销售不等于中国设备收入，更不等于某公司订单。",
+    "checkedAt": "2026-10-30",
+    "dateBasis": "checked_only",
+    "published": null,
+    "period": "2025全年",
+    "locator": "来源正文"
+  },
+  {
+    "id": "materials",
+    "headline": "安集科技按抛光对象提供CMP材料，并列出湿法清洗与刻蚀类化学品。",
+    "url": "https://www.anjimicro.com/gongnengxingshidianzihuaxuepin.html",
+    "source": "安集科技官网",
+    "business": [
+      {
+        "code": "688019",
+        "name": "安集科技",
+        "role": "CMP抛光液与功能性湿电子化学品",
+        "basis": "产品页按铜、钨和介电材料等对象列示抛光液，并提供相关清洗液和刻蚀液。",
+        "url": "https://www.anjimicro.com/gongnengxingshidianzihuaxuepin.html",
+        "sourceLabel": "公司公开业务资料",
+        "processes": [
+          "cmp-slurry",
+          "wet-chemicals"
+        ]
+      }
+    ],
+    "metrics": [],
+    "risk": "材料配方、认证及批量应用按产品和客户分别核对；不能将一类材料的进展推广到全部材料。",
+    "checkedAt": "2026-10-30",
+    "dateBasis": "checked_only",
+    "published": null,
+    "period": "公开业务资料；非行业统计",
+    "locator": "来源正文"
+  },
+  {
+    "id": "eda",
+    "headline": "华大九天产品覆盖模拟、射频、数字与晶圆制造工具；目录覆盖不等于全流程替代。",
+    "url": "https://www.empyrean-tech.com/",
+    "source": "华大九天官网",
+    "business": [
+      {
+        "code": "301269",
+        "name": "华大九天",
+        "role": "EDA设计与验证工具",
+        "basis": "官方目录列模拟与电源管理、射频、数字SoC及制造EDA产品方案。",
+        "url": "https://www.empyrean-tech.com/",
+        "sourceLabel": "公司公开业务资料",
+        "processes": [
+          "digital-tools",
+          "analog-tools",
+          "verification"
+        ]
+      }
+    ],
+    "metrics": [],
+    "risk": "工具授权、实际使用、工艺签核和完整流程替代分别取证，不从产品名称计算国产化率。",
+    "checkedAt": "2026-10-30",
+    "dateBasis": "checked_only",
+    "published": null,
+    "period": "公开业务资料；非行业统计",
+    "locator": "来源正文"
+  },
+  {
+    "id": "manufacturing",
+    "headline": "中芯国际半年报可核验量价与收入变化；这些是公司经营，不是整个制造层总量。",
+    "url": "https://static.cninfo.com.cn/finalpage/2026-08-28/1225520297.PDF",
+    "source": "中芯国际2026半年报",
+    "business": [
+      {
+        "code": "688981",
+        "name": "中芯国际",
+        "role": "8英寸与12英寸晶圆代工",
+        "basis": "半年报披露晶圆代工服务与相应收入，晶圆销量采用折合8英寸标准逻辑口径。",
+        "url": "https://static.cninfo.com.cn/finalpage/2026-08-28/1225520297.PDF",
+        "sourceLabel": "公司公开业务资料",
+        "processes": [
+          "foundry"
+        ]
+      }
+    ],
+    "metrics": [
+      {
+        "id": "smic-wafer",
+        "comparison": {"basis":"reported","kind":"yoy","value":14.9,"priorPeriod":"2025上半年","source":"中芯国际2026半年报","published":"2026-08-28","url":"https://static.cninfo.com.cn/finalpage/2026-08-28/1225520297.PDF","locator":"PDF第22页，537.9万片对468.2万片"},
+        "label": "中芯晶圆销量",
+        "value": 537.9,
+        "unit": "万片",
+        "url": "https://static.cninfo.com.cn/finalpage/2026-08-28/1225520297.PDF",
+        "source": "中芯国际2026半年报",
+        "scope": "公司上半年销量，折合8英寸标准逻辑；不与12英寸片数直接相加。",
+        "period": "2026上半年",
+        "locator": "PDF第22页",
+        "published": "2026-08-28",
+        "checkedAt": "2026-10-30",
+        "dateBasis": "publication",
+        "origin": "primary_disclosure",
+        "status": "sourced"
+      },
+      {
+        "id": "smic-asp",
+        "previous": {"value":6482,"unit":"元/片","period":"2025上半年","scope":"销售晶圆收入/晶圆总数；折合8英寸口径，非统一工艺报价。","source":"中芯国际2026半年报","published":"2026-08-28","url":"https://static.cninfo.com.cn/finalpage/2026-08-28/1225520297.PDF","locator":"PDF第22页，平均售价对照表"},
+        "label": "中芯晶圆平均售价",
+        "value": 6667,
+        "unit": "元/片",
+        "url": "https://static.cninfo.com.cn/finalpage/2026-08-28/1225520297.PDF",
+        "source": "中芯国际2026半年报",
+        "scope": "销售晶圆收入/晶圆总数；折合8英寸口径，非统一工艺报价。",
+        "period": "2026上半年",
+        "locator": "PDF第22页",
+        "published": "2026-08-28",
+        "checkedAt": "2026-10-30",
+        "dateBasis": "publication",
+        "origin": "primary_disclosure",
+        "status": "sourced"
+      },
+      {
+        "id": "smic-revenue-growth",
+        "label": "中芯收入同比",
+        "value": 19.4,
+        "unit": "%",
+        "url": "https://static.cninfo.com.cn/finalpage/2026-08-28/1225520297.PDF",
+        "source": "中芯国际2026半年报",
+        "scope": "人民币同口径半年报同比，不与美元季度数字混比。",
+        "period": "2026上半年",
+        "locator": "PDF第7页",
+        "published": "2026-08-28",
+        "checkedAt": "2026-10-30",
+        "dateBasis": "publication",
+        "origin": "primary_disclosure",
+        "status": "sourced"
+      }
+    ],
+    "risk": "利润、现金和新增资本开支需同期核对；这三项不能自动推出行业景气阶段。",
+    "checkedAt": "2026-10-30",
+    "dateBasis": "publication",
+    "published": "2026-08-28",
+    "period": "2026上半年",
+    "locator": "PDF第7、22页"
+  },
+  {
+    "id": "packaging",
+    "headline": "长电科技披露先进封装与存储封装能力；样品验证与规模量产分别展示。",
+    "url": "https://static.cninfo.com.cn/finalpage/2026-08-21/1225487900.PDF",
+    "source": "长电科技2026半年报",
+    "business": [
+      {
+        "code": "600584",
+        "name": "长电科技",
+        "role": "先进封装与芯片测试",
+        "basis": "半年报披露XDFOI平台规模量产及硅光引擎样品交付验证，两者阶段不同。",
+        "url": "https://static.cninfo.com.cn/finalpage/2026-08-21/1225487900.PDF",
+        "sourceLabel": "公司公开业务资料",
+        "processes": [
+          "advanced",
+          "wafer-level",
+          "flip-chip",
+          "testing"
+        ]
+      }
+    ],
+    "metrics": [
+      {
+        "id": "jcet-stack",
+        "label": "长电存储堆叠能力",
+        "value": 32,
+        "unit": "层",
+        "url": "https://static.cninfo.com.cn/finalpage/2026-08-21/1225487900.PDF",
+        "source": "长电科技2026半年报",
+        "scope": "公司披露的存储封装能力，不是行业普遍产能或HBM层数。",
+        "period": "2026上半年",
+        "locator": "PDF第12页",
+        "published": "2026-08-21",
+        "checkedAt": "2026-10-30",
+        "dateBasis": "publication",
+        "origin": "primary_disclosure",
+        "status": "sourced"
+      },
+      {
+        "id": "jcet-thin",
+        "label": "长电超薄芯片加工",
+        "value": 25,
+        "unit": "μm",
+        "url": "https://static.cninfo.com.cn/finalpage/2026-08-21/1225487900.PDF",
+        "source": "长电科技2026半年报",
+        "scope": "公司产品工艺能力，不能据此推算订单规模或良率。",
+        "period": "2026上半年",
+        "locator": "PDF第12页",
+        "published": "2026-08-21",
+        "checkedAt": "2026-10-30",
+        "dateBasis": "publication",
+        "origin": "primary_disclosure",
+        "status": "sourced"
+      }
+    ],
+    "risk": "技术能力和客户验证不能替代分产品收入及回报验证，不把存储封装参数当作全部先进封装指标。",
+    "checkedAt": "2026-10-30",
+    "dateBasis": "publication",
+    "published": "2026-08-21",
+    "period": "2026上半年",
+    "locator": "PDF第12页"
+  },
+  {
+    "id": "design",
+    "headline": "兆易创新业务覆盖存储、MCU、传感和模拟；不同产品的价格与库存周期应分开。",
+    "url": "https://www.gigadevice.com/about/company-profile",
+    "source": "兆易创新官网",
+    "business": [
+      {
+        "code": "603986",
+        "name": "兆易创新",
+        "role": "存储、MCU、传感与模拟芯片",
+        "basis": "官网明确Fabless身份和产品范围；产品业务不意味着所有终端需求同步增长。",
+        "url": "https://www.gigadevice.com/about/company-profile",
+        "sourceLabel": "公司公开业务资料",
+        "processes": [
+          "storage",
+          "compute",
+          "sensors",
+          "analog",
+          "pmic"
+        ]
+      }
+    ],
+    "metrics": [],
+    "risk": "设计导入到量产出货仍需订单、收入与库存验证，不能拿公司全部收入代表单个芯片品类。",
+    "checkedAt": "2026-10-30",
+    "dateBasis": "checked_only",
+    "published": null,
+    "period": "公开业务资料；非行业统计",
+    "locator": "来源正文"
+  },
+  {
+    "id": "power",
+    "headline": "斯达半导官网分别列IGBT、SiC和分立器件；汽车、工业及能源需求不混为同一周期。",
+    "url": "https://www.powersemi.com/",
+    "source": "斯达半导官网",
+    "business": [
+      {
+        "code": "603290",
+        "name": "斯达半导",
+        "role": "IGBT与SiC功率模块",
+        "basis": "官网产品目录列IGBT、SiC、IPM及二极管模块，并区分应用方案。",
+        "url": "https://www.powersemi.com/",
+        "sourceLabel": "公司公开业务资料",
+        "processes": [
+          "igbt",
+          "sic",
+          "diode"
+        ]
+      }
+    ],
+    "metrics": [],
+    "risk": "产品目录不证明车规认证或本轮新增订单；器件、模块及终端收入分别核对。",
+    "checkedAt": "2026-10-30",
+    "dateBasis": "checked_only",
+    "published": null,
+    "period": "公开业务资料；非行业统计",
+    "locator": "来源正文"
+  }
+]

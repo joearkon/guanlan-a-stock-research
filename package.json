@@ -1,0 +1,14 @@
+{
+  "name": "guanlan-local-harness",
+  "version": "0.1.0-dev",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=24.0.0" },
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "build": "npm --prefix frontend run build",
+    "start": "node src/server.mjs",
+    "doctor": "node scripts/doctor.mjs",
+    "test:live": "node scripts/live-smoke.mjs"
+  }
+}

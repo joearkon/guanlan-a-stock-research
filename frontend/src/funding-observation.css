@@ -1,0 +1,147 @@
+.funding-page{min-width:0}
+.funding-page>.page-heading{margin-bottom:16px}
+.funds-radar{min-width:0;margin:0 0 20px;padding:16px 20px;background:var(--surface);border:1px solid var(--line);border-radius:8px}
+.funds-radar-heading{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:4px 16px;margin-bottom:12px}
+.funds-radar-heading h2{font-size:18px;line-height:28px;margin:0}
+.funds-radar-heading p,.funds-radar-heading small{color:var(--muted);font-size:12px;line-height:20px}
+.funds-radar-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.funds-radar-toolbar label{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:14px;min-width:0}
+.funds-radar-toolbar select,.funds-radar-toolbar input{min-height:34px;padding:6px 10px;max-width:100%}
+.funds-radar-toolbar .segmented{border-radius:6px}
+.funds-radar-toolbar{display:grid;grid-template-columns:auto auto minmax(170px,auto) minmax(190px,1fr)}
+.funds-radar-toolbar>label{grid-column:4;justify-self:end}
+@media(max-width:1000px){.funds-radar-toolbar{grid-template-columns:repeat(2,minmax(0,1fr))}.funds-radar-toolbar>label{grid-column:auto;justify-self:stretch}}
+@media(max-width:600px){.funds-radar-toolbar{display:flex}}
+.funds-radar-ranks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.funds-radar-ranks>section{min-width:0}
+.funds-radar-ranks h3{margin:0 0 8px;display:flex;align-items:center;gap:8px;font-size:14px;line-height:24px;font-weight:600}
+.funds-radar-ranks h3 small{font-weight:400;font-size:12px;color:var(--muted)}
+.funds-radar-ranks table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:14px;line-height:20px;font-variant-numeric:tabular-nums lining-nums}
+.funds-radar-ranks th{color:var(--muted);font-size:12px;font-weight:400;text-align:right;padding:8px 0;border-bottom:1px solid var(--line)}
+.funds-radar-ranks td{text-align:right;padding:10px 0;border-bottom:1px solid color-mix(in srgb,var(--line) 65%,transparent);vertical-align:middle;overflow-wrap:anywhere}
+.funds-radar-ranks th:first-child,.funds-radar-ranks td:first-child{text-align:left;width:44%;padding-right:12px}
+.funds-radar-ranks tbody tr:last-child td{border-bottom:0}
+.funds-radar-ranks tbody tr:hover{background:var(--raised)}
+.funds-radar-ranks td small{display:block;font-size:12px;line-height:20px;color:var(--muted)}
+.funds-radar-ranks td button{font:inherit;background:transparent;border:0;padding:0;text-align:inherit;color:inherit}
+.funds-radar-ranks td button:hover{color:var(--accent)}
+.funds-radar-ranks .funds-radar-board{display:block;width:100%;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.funds-radar-ranks td:nth-child(2){white-space:nowrap}
+.funds-radar-ranks th:nth-child(3),.funds-radar-ranks td:nth-child(3){padding-left:14px}
+.funds-radar-ranks td:nth-child(3){font-size:12px;line-height:18px;color:var(--muted);white-space:normal}
+.funds-radar-changes{margin-top:24px;padding-top:20px;border-top:1px solid var(--line)}
+.funds-radar-changes h2{font-size:18px;line-height:28px;margin:0 0 8px}
+.funds-radar-changes>.segmented{display:flex;width:fit-content;max-width:100%;overflow-x:auto;margin:12px 0}
+.funds-radar-changes>.segmented button{flex:none;white-space:nowrap}
+.funds-market-structure{background:var(--input);border-radius:6px;padding:12px 16px;margin:12px 0}
+.funds-market-structure>header{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}.funds-market-structure h3{font-size:14px;line-height:24px;margin:0}.funds-market-structure small,.funds-market-structure details{font-size:12px;line-height:20px;color:var(--muted)}
+.funds-market-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;padding:12px 0}.funds-market-stats>div{display:grid;gap:4px}.funds-market-stats span{font-size:12px;color:var(--muted)}.funds-market-stats strong{font-size:18px;line-height:28px;font-variant-numeric:tabular-nums}
+.funds-overlap-alias{font-size:12px;color:var(--muted);white-space:normal}.funds-overlap-alias p{font-size:12px;line-height:20px}.funds-radar-ranks .funds-radar-board small{display:inline;color:var(--muted)}
+.funds-audit-warning{color:var(--accent);font-weight:600}
+@media(max-width:700px){.funds-market-stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.funds-market-structure{padding:12px}}
+.funds-radar-ranks .empty{padding:24px 0;font-size:14px;line-height:24px}
+.funds-radar-note,.funds-radar-source{font-size:12px;line-height:20px;color:var(--muted);margin:12px 0 0}
+.funding-page .funds-radar-source{margin:0 0 12px;padding:0;border:0;font-size:12px;line-height:20px}
+.funds-radar .funds-radar-note{padding-top:12px;border-top:1px solid var(--line)}
+.funds-radar .funds-radar-note summary{cursor:pointer;width:fit-content}
+.funds-radar .funds-radar-note p{font-size:12px;line-height:20px;margin-top:8px;max-width:100ch}
+.funding-page .funds-radar-heading p{font-size:12px;line-height:20px}
+.funds-radar-source summary{cursor:pointer;display:list-item;width:fit-content}
+.funds-radar-source p{margin:8px 0 0;font-size:12px;line-height:20px;max-width:100ch}
+.funds-radar-note a,.funds-radar-source a{color:var(--accent);text-underline-offset:3px}
+.funds-radar-windows{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0}
+.funds-radar-windows>div{padding:12px;border:1px solid var(--line);border-radius:6px;min-width:0}
+.funds-radar-windows dt{font-size:12px;line-height:20px;color:var(--muted)}
+.funds-radar-windows dd{margin:4px 0 0;font-size:18px;line-height:28px;font-weight:600;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.funding-page>section[aria-label="量价支撑"],.funding-page>section[aria-label="资金方向"]{margin-bottom:20px;min-width:0}
+.funding-page>section[aria-label="量价支撑"]>h2,.funding-page>section[aria-label="资金方向"]>h2{margin:0 0 4px}
+.funding-page>section[aria-label="量价支撑"]>.provenance,.funding-page>section[aria-label="资金方向"]>.provenance{margin:0 0 8px}
+.funding-directions{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:12px 0 0}
+.funding-directions section{border:1px solid var(--line);background:var(--surface);padding:12px 16px;border-radius:8px;margin-bottom:0}
+.funding-directions .widget-heading{border-bottom:0;margin-bottom:4px;padding-bottom:4px}
+.funding-directions .widget-heading p{margin-top:0;font-size:12px;line-height:20px}
+.funding-directions h2{margin:0;font-size:18px;line-height:28px}
+.funding-direction-item{display:flex;width:100%;align-items:center;justify-content:space-between;gap:12px;text-align:left;padding:9px 0;border:0;border-bottom:1px solid var(--line);background:transparent;font-size:14px;line-height:24px}
+.funding-direction-item:last-child{border-bottom:0}
+.funding-direction-item strong{font-size:14px;line-height:24px;font-weight:500;min-width:0;overflow-wrap:anywhere}
+.funding-direction-item>span{font-size:14px;white-space:nowrap;flex:none}
+.funding-direction-item:hover,.funding-transition:hover{background:var(--raised)}
+.funding-direction-item:focus-visible,.funding-transition:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.funding-timeline{list-style:none;margin:8px 0 0;padding:0;max-height:560px;overflow:auto;scrollbar-width:thin}
+.funding-timeline li{display:grid;grid-template-columns:64px minmax(0,1fr);border-bottom:1px solid var(--line);padding:12px 0;gap:8px}
+.funding-timeline li:last-child{border-bottom:0}
+.funding-timeline time{font-variant-numeric:tabular-nums;color:var(--muted);font-size:12px;line-height:20px;padding-top:2px}
+.funding-transition{display:grid;width:100%;gap:2px;text-align:left;padding:0 10px;border:0;border-left:2px solid var(--line);background:transparent;min-width:0;font-size:14px;line-height:24px}
+.funding-transition strong{font-size:14px;line-height:24px;font-weight:500;overflow-wrap:anywhere}
+.funding-transition>span{font-size:12px;line-height:20px}
+.funding-transition:focus,.funding-transition:hover{border-left-color:var(--accent)}
+.funding-transition small{color:var(--muted);font-size:12px;line-height:20px}
+.funding-evidence-stocks{display:flex;flex-wrap:wrap;gap:12px}
+.funding-page .relay-layout{grid-template-columns:minmax(0,1fr) minmax(280px,.4fr);gap:20px;align-items:start;margin-top:12px}
+.funding-page .relay-layout>.panel-boundary>.widget:has(.funding-timeline){position:sticky;top:84px;margin:0;padding:16px;border-radius:8px}
+.funding-page .relay-layout .widget:has(.funding-timeline) .widget-heading{padding-bottom:12px;margin-bottom:8px}
+.funding-page .relay-layout .widget:has(.funding-timeline)>.provenance{font-size:12px;line-height:20px;margin:0 0 4px}
+.funding-page>.segmented{margin-top:8px}
+.funding-page>.provenance{margin:8px 0;font-size:12px;line-height:20px}
+.funding-page .collective-controls{display:grid;grid-template-columns:auto minmax(220px,.8fr) minmax(220px,1fr);align-items:end;gap:16px;margin:16px 0 12px}
+.funding-page .collective-controls>label{font-size:12px;gap:6px;min-width:0}
+.funding-page .collective-controls input,.funding-page .collective-controls select{width:100%;min-width:0;min-height:36px;padding:8px 10px}
+.funding-page .relay-theme{border-radius:8px;margin-bottom:12px;min-height:0}
+.funding-page .collective-summary{grid-template-columns:40px minmax(150px,1fr) minmax(120px,.6fr) minmax(130px,.7fr);padding:12px;gap:12px;align-items:start}
+.funding-page .collective-summary img{width:40px;height:40px;border-radius:6px}
+.funding-page .collective-summary strong{font-size:14px;line-height:24px}
+.funding-page .collective-summary b{font-size:14px;line-height:24px;font-weight:500}
+.funding-page .collective-summary small{font-size:12px;line-height:20px}
+.funding-page .collective-summary>span{min-width:0}
+.funding-page .collective-facts{padding:0 12px 12px;gap:4px 16px;font-size:12px;line-height:20px}
+.funding-page .collective-archive{margin-top:16px;background:transparent;border-color:var(--line)}
+.funding-page .collective-archive summary{color:var(--muted)}
+.funding-evidence-drawer dd{overflow-wrap:anywhere;margin-inline-start:0}
+.market-observation-tabs{margin-bottom:20px}
+.market-observation-extra{margin-top:16px;border:1px solid var(--line);border-radius:6px;padding:16px}
+.market-observation-extra>summary{font-size:16px;font-weight:600;cursor:pointer}
+@media(max-width:1200px){
+ .funding-page .collective-summary{grid-template-columns:40px minmax(0,1fr) minmax(130px,.7fr)}
+ .funding-page .collective-summary>span:last-child{grid-column:2/-1;display:flex;align-items:center;flex-wrap:wrap;gap:4px 12px}
+ .funding-page .collective-summary>span:nth-last-child(2){grid-column:auto}
+ .funding-page .collective-controls{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+ .funding-page .collective-controls>.segmented{grid-column:1/-1;justify-self:start}
+}
+@media(max-width:900px){
+ .funding-page .relay-layout{grid-template-columns:minmax(0,1fr)}
+ .funding-page .relay-layout>.panel-boundary>.widget:has(.funding-timeline){position:static}
+ .funds-radar{padding:16px}
+ .funds-radar-ranks{gap:20px}
+}
+@media(max-width:600px){
+ .funds-radar{padding:12px;margin-bottom:16px}
+ .funds-radar-heading{align-items:flex-start}
+ .funds-radar-toolbar{gap:8px;margin-bottom:12px;align-items:stretch}
+ .funds-radar-toolbar>label{width:100%;justify-content:space-between;flex-wrap:wrap;gap:6px}
+ .funds-radar-toolbar select{flex:1;min-width:120px;max-width:100%}
+ .funds-radar-toolbar>.segmented{width:100%;display:flex}
+ .funds-radar-toolbar>.segmented button{flex:1}
+ .funds-radar-ranks,.funding-directions{grid-template-columns:minmax(0,1fr);gap:12px}
+ .funds-radar-ranks>section+section{border-top:1px solid var(--line);padding-top:12px}
+ .funds-radar-ranks th:first-child,.funds-radar-ranks td:first-child{width:40%;padding-right:8px}
+ .funds-radar-ranks td{padding:9px 0}
+ .funding-directions section{padding:12px}
+ .funding-direction-item{gap:8px;align-items:flex-start}
+ .funding-direction-item>span{font-size:12px}
+ .funding-page .collective-controls{grid-template-columns:minmax(0,1fr);gap:12px;margin:12px 0}
+ .funding-page .collective-controls>.segmented{grid-column:auto;justify-self:stretch;display:flex}
+ .funding-page .collective-controls>.segmented button{flex:1}
+ .funding-page .collective-summary{grid-template-columns:32px minmax(0,1fr);gap:8px;padding:12px}
+ .funding-page .collective-summary img{width:32px;height:32px}
+ .funding-page .collective-summary>span:nth-last-child(-n+2){grid-column:2/-1;display:block}
+ .funding-page .collective-summary>span:last-child>small{display:block}
+ .funding-page .collective-toggle{margin-top:4px}
+ .funding-page .collective-facts{gap:4px 12px}
+ .funding-page .relay-layout{gap:16px;margin-top:12px}
+ .funding-timeline{max-height:440px}
+ .funding-page .page-heading>.outline-button{margin-left:auto}
+}
+.funds-data-timing{display:grid;grid-template-columns:minmax(140px,.8fr) minmax(170px,1fr) minmax(210px,1.2fr);gap:12px;padding:12px 16px;margin:12px 0 16px;border-radius:8px;background:linear-gradient(110deg,var(--active),var(--surface));border:1px solid var(--line)}
+.funds-data-timing>div{min-width:0;display:grid;gap:4px}.funds-data-timing span{font-size:12px;color:var(--muted)}.funds-data-timing time,.funds-data-timing strong{font-size:14px;line-height:22px;font-weight:600;color:var(--heading);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}.funds-data-timing time{color:var(--accent)}
+.funds-radar-toolbar>button[aria-pressed=true]{background:var(--active);border-color:var(--accent);color:var(--accent)}
+@media(max-width:760px){.funds-data-timing{grid-template-columns:repeat(2,minmax(0,1fr));padding:12px;gap:12px}.funds-data-timing>div:last-child{grid-column:1/-1}}

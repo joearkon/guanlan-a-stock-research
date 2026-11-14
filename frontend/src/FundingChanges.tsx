@@ -1,0 +1,9 @@
+import {useState} from 'react';
+import {Segmented} from './components';
+import {number,tone} from './api';
+export default function FundingChanges({data,onPick,pageLimit,onMore}:{data:any;onPick:(row:any)=>void;pageLimit?:number;onMore?:()=>void}){
+ const [view,setView]=useState('turnedPositive'),[localLimit,setLimit]=useState(10),limit=pageLimit||localLimit,changes=data?.changes;
+ const options:[string,string][]=[['turnedPositive','五日转正'],['accelerated','五日加速'],['decelerated','五日减速'],['divergence','窗口背离'],['todayReturn','今日回流'],['todayOutflow','今日反手流出']];
+ const rows=Array.isArray(changes?.[view])?changes[view]:[];
+ return <section className="funds-radar-changes" aria-label="资金窗口变化"><h2>资金窗口变化</h2><p className="provenance">同一来源全量已收板块中的窗口变化，不限于上方前十；不等于逐日连续趋势。</p>{data?.dailyComparison?.reason&&<p className="provenance">{data.dailyComparison.reason}</p>}<Segmented label="资金变化类型" value={view} options={options} onChange={v=>{setView(v);setLimit(10);}}/>{changes?<><div className="quote-scroll"><table className="data-table"><thead><tr>{['板块','今日（亿）','近5日（亿）','前5日推导（亿）','当日状态'].map(s=><th key={s}>{s}</th>)}</tr></thead><tbody>{rows.slice(0,limit).map((r:any)=><tr key={r.code}><td><button className="funds-radar-board" onClick={()=>onPick(r)}>{r.name}</button></td>{['today','d5','previous5'].map(k=><td key={k} className={tone(r[k])}>{r[k]==null?'—':(r[k]>0?'+':'')+number(r[k])}</td>)}<td>{r.action||r.divergence||r.phase||'—'}</td></tr>)}</tbody></table></div>{!rows.length&&<p className="empty">本批没有满足此规则且窗口齐全的记录；缺数据不作为无变化。</p>}{(data?.page?.totals?.["changes."+view]??rows.length)>limit&&<button className="outline-button" onClick={()=>onMore?onMore():setLimit(n=>n+10)}>再显示10个变化</button>}<p className="provenance">{changes.basis}</p></>:<p className="empty">当前已发布快照尚未提供变化分析；不从前十榜单推造。</p>}</section>;
+}

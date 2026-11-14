@@ -1,0 +1,46 @@
+.home-desk .home-personal{align-items:start;gap:16px;margin:16px 0}
+.home-personal>.panel-boundary{min-width:0}
+.home-personal .widget{padding:12px 16px;margin:0}
+.home-personal .widget-heading{padding-bottom:8px;margin-bottom:4px;min-height:28px}
+.home-personal .widget-heading h2{font-size:16px;line-height:24px}
+.home-personal .home-personal-scroll{max-height:272px;overflow:auto;overscroll-behavior:contain}
+.home-personal .home-personal-table{font-size:14px}
+.home-personal .home-personal-table th{position:sticky;top:0;background:var(--surface);z-index:1;height:30px;padding:4px 0}
+.home-personal .home-personal-table td{height:40px;padding:4px 0;line-height:20px}
+.home-personal-name{display:flex;align-items:center;min-width:0;gap:4px}
+.home-personal-name>.order-handle{flex:none;min-width:24px;min-height:28px;padding:0;margin:0 4px 0 0}
+.home-personal-name>.stock-link{min-width:0;overflow:hidden;text-align:left}
+.home-personal .home-personal-table strong{font-size:14px;line-height:20px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.home-personal .home-personal-table small{font-size:12px;line-height:20px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.home-personal-table tr:has(.order-handle[aria-pressed=true]){background:var(--raised);outline:1px solid var(--accent);outline-offset:-1px}
+.home-order-status{font-size:12px;line-height:20px;color:var(--muted);margin-top:4px}
+/* Independent stacks: short holdings no longer reserve the watchlist's height. */
+.home-desk .home-market-row>.panel-boundary>.widget{margin-bottom:0}
+.home-desk .home-market-row{margin-bottom:16px}
+.home-account-workbench{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:16px;align-items:start;margin-bottom:16px}
+.home-desk .home-account-workbench .home-personal{display:flex;flex-direction:column;align-items:stretch;gap:16px;margin:0;min-width:0}
+.home-account-workbench .home-personal>div{min-width:0}
+.home-account-workbench .home-personal-table th:first-child,.home-account-workbench .home-personal-table td:first-child{width:auto}
+.home-account-workbench .home-personal-table .home-name-column{width:24%}
+.home-account-workbench .home-personal-table th,.home-account-workbench .home-personal-table td{padding-left:8px;padding-right:8px;white-space:nowrap;text-align:left}
+.home-account-workbench .home-personal-table th:first-child,.home-account-workbench .home-personal-table td:first-child{padding-left:0}
+.home-account-workbench .home-personal-table th:last-child,.home-account-workbench .home-personal-table td:last-child{padding-right:0}
+.home-watch-table{min-width:470px}.home-holdings-table{min-width:450px}
+.home-quote-time{font-size:12px;color:var(--muted)}
+.home-related-card .widget-heading{flex-wrap:wrap;gap:8px}
+.home-related-card .widget-heading>div:first-child{display:block}
+.home-tasks-card .empty{padding:16px 0;font-size:14px;line-height:20px}
+.home-theme-support .widget-heading{flex-wrap:wrap;gap:8px}
+.home-theme-support .widget-heading>div:first-child{display:block}
+.home-theme-support .quote-scroll{max-height:260px;overflow:auto}
+.home-theme-support .data-table{min-width:420px}
+.home-theme-support .data-table th{position:sticky;top:0;z-index:1}
+.home-theme-support .data-table th:first-child{width:36%}
+.home-theme-support .data-table th:nth-child(2){width:39%}
+.home-theme-support .data-table th:last-child{width:25%}
+@media(max-width:1000px){
+ .home-account-workbench{grid-template-columns:minmax(0,1fr)}
+ .home-desk .home-account-workbench .home-personal{display:contents}
+ .home-watch-card{order:0}.home-hold-card{order:1}.home-related-card{order:2}.home-tasks-card{order:3}.home-theme-support{order:4}
+}
+.home-desk .home-notice-row{height:auto;min-height:60px;padding:10px 4px;gap:8px;border-bottom:0;border-radius:5px;align-items:start}.home-notice-row>span{min-width:0}.home-desk .home-notice-row time{font-variant-numeric:tabular-nums;line-height:20px}.home-desk .home-notice-row small{line-height:20px}.home-desk .home-notice-row .announcement-title{display:block;max-width:100%;width:100%;text-align:left;padding:2px 0 0;border:0;background:none}.home-desk .home-notice-row .announcement-title strong{line-height:20px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.home-desk .home-notice-row:hover{background:var(--raised)}.home-task-link{font-size:14px;font-weight:500;line-height:24px;color:var(--heading);text-decoration:none}.home-task-link:hover{color:var(--accent);text-decoration:underline}

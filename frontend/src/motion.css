@@ -1,0 +1,13 @@
+:root{--motion-fast:100ms;--motion-ui:150ms;--motion-panel:200ms;--motion-ease:cubic-bezier(.16,1,.3,1)}
+/* Financial updates never inherit a tween from interactive chrome. */
+button,a,.quotes tbody tr{transition:none}
+:where(.primary,.outline-button,.quiet-button,.icon-button):not(:disabled){transition:transform var(--motion-fast) var(--motion-ease)}
+:where(.primary,.outline-button,.quiet-button,.icon-button):not(:disabled):active{transform:scale(.98)}
+:root .segmented[data-motion] button{position:relative;isolation:isolate;border-color:transparent;transition:none}
+:root .segmented[data-motion] button.active{background:transparent;border-color:transparent}
+.segmented-indicator{position:absolute;inset:0;z-index:-1;pointer-events:none;border:1px solid var(--accent);border-radius:4px;background:var(--active);transition:none;transform-origin:center}
+[data-market-value],.quotes td,.quotes td *,.stat strong,.home-index-value,.home-index-value *,.ohlc,.ohlc *,.snapshot strong{transition:none!important;animation:none!important}
+[data-market-value]{display:inline-block;border-radius:2px}
+.quote-flash-up{background:color-mix(in srgb,var(--up) 20%,transparent)}
+.quote-flash-down{background:color-mix(in srgb,var(--down) 20%,transparent)}
+@media(prefers-reduced-motion:reduce){:root{--motion-fast:0ms;--motion-ui:0ms;--motion-panel:0ms}:where(.primary,.outline-button,.quiet-button,.icon-button):active{transform:none!important}.quote-flash-up,.quote-flash-down{background:transparent}}

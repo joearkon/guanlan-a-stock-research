@@ -1,0 +1,32 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';import os from 'node:os';import path from 'node:path';
+import {createApp} from '../src/server.mjs';
+const id='93333333-3333-4333-8333-333333333333';
+for(const engine of ['codex','codebuddy','claude'])test(`native commentary uses the saved ${engine}, persists verbatim, and never falls back on failure`,async t=>{
+ const dir=fs.mkdtempSync(path.join(os.tmpdir(),'gl-commentary-')),remote=[],calls=[];
+ const app=createApp({dataDir:dir,remoteFetch:async(url,init={})=>{
+  remote.push({url,method:init.method||'GET'});
+  if(url.endsWith('/api/auth/password/login'))return Response.json({ok:true},{headers:{'set-cookie':'gl_session=fake-isolated; Path=/'}});
+  if(url.endsWith('/api/me'))return Response.json({user:{id:7}});
+  return Response.json({asof:'2026-11-13',indices:[{code:'000001',price:100,pct:1}],ustats:{up:2,down:1}});
+ },detect:async()=>[{id:engine,installed:true,authenticated:true,available:true,status:'ready',version:'isolated-test-cli',...(engine==='claude'?{authRevision:'isolated-revision',billingSource:'Claude 本人订阅 / 账号额度'}:{})}],run:async(selected,request)=>{if(request.context?.connectionProbe)return {nativeText:'隔离连接夹具响应'};calls.push({selected,request});if(calls.length>1)throw Object.assign(Error('simulated provider failure'),{code:'agent_not_authenticated'});return {nativeText:'## 自主盘面研究\n\n| 观察 | 边界 |\n|---|---|\n| 只读共享资料 | 不编造缺口 |\n\n原生 **Markdown** 保持不变。'};}});
+ await new Promise(r=>app.server.listen(0,'127.0.0.1',r));const base='http://127.0.0.1:'+app.server.address().port;
+ t.after(async()=>{await app.close();assert.equal(path.dirname(path.resolve(dir)),path.resolve(os.tmpdir()));assert.ok(path.basename(dir).startsWith('gl-commentary-'));fs.rmSync(dir,{recursive:true,force:true});});
+ const post=(p,body,cookie='')=>fetch(base+p,{method:'POST',headers:{origin:base,'content-type':'application/json','x-gl':'1',cookie},body:JSON.stringify(body)});
+ const login=await post('/api/auth/password/login',{email:'qa@example.invalid',password:'fake'}),cookie=login.headers.get('set-cookie').split(';')[0];
+ const probeId='95555555-5555-4555-8555-555555555555';await post('/api/local-ai/probes',{engine,turnId:probeId},cookie);for(let n=0;n<100&&app.service.get('cloud:7',probeId)?.status!=='complete';n++)await new Promise(r=>setTimeout(r,10));assert.equal((await post('/api/local-ai/settings',{engine,probeId},cookie)).status,200);
+ const payload={turnId:id,engine:engine==='codex'?'codebuddy':'codex',question:'研究2026-11-13的盘面，自主编排并保留原生回答。',outputMode:'native',context:{page:'全市场观测',section:'market-commentary-v1',asof:'2026-11-13'}};
+ assert.equal((await post('/api/agent/jobs',payload,cookie)).status,202);
+ const wait=async(jobId,status)=>{for(let n=0;n<100;n++){const r=await(await fetch(base+'/api/agent/jobs/'+jobId,{headers:{cookie}})).json();if(r.status===status)return r;await new Promise(r=>setTimeout(r,10));}assert.fail('not settled');};
+ const complete=await wait(id,'complete');assert.equal(complete.engine,engine);assert.equal(complete.result.outputMode,'native');assert.equal(complete.result.asof,'2026-11-13');
+ assert.match(complete.result.answer,/\| 观察 \| 边界 \|/);assert.equal(complete.result.diagnostics.tokens.total,null);assert.equal(calls[0].selected,engine);assert.equal(calls[0].request.outputMode,'native');
+ for(let n=0;n<3;n++){await post('/api/agent/jobs',payload,cookie);await wait(id,'complete');}assert.equal(calls.length,1);
+ app.store.status('cloud:7',id,'needs_attention','simulated interrupted finalization');
+ const restored=await(await post('/api/agent/jobs/'+id+'/revalidate',{},cookie)).json();assert.equal(restored.status,'complete');assert.equal(restored.result.answer,complete.result.answer);assert.equal(calls.length,1);
+ const failId='94444444-4444-4444-8444-444444444444';await post('/api/agent/jobs',{...payload,turnId:failId},cookie);await wait(failId,'failed');
+ await post('/api/agent/jobs',{...payload,turnId:failId},cookie);assert.equal((await post('/api/agent/jobs/'+failId+'/revalidate',{},cookie)).status,409);assert.equal(calls.length,2);
+ assert.equal(app.service.get('cloud:7',id).result.answer,complete.result.answer);
+ assert.deepEqual(calls.map(c=>c.selected),[engine,engine]);assert.equal(remote.some(r=>r.method!=='GET'&&!r.url.endsWith('/api/auth/password/login')),false);
+ assert.equal(remote.some(r=>/\/api\/(agent|chat|ai)\//.test(r.url)),false);
+});

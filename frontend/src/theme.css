@@ -1,0 +1,47 @@
+/* Authoritative tokens from the 2026-10-28 migration specification.
+   Small-text contrast exceptions are documented in MIGRATION-DECISION.md. */
+.stock-link{display:inline;border:0;background:transparent;padding:0;margin:0;color:inherit;font:inherit;text-align:inherit;cursor:pointer;max-width:100%}.stock-link:hover{text-decoration:underline;text-underline-offset:3px;color:var(--accent)}.stock-link:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+.stack-form textarea{width:100%;min-height:160px;padding:12px;border:1px solid var(--line);border-radius:4px;background:var(--input);color:var(--body);font:inherit;font-size:14px;line-height:24px;resize:vertical}.stack-form textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.home-history-status{position:absolute;right:12px;top:12px;font-size:12px;color:var(--muted)}.home-history-warning:has(+.home-history-status){top:28px}
+:root,:root[data-theme=dark]{--canvas:#121212;--surface:#18181b;--raised:#242427;--line:#27272a;--heading:#f4f4f5;--body:#d4d4d8;--muted:#a1a1aa;--accent:#f97316;--up:#ef4444;--down:#22c55e;--down-text:#22c55e;--neutral:#94a3b8;--active:#36271f;--input:#141416;--chrome:#151518;color:var(--body);background:var(--canvas);color-scheme:dark}
+:root[data-theme=light]{--canvas:#f8fafc;--surface:#ffffff;--raised:#f1f5f9;--line:#e2e8f0;--heading:#0f172a;--body:#334155;--muted:#64748b;--accent:#ea580c;--up:#dc2626;--down:#16a34a;--down-text:#15803d;--neutral:#64748b;--active:#fff0e4;--input:#ffffff;--chrome:#ffffff;color:var(--body);background:var(--canvas);color-scheme:light}
+body{background:var(--canvas);color:var(--body)}h1,h2,h3,.brand strong,.stock-name{color:var(--heading)}.down{color:var(--down-text)}.muted,small{color:var(--muted)}.panel-boundary{display:contents}
+.sidebar,.topbar,[data-theme=light] .sidebar,[data-theme=light] .topbar{background:var(--chrome)}.search,.segmented,input,select,[data-theme=light] .search,[data-theme=light] .segmented,[data-theme=light] input,[data-theme=light] select{background:var(--input)}.sidebar nav>a,.subnav a,.anchor-tabs a,.user-button,.breadcrumb,.topbar time,.interaction-hint,.provenance,.widget-heading p,.home-text-button,.local-status{color:var(--muted)}.sidebar nav a:hover,.quotes tbody tr:hover,[data-theme=light] .quotes tbody tr:hover{background:var(--raised);color:var(--heading)}.sidebar nav>a.active,.subnav a.active,.quotes tr[aria-selected=true],.segmented button.active,[data-theme=light] .quotes tr[aria-selected=true],[data-theme=light] .segmented button.active{background:var(--active);color:var(--accent)}.quotes th,.data-table th,.page-tabs,.anchor-tabs,[data-theme=light] .quotes th,[data-theme=light] .data-table th,[data-theme=light] .anchor-tabs,[data-theme=light] .page-tabs{background:var(--raised)}.stat,[data-theme=light] .stat,.drawer,[data-theme=light] .drawer{background:var(--surface)}.factor-track,.home-rank-track{background:var(--raised)}.primary{background:var(--accent);border-color:var(--accent);color:#111827}.primary:hover{filter:brightness(1.08);background:var(--accent)}.quiet-button:hover,.outline-button:hover,[data-theme=light] .quiet-button:hover,[data-theme=light] .outline-button:hover{color:var(--accent);background:var(--active);border-color:var(--accent)}.fact-note,[data-theme=light] .fact-note{background:var(--active)}.fact-chip{color:var(--accent);border-color:var(--accent);background:var(--active)}.segmented button{color:var(--muted)}.segmented button:hover:not(.active){background:var(--raised);color:var(--heading)}
+.financial-chart{position:relative;min-width:0}.financial-chart-toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;font-size:12px}.financial-chart-toolbar>div{display:flex;gap:4px;margin-right:auto}.financial-chart-toolbar button{background:transparent;border:1px solid var(--line);padding:4px 8px;border-radius:4px;min-height:28px}.financial-chart-toolbar button:hover{border-color:var(--accent)}.financial-chart-toolbar button[aria-pressed=false]{opacity:.4;text-decoration:line-through}.financial-chart-canvas{width:100%;min-width:0;touch-action:pan-y}.financial-tooltip{position:absolute;z-index:4;pointer-events:none;padding:12px;border:1px solid var(--line);background:var(--surface);color:var(--body);border-radius:4px;width:192px;font-size:12px;line-height:20px;box-shadow:0 4px 20px #0003}.financial-tooltip>strong{display:block;margin-bottom:4px;color:var(--heading)}.financial-tooltip>div{display:flex;justify-content:space-between;gap:12px}.financial-tooltip span{color:var(--muted)}.financial-tooltip b{font-weight:500}.chart-attribution{font-size:12px;line-height:20px;color:var(--muted);padding-top:8px}.chart-attribution a{color:var(--accent)}.quotes td,.stat strong,.home-index-value strong,.ohlc b{transition:none}
+[data-theme=light] .home-notice-row small{color:#0369a1}[data-theme=light] .financial-chart-toolbar button:nth-child(1){color:#475569!important}[data-theme=light] .home-axis-y,[data-theme=light] .home-axis-x{color:var(--muted)}[data-theme=light] .local-error{color:#92400e;background:#fffbeb;border-color:#f59e0b}[data-theme=light] .primary{color:white}
+@media(max-width:700px){.theme-toggle{padding:4px}.topbar{gap:6px}.financial-chart-toolbar button{padding:4px 6px}.financial-tooltip{width:164px;padding:8px}.chart-attribution{font-size:12px}}
+.order-handle{touch-action:none;cursor:grab;display:inline-flex;align-items:center;justify-content:center;min-width:28px;min-height:32px;padding:4px;margin-right:8px;color:var(--muted);background:transparent;border:1px solid transparent;vertical-align:middle}
+.order-handle[aria-pressed=true]{cursor:grabbing;color:var(--accent);border-color:var(--accent)}
+.quotes tr:has(.order-handle[aria-pressed=true]){outline:1px solid var(--accent);outline-offset:-1px;background:var(--raised)}
+.order-handle:disabled{cursor:not-allowed;opacity:.4}
+tr[data-order-drop=before]{box-shadow:inset 0 2px var(--accent)}
+tr[data-order-drop=after]{box-shadow:inset 0 -2px var(--accent)}
+.quote-identity{display:flex;align-items:center;gap:8px;min-width:0}
+.quote-identity>.order-handle{flex:none;margin-right:0}
+.quote-identity>.stock-link,.quote-identity>span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.quote-identity>.holding-name-button{flex:none;margin:0}
+.quotes .quote-identity small{display:block;margin-left:0;overflow:hidden;text-overflow:ellipsis}
+.asset-management-actions{display:flex;align-items:center;gap:12px}
+.quotes .quote-table-actions{position:sticky;right:0;background:var(--surface);text-align:center;box-shadow:-1px 0 var(--line);z-index:1}
+.quotes th.quote-table-actions{width:76px;z-index:3;background:var(--raised)}
+.quotes tr[aria-selected=true] .quote-table-actions{background:var(--active)}
+.quotes tr:hover .quote-table-actions{background:var(--raised)}
+/* Sticky cells and translated table rows can paint twice in Chromium. During
+   the gesture the floating row carries the action; restore stickiness on drop. */
+.quotes[data-order-dragging] tbody .quote-table-actions{position:static}
+.quotes .holding-name-button{margin-left:8px}
+.announcement-title{display:block;border:0;background:none;color:inherit;text-align:left;padding:0;font:inherit;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer}.announcement-title:hover{color:var(--accent)}
+/* Shared selection states: keep hover, selection and keyboard focus distinct. */
+:root{--selection-bg:var(--active);--selection-text:var(--accent);--count-bg:var(--raised);--count-text:var(--muted)}
+:root[data-theme=light]{--selection-bg:#fff0e4;--selection-text:#9a3412;--count-bg:#e2e8f0;--count-text:#475569}
+.page-tabs>a{background:transparent}
+.page-tabs>a:hover{background:var(--raised);color:var(--heading)}
+.page-tabs>a span{background:var(--count-bg);color:var(--count-text)}
+.page-tabs>a[aria-current=page],.page-tabs>a[aria-current=page]:hover{background:var(--selection-bg);color:var(--selection-text)}
+.page-tabs>a[aria-current=page] span{background:var(--selection-bg);color:var(--selection-text)}
+:root[data-theme=light] :is(.sidebar nav>a.active,.subnav a.active,.segmented button.active,.screener-presets button[aria-pressed=true]){background:var(--selection-bg);color:var(--selection-text)}
+:root[data-theme=light] .segmented button.active{box-shadow:none}
+:root[data-theme=light] :is(.sidebar nav>a.active,.subnav a.active):hover{background:var(--selection-bg);color:var(--selection-text)}
+:root[data-theme=light] .quotes tr[aria-selected=true],:root[data-theme=light] .quotes tr[aria-selected=true]:hover,:root[data-theme=light] .quotes tr[aria-selected=true]:hover .quote-table-actions{background:var(--selection-bg)}
+:root .quotes tr[aria-selected=true]:hover,:root .quotes tr[aria-selected=true]:hover .quote-table-actions{background:var(--selection-bg)}
+:root[data-theme=light] .quotes tr[aria-selected=true]{color:var(--body)}

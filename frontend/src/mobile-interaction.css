@@ -1,0 +1,37 @@
+/* Finger targets and native scroll arbitration. Desktop density stays unchanged.
+   Only type has !important to match the shared typography role contract. */
+.battle-touch-hint{display:none}
+@media (pointer:coarse){
+ :root .battle-edit-note .battle-pointer-hint{display:none}
+ :root .battle-edit-note .battle-touch-hint{display:block;font-size:14px;line-height:24px}
+ :root button:not(.battle-resize-edge):not(.battle-resize),
+ :root [role=button],
+ :root :is(.sidebar nav>a,.sidebar .subnav a,.sidebar-controls button,.page-tabs>a,.anchor-tabs a,.account-menu [role=menuitem]){
+  min-height:44px;min-width:44px;touch-action:manipulation;
+ }
+ :root :is(input:not([type=checkbox]):not([type=radio]),select,textarea){font-size:max(16px,calc(16px * var(--user-font-scale,1)))!important;min-height:44px}
+ :root :is(.order-handle,.battle-move,.battle-resize,.battle-resize-edge){touch-action:none}
+ :root .battle-panel-heading h2{touch-action:pan-y pinch-zoom;cursor:default;user-select:text}
+ :root :is(.quote-scroll,.home-personal .home-personal-scroll,.relay-event-list,.agent-message-scroll,.daily-grid>aside .widget:has(.daily-news)){
+  overscroll-behavior:auto;
+ }
+ :root .drawer{max-height:100dvh;scroll-padding-block:72px 24px}
+ :root .drawer :is(input,select,textarea){scroll-margin-block:84px 24px}
+ :root .drawer-close-button{width:44px;height:44px;flex:none}
+ :root .battle-panel-heading{gap:8px}
+ :root .battle-panel-tools{gap:4px;flex-shrink:0}
+}
+@media (max-width:700px) and (pointer:coarse){
+ :root .topbar{gap:4px}
+ :root .topbar :is(.icon-button,.privacy-toggle,.user-button,.ai-action){width:44px;min-width:44px;height:44px;padding:8px;justify-content:center;flex-shrink:0}
+ :root .topbar .ai-action>svg{display:block;flex:none}
+ :root .topbar .topbar-ask-label{display:none}
+ :root .topbar .search{min-height:44px;height:44px;min-width:0;padding:0 6px;flex:1 1 70px}
+ :root .topbar .search input{min-width:0;width:100%}
+ :root .topbar .security-options{top:56px}
+ :root footer :is(.platform-notice-button,.read-status>button){min-height:44px;padding-block:6px}
+}
+@media (max-width:359px) and (pointer:coarse){
+ /* Theme remains available in My > Personal settings on very narrow phones. */
+ :root .topbar .theme-toggle{display:none}
+}

@@ -1,0 +1,2 @@
+export function heatClass(value:unknown){return typeof value!=='number'||!Number.isFinite(value)?'heat-empty':value>0?'heat-up':value<0?'heat-down':'heat-flat';}
+export function heatBackground(value:unknown){if(typeof value!=='number'||!Number.isFinite(value)||value===0)return'var(--raised)';return value>0?`rgb(${Math.round(83+80*Math.min(value/3,1))} 51 57)`:`rgb(40 ${Math.round(77+39*Math.min(-value/3,1))} 65)`;}

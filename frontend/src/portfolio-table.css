@@ -1,0 +1,72 @@
+/* Account table only: never share layout classes with the quote drawer. */
+.watch-performance-toolbar{display:flex;align-items:center;flex-wrap:wrap;gap:12px;padding:8px 12px}
+.watch-performance-toolbar>span,.portfolio-quotes .watch-baseline-source{font-size:12px;line-height:20px;color:var(--muted)}
+.portfolio-quotes .watch-baseline-source{display:block;white-space:normal}
+.portfolio-quotes .quote-col-added{width:124px}
+.portfolio-quotes .quote-col-base{width:160px}
+.portfolio-quote-list>.quote-scroll{isolation:isolate;scrollbar-gutter:stable}
+.portfolio-quotes{width:100%;min-width:960px;table-layout:fixed;border-collapse:separate;border-spacing:0;font-size:14px;font-variant-numeric:tabular-nums lining-nums}
+.portfolio-quotes.holdings-quotes{min-width:1180px}
+/* Pin cells on one vertical plane; the right-hand corner also pins horizontally.
+   Separate borders keep the header divider painted during local scrolling. */
+.portfolio-quotes thead{position:static;z-index:auto}
+.portfolio-quotes thead th{position:sticky;top:0;z-index:2;background:var(--raised)}
+.portfolio-quotes thead th.quote-table-actions{z-index:3;box-shadow:none}
+.portfolio-quotes .quote-col-name{width:24%}
+.portfolio-quotes .quote-col-status{width:72px}
+.portfolio-quotes .quote-col-actions{width:112px}
+.portfolio-quotes th:first-child,.portfolio-quotes th:last-child{width:auto}
+.portfolio-quotes :is(th,td){display:table-cell;vertical-align:middle;padding:6px 12px;font-family:var(--font-sans);line-height:20px;border-bottom:1px solid var(--line)}
+.portfolio-quotes th{height:40px;font-size:14px;font-weight:500;letter-spacing:0;color:var(--body)}
+.portfolio-quotes tbody tr{height:52px}
+.portfolio-quotes tr[aria-selected=true],.portfolio-quotes tr[aria-selected=true]:hover{background:var(--active);color:var(--body)}
+.portfolio-quotes td{height:52px;font-size:14px;font-weight:400}
+.portfolio-quotes .quote-identity{display:flex;align-items:center;gap:8px;min-width:0}
+.portfolio-quotes .stock-name{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px;font-weight:600;line-height:20px}
+.portfolio-quotes .stock-name small{display:block;margin:0;font-size:12px;font-weight:400;line-height:20px;color:var(--muted)}
+.portfolio-quotes .status-chip{font-size:12px;line-height:20px}
+.portfolio-quotes :is(th,td):has(+.quote-table-actions){text-align:center}
+.portfolio-quotes :is(th,td).quote-table-actions{text-align:center;right:0;padding:6px 12px;min-width:0;border-radius:0;top:auto}
+.portfolio-quotes th.quote-table-actions{top:0;width:auto}
+.portfolio-quotes .quote-table-actions button{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-width:76px;height:32px;padding:6px 10px;margin:0;font-family:var(--font-sans);font-size:14px;font-weight:500;line-height:20px;border:1px solid var(--line);border-radius:4px;background:var(--surface);color:var(--body);cursor:pointer}
+.portfolio-quotes .quote-table-actions button:hover{background:var(--active);border-color:var(--accent);color:var(--accent)}
+.portfolio-quotes tr[aria-selected=true] .quote-table-actions{background:var(--active)}
+.portfolio-quotes .quote-table-actions button:disabled{cursor:wait;opacity:.6}
+.portfolio-quotes .portfolio-row-action svg{width:16px;height:16px;flex:none}
+.portfolio-quotes tr[aria-selected=true] .portfolio-row-action{color:var(--accent)}
+.portfolio-quotes th .portfolio-sort-button{display:inline-flex;justify-content:flex-end;align-items:center;gap:6px;min-height:28px;padding:2px 4px;font-family:var(--font-sans);font-size:14px;font-weight:500;line-height:20px;border-radius:3px}
+.portfolio-quotes th .portfolio-sort-button:hover{background:var(--active);color:var(--accent)}
+.portfolio-quotes th[aria-sort=ascending],.portfolio-quotes th[aria-sort=descending]{color:var(--accent)}
+.portfolio-sort-arrows{display:flex;flex-direction:column;justify-content:center;gap:0;flex:none;width:12px;height:20px}
+.portfolio-sort-arrows svg{height:10px;opacity:.4}
+.portfolio-quotes .portfolio-sort-arrows svg[data-active=true]{opacity:1;color:var(--accent)}
+.portfolio-sort-status{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 16px;border-bottom:1px solid var(--line);font-size:12px;line-height:20px;color:var(--muted)}
+.portfolio-sort-status button{border:0;background:none;color:var(--accent);padding:0;font:inherit;cursor:pointer}
+.portfolio-table-panel>.portfolio-toolbar{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin:0;padding:12px 16px;border-bottom:1px solid var(--line);background:var(--surface)}
+.portfolio-table-panel>.portfolio-toolbar label{display:inline-flex;align-items:center;gap:8px;font-size:14px;line-height:20px;color:var(--body)}
+.portfolio-table-panel>.portfolio-toolbar select,.portfolio-table-panel>.portfolio-toolbar button{height:36px;min-height:36px;padding:6px 12px;font-family:var(--font-sans);font-size:14px;line-height:22px}
+.portfolio-selected-context{margin-left:auto;max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;color:var(--muted)}
+.portfolio-table-panel>.page-tabs a{font-size:14px;font-weight:500}
+@media(pointer:coarse){.portfolio-quotes .quote-table-actions button{height:40px}}
+@media(max-width:700px){.portfolio-quotes .quote-col-name{width:200px}.portfolio-quotes :is(th,td){padding:6px 10px}.portfolio-quotes :is(th,td).quote-table-actions{padding:6px 10px}}
+/* Mobile uses row actions rather than a pinned action column. Keep the first
+   two columns bounded so that the actual price fits even a 320px viewport. */
+html[data-navigation-layout=mobile] .portfolio-quotes{min-width:720px}
+html[data-navigation-layout=mobile] .portfolio-quotes.holdings-quotes{min-width:940px}
+html[data-navigation-layout=mobile] .portfolio-quotes .quote-col-name{width:128px}
+html[data-navigation-layout=mobile] .portfolio-quotes .quote-col-price{width:68px}
+html[data-navigation-layout=mobile] .portfolio-quotes .quote-col-change{width:72px}
+html[data-navigation-layout=mobile] .portfolio-quotes :is(.quote-col-actions,.quote-table-actions){display:none}
+html[data-navigation-layout=mobile] .portfolio-quotes :is(th,td){padding:6px 8px}
+html[data-navigation-layout=mobile] .portfolio-quotes td:first-child{padding-right:8px}
+html[data-navigation-layout=mobile] .portfolio-quotes .quote-identity{gap:4px}
+html[data-navigation-layout=mobile] .portfolio-quotes .stock-name{flex:1;text-align:left}
+html[data-navigation-layout=mobile] .portfolio-quotes tbody tr{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+html[data-navigation-layout=mobile] .portfolio-sort-status{gap:8px;flex-wrap:wrap;padding:4px 8px}
+html[data-navigation-layout=mobile] .portfolio-sort-help{display:none}
+.portfolio-mobile-actions{display:flex;align-items:center;gap:8px;margin-left:auto;white-space:nowrap}
+.portfolio-mobile-actions>button{min-width:44px;min-height:44px;padding:4px 6px}
+.portfolio-mobile-menu-actions{display:grid;gap:12px}
+.portfolio-mobile-menu-actions>:is(button,.stock-link){display:flex;align-items:center;justify-content:center;min-height:44px;padding:10px 16px;border:1px solid var(--line);border-radius:5px;background:var(--surface);color:var(--body);font:inherit;text-align:center}
+.portfolio-mobile-menu-actions>:is(button,.stock-link):hover{background:var(--active);border-color:var(--accent)}
+.portfolio-mobile-menu-actions>.portfolio-mobile-remove{color:var(--accent)}

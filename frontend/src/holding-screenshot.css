@@ -1,0 +1,18 @@
+.holding-screenshot{font-size:14px;line-height:1.65}
+.screenshot-privacy{display:flex;gap:12px;padding:16px;border-radius:8px;background:var(--active);color:var(--body)}
+.screenshot-privacy svg{flex-shrink:0;color:var(--accent)}
+.screenshot-privacy p,.screenshot-plan p{margin:6px 0 0;font-size:12px;color:var(--muted)}
+.screenshot-actions{display:flex;gap:8px;flex-wrap:wrap}
+.holding-screenshot .screenshot-actions button{display:inline-flex;align-items:center;gap:8px;width:auto}
+.screenshot-image canvas{display:block;max-width:100%;height:auto;margin:12px auto;touch-action:none;cursor:crosshair;border-radius:6px;background:var(--canvas)}
+.screenshot-image{max-width:100%;min-width:0}
+.screenshot-rows{display:grid;gap:12px}.screenshot-row{padding:16px;border-radius:8px;border:1px solid var(--line);background:var(--canvas)}
+.screenshot-row-title{display:flex;justify-content:space-between;margin-bottom:12px}.screenshot-row-title>span{font-size:12px;color:var(--muted)}
+.screenshot-fields{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:10px}.screenshot-fields label{min-width:0}
+.holding-screenshot label{display:flex;flex-direction:column;gap:6px}.screenshot-row>label{margin-top:10px}
+.holding-screenshot .screenshot-confirm{display:flex;flex-direction:row;align-items:center;gap:10px;min-height:44px}.screenshot-confirm input{width:18px;height:18px;accent-color:var(--accent);flex-shrink:0}
+.screenshot-warning{font-size:12px;color:var(--accent);margin:10px 0}.screenshot-row.is-skipped{opacity:.6}.screenshot-plan{padding:16px;background:var(--active);border-radius:8px}.screenshot-plan button{margin-top:14px}
+.screenshot-progress{display:grid;gap:10px}.screenshot-progress progress{width:100%;accent-color:var(--accent)}
+.holding-screenshot :is(.outline-button,.primary){min-height:40px;justify-content:center}.holding-screenshot button:hover:not(:disabled){filter:brightness(1.08)}
+.import-methods{display:flex;gap:8px;margin-bottom:20px}.import-methods button[aria-pressed=true],.screenshot-actions button[aria-pressed=true]{color:var(--accent);border-color:var(--accent);background:var(--active)}
+@media(max-width:500px){.screenshot-fields{grid-template-columns:1fr 1fr}.screenshot-fields label:first-child{grid-column:1/-1}.holding-screenshot :is(button,input,select){min-height:44px}.screenshot-row{padding:12px}}

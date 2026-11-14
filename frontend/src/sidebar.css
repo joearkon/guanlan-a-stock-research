@@ -1,0 +1,39 @@
+.sidebar{display:flex;flex-direction:column;overflow:hidden;background:var(--chrome)}
+.sidebar nav>a,.sidebar-controls button{position:relative}
+.sidebar-label{position:absolute;left:52px;font-size:14px;white-space:nowrap;pointer-events:none}
+.sidebar-controls .sidebar-label{left:46px;font-size:12px}
+.sidebar-tooltip{position:fixed;transform:translateY(-50%);z-index:1000;padding:8px 12px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--heading);box-shadow:0 4px 16px #0003;font-size:12px;pointer-events:none;white-space:nowrap}
+.sidebar-content{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin}
+.sidebar-header{flex:none}
+.sidebar-controls{flex:none;padding:8px 12px;border-top:1px solid var(--line);background:var(--chrome)}
+.sidebar-content nav{padding-top:8px}
+.sidebar-controls button{display:flex;align-items:center;gap:12px;width:100%;height:36px;padding:0 16px;color:var(--muted);background:transparent;border:0;border-radius:4px;font-size:12px;white-space:nowrap}
+.sidebar-controls button:hover{background:var(--raised);color:var(--heading)}
+.sidebar-controls svg{flex:none}
+html[data-sidebar-mode=rail] .topbar{left:72px}
+html[data-sidebar-mode=rail] .route-content{margin-left:72px}
+.sidebar[data-expanded=false]{width:72px}
+.sidebar[data-expanded=false] .brand{padding:0 12px;gap:0;justify-content:center}
+.sidebar[data-expanded=false] .brand img{width:48px;max-width:48px;flex:none}
+.sidebar[data-expanded=false] .brand>div,.sidebar[data-expanded=false] .subnav{display:none}
+.sidebar[data-expanded=false] nav{padding:20px 8px}
+.sidebar[data-expanded=false] nav>a{font-size:0;padding:0;height:48px;justify-content:center;gap:0}
+.sidebar[data-expanded=false] nav>a svg{width:20px;height:20px;flex:none}
+.sidebar[data-expanded=false] .sidebar-controls{padding:8px}
+.sidebar[data-expanded=false] .sidebar-controls button{padding:0;justify-content:center}
+.sidebar[data-expanded=true]{width:240px}
+html[data-sidebar-mode=rail] .sidebar[data-expanded=true]{box-shadow:8px 0 24px #0003}
+@media(max-width:700px){
+ html[data-sidebar-mode] .sidebar{bottom:42px}
+ html[data-sidebar-mode] .topbar{left:64px}
+ html[data-sidebar-mode] .route-content{margin-left:64px}
+ .sidebar[data-expanded=false]{width:64px}
+ .sidebar[data-expanded=true] .brand{padding:0 16px;gap:12px}
+ .sidebar[data-expanded=true] .brand>div{display:block}
+ .sidebar[data-expanded=true] .brand img{width:56px}
+ .sidebar[data-expanded=true] nav{padding:16px 12px}
+ .sidebar[data-expanded=true] nav>a{font-size:14px;flex-direction:row;justify-content:flex-start;gap:16px;padding:0 16px;height:44px}
+ .sidebar[data-expanded=true] .subnav{margin-left:40px}
+ .sidebar[data-expanded=true] .subnav a{text-align:left;font-size:12px;padding:8px 12px}
+ .sidebar[data-expanded=true]{box-shadow:8px 0 24px #0005}
+}

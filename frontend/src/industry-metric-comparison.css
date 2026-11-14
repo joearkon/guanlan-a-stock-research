@@ -1,0 +1,7 @@
+.sb-metric-grid .sb-comparison{margin:8px 0;padding:0;border:0;background:transparent;font-size:12px}
+.sb-comparison summary{width:fit-content;cursor:pointer;color:var(--accent);border-radius:4px;padding:3px 5px;margin-left:-5px;transition:background-color 100ms ease-out}
+.sb-comparison summary:hover{background:var(--active)}
+.sb-comparison summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.sb-comparison p{color:var(--muted);font-size:12px;margin:6px 0}
+.sb-comparison-gap{display:block;color:var(--muted);margin:8px 0}
+.sb-metric-grid article>small{display:block;line-height:1.6;overflow-wrap:anywhere}

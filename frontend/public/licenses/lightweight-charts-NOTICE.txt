@@ -1,0 +1,5 @@
+TradingView Lightweight Charts™
+Copyright (с) 2025 TradingView, Inc. https://www.tradingview.com/
+
+Chart engine: lightweight-charts 5.2.1 (Apache-2.0).
+The GuanLan integration uses its own data providers and does not receive market data from TradingView.

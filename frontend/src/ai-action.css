@@ -1,0 +1,15 @@
+:root{--ai-ink:#ffcf9f;--ai-border:#a65e31;--ai-fill:linear-gradient(125deg,#59331e,#35251f);--ai-hover:linear-gradient(125deg,#704123,#483026)}
+[data-theme=light]{--ai-ink:#923a0c;--ai-border:#d9915b;--ai-fill:linear-gradient(125deg,#fff3df,#ffe0c6);--ai-hover:linear-gradient(125deg,#ffe6c4,#ffcfaa)}
+button.ai-action,a.ai-action{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:38px;padding:8px 14px;border:1px solid var(--ai-border);border-radius:7px;background:var(--ai-fill);color:var(--ai-ink);font:inherit;font-size:14px;line-height:20px;font-weight:600;text-decoration:none;transition:transform var(--motion-fast,100ms) var(--motion-ease,cubic-bezier(.16,1,.3,1));cursor:pointer}
+button.ai-action:hover:not(:disabled),a.ai-action:hover{background:var(--ai-hover);border-color:var(--accent);color:var(--ai-ink);filter:none}
+button.ai-action:active:not(:disabled),a.ai-action:active{transform:scale(.98)}
+button.ai-action:focus-visible,a.ai-action:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+button.ai-action:disabled{opacity:.5;cursor:not-allowed;transform:none}
+button.ai-action.ai-action-run{color:#221306;background:linear-gradient(120deg,#ffb45b,#ff8a2b);border-color:#f79435}
+button.ai-action.ai-action-run:hover:not(:disabled){background:linear-gradient(120deg,#ffc477,#ff9d48);color:#221306}
+.ai-action-icon{display:inline-block;flex:none;vertical-align:middle}.topbar .ai-action svg{display:block}.sidebar nav>a.ai-navigation>svg{color:var(--accent)}
+button.ai-action.ai-action-prepare,a.ai-action.ai-action-prepare{color:var(--ai-ink);background:var(--ai-fill)}
+.topbar button.ai-action .ai-action-icon{display:block}
+@media(prefers-reduced-motion:reduce){button.ai-action,a.ai-action{transition:none}button.ai-action:active:not(:disabled),a.ai-action:active{transform:none}}
+[data-ui-motion=reduced] button.ai-action,[data-ui-motion=reduced] a.ai-action{transition:none;transform:none}
+[data-ui-motion=reduced] button.ai-action:active:not(:disabled),[data-ui-motion=reduced] a.ai-action:active{transform:none}

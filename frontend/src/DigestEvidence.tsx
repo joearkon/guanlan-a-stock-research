@@ -1,0 +1,8 @@
+import StockLink from './StockLink';
+import {Link} from 'react-router-dom';
+import {Widget} from './components';
+import SmartTable from './SmartTable';
+import {number,pct} from './api';
+export default function DigestEvidence({fact}:{fact:any}){
+ return <div className="digest-evidence">{fact.marketDate?<><Widget title="摘要所用行情"><p className="provenance">行情日期 {fact.marketDate} · {fact.marketSource||'已发布指数资料'}；生成时间与行情日期不同，不把盘前摘要当成当日实时盘。</p><SmartTable headers={['指数','收盘','涨跌幅','行情日期']} rows={(fact.indices||[]).map((i:any)=>[i.name,number(i.price),pct(i.pct),i.asof])}/><Link to={'/market-observation?date='+fact.marketDate}>查看该业务日市场事实 →</Link></Widget><Widget title="摘要所用个人证券范围"><SmartTable headers={['名称','关系','收盘','涨跌幅','行情日期']} rows={(fact.securities||[]).map((s:any)=>[<StockLink code={s.code} name={s.name}>{s.name} {s.code}</StockLink>,s.relation,number(s.price),pct(s.pct),s.asof||'缺同日报价'])}/>{Array.isArray(fact.securities)&&!fact.securities.length&&<p className="empty">生成时该账号未录入证券自选或持仓。</p>}<p className="provenance">{fact.securitiesSource||'站内已发布个股收盘资料'} · {fact.portfolioNote}</p></Widget></>:<p className="provenance">此为研究复核摘要，不包含行情或交易判断。</p>}<Widget title="摘要中的到期任务"><SmartTable headers={['事项','证券 / 范围','复核日期','来源']} rows={(fact.tasks||[]).map((t:any)=>[t.title,/^\d{6}$/.test(t.code)?<StockLink code={t.code} name={t.name}/>:'市场复核',t.dueDate,t.source])}/></Widget><Widget title="摘要中的重点提醒"><SmartTable headers={['提醒','等级','事实时间','来源']} rows={(fact.messages||[]).map((m:any)=>[m.id?<Link to={'/notifications?message='+m.id}>{m.title}</Link>:m.title,'L'+m.priority,m.dataTime||'未提供',m.source||'未提供'])}/><p className="provenance">{fact.scope}</p></Widget></div>;
+}

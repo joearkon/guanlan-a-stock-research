@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-11-14T05:34:36.929Z",
+  "origin": "https://guanlan-research.kunkun1023.xyz",
+  "release": "2026.11.13.7",
+  "deploymentId": "dc605317-9d32-4e19-9eff-92a8b9b1933d",
+  "workerVersion": "4bc07750-fd79-49c3-9516-ac731f4bd0fb",
+  "trafficPercent": 100,
+  "backendSha256": "3e7b6955c3f80d7eef963f98d041b1083f48092f61c3cc4fc0df2eb211e37969",
+  "entry": "/next/assets/index-ZDiFmSRW.js",
+  "entrySha256": "c4d5d01b15e43af55fd994d538d6e1694689c4839798929d068de8f695f18f5a",
+  "candidateExcluded": "2026.11.13.8",
+  "sourceParity": "verified_normalized_js_css_asset_graph",
+  "productionChanged": false,
+  "parityAssetCount": 173,
+  "rebuiltEntry": "index-ZDiFmSRW.js",
+  "parityNote": "Baseline rebuild restored the exact production entry filename index-ZDiFmSRW.js; 173 reachable JS/CSS assets matched after normalizing asset hash references. Subsequent local-harness feature changes are intentional deltas from this baseline."
+}

@@ -1,0 +1,10 @@
+.widget-content{position:relative;min-width:0;isolation:isolate}
+.widget-content:has(>.skeleton){min-height:120px}
+.widget-refresh-layer{position:absolute;inset:0;z-index:5;display:grid;place-items:center;pointer-events:none;background:color-mix(in srgb,var(--surface) 30%,transparent);border-radius:8px}
+.widget-refresh-layer>span{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:24px;padding:9px 16px;color:var(--accent);background:var(--surface);box-shadow:0 6px 24px #0002;font-size:13px;line-height:20px}
+.widget-refresh-layer svg{animation:local-refresh-spin .9s linear infinite}
+.widget-content[data-updating=true]::before{content:"";position:absolute;top:0;left:0;width:100%;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);transform-origin:left;animation:local-refresh-line 1.1s ease-in-out infinite;z-index:6}
+@keyframes local-refresh-spin{to{transform:rotate(360deg)}}
+@keyframes local-refresh-line{0%{transform:scaleX(.12);opacity:.5}50%{transform:scaleX(.8);opacity:1}100%{transform:scaleX(1);opacity:.35}}
+@media(prefers-reduced-motion:reduce){.widget-refresh-layer svg,.widget-content[data-updating=true]::before{animation:none}}
+[data-ui-motion=reduced] .widget-refresh-layer svg,[data-ui-motion=reduced] .widget-content[data-updating=true]::before{animation:none}

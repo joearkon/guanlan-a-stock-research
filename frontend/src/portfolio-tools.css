@@ -1,0 +1,88 @@
+/* This existing, labelled confirmation group belongs only to ResearchEditor.
+   Do not restyle every fact-note or every drawer button to fix this action. */
+.stack-form > .fact-note[aria-label="移除关注确认"] {
+ --removal-danger:#f87171;
+ display:flex;
+ flex-wrap:wrap;
+ justify-content:flex-end;
+ align-items:center;
+ gap:12px;
+ padding:16px;
+ border:1px solid var(--line);
+ border-left:3px solid var(--removal-danger);
+ border-radius:6px;
+ background:var(--canvas);
+ color:var(--body);
+ font-size:14px;
+ line-height:24px;
+}
+.stack-form > .fact-note[aria-label="移除关注确认"] > p {
+ flex:0 0 100%;
+ margin:0;
+ overflow-wrap:anywhere;
+}
+.stack-form > .fact-note[aria-label="移除关注确认"] > button {
+ display:inline-flex;
+ align-items:center;
+ justify-content:center;
+ min-height:36px;
+ padding:7px 14px;
+ border:1px solid var(--line);
+ border-radius:4px;
+ background:var(--surface);
+ color:var(--body);
+ font:inherit;
+ font-size:14px;
+ line-height:20px;
+ white-space:nowrap;
+ cursor:pointer;
+}
+.stack-form > .fact-note[aria-label="移除关注确认"] > button:first-of-type {
+ border-color:var(--removal-danger);
+ color:var(--removal-danger);
+ font-weight:600;
+}
+.stack-form > .fact-note[aria-label="移除关注确认"] > button:hover:not(:disabled) {background:var(--raised)}
+.stack-form > .fact-note[aria-label="移除关注确认"] > button:focus-visible {outline:2px solid var(--accent);outline-offset:3px}
+.stack-form > .fact-note[aria-label="移除关注确认"] > button:disabled {opacity:.5;cursor:wait}
+[data-theme="light"] .stack-form > .fact-note[aria-label="移除关注确认"] {--removal-danger:#b91c1c}
+@media(max-width:500px) {
+ .stack-form > .fact-note[aria-label="移除关注确认"] > button {width:100%;min-height:40px}
+}
+
+/* Research drawer only; other drawers and forms retain their layout. */
+.research-editor{--removal-danger:#f87171;font-size:14px;line-height:24px}
+[data-theme=light] .research-editor{--removal-danger:#b91c1c}
+.research-editor-intro{margin:0;color:var(--muted)}
+.research-editor-intro>span{display:block;margin-top:4px;font-size:12px;line-height:20px}
+.research-management{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0}
+.research-kind{display:inline-flex;padding:2px 10px;border-radius:4px;background:var(--raised);color:var(--muted);font-size:12px;line-height:20px}
+.research-editor .research-button-row,.research-editor-footer{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.research-editor .research-button-row{justify-content:flex-end}
+.research-editor :is(.primary,.outline-button){display:inline-flex;align-items:center;justify-content:center;gap:8px;width:auto;min-height:40px;padding:8px 16px;margin:0;border:1px solid var(--line);border-radius:6px;font:inherit;font-size:14px;line-height:20px;cursor:pointer;transition:transform var(--motion-fast) var(--motion-ease)}
+.research-editor .outline-button{background:var(--canvas);color:var(--body)}
+.research-editor .primary{background:var(--accent);border-color:var(--accent);color:#121212;font-weight:600}
+.research-editor .outline-button:hover:not(:disabled){background:var(--raised);border-color:var(--accent);color:var(--accent)}
+.research-editor .primary:hover:not(:disabled){box-shadow:0 0 0 3px var(--active);filter:brightness(1.08)}
+.research-editor .research-danger{color:var(--removal-danger)}
+.research-editor .research-danger:hover:not(:disabled){color:var(--removal-danger);border-color:var(--removal-danger);background:color-mix(in srgb,var(--removal-danger) 9%,var(--canvas))}
+.research-editor :is(button,input,textarea,select):focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.research-editor :is(input,textarea,select):hover:not(:disabled){border-color:var(--muted)}
+.research-editor :is(.primary,.outline-button):active:not(:disabled){transform:scale(.98)}
+.research-editor button:disabled{opacity:.5;cursor:not-allowed}
+.research-editor .stack-form{gap:16px}
+.research-editor .stack-form>label{display:flex;flex-direction:column;gap:8px;font-size:14px}
+.research-editor textarea{min-height:112px;resize:vertical}
+.research-task-section{margin-top:8px;padding:20px;background:var(--canvas);border-radius:8px}
+.research-task-section h3{font-size:18px;line-height:28px;margin:0}
+.research-task-section>.provenance{margin:4px 0 20px}
+.research-task{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-radius:4px}
+.research-task:hover{background:var(--raised)}
+.research-task input{width:16px;height:16px;flex-shrink:0;margin-top:4px;accent-color:var(--accent)}
+.research-editor-footer{justify-content:flex-end;padding-top:16px}
+.research-removal{padding:16px;background:var(--canvas);border:1px solid var(--line);border-radius:8px}
+.research-removal p{margin:0 0 16px}
+@media(max-width:500px){.research-task-section{padding:16px}.research-editor :is(.primary,.outline-button){min-height:44px}.research-editor .research-button-row{justify-content:flex-start}}
+@media(prefers-reduced-motion:reduce){.research-editor :is(.primary,.outline-button){transition:none}.research-editor :is(.primary,.outline-button):active:not(:disabled){transform:none}}
+:root[data-ui-motion=reduced] .research-editor :is(.primary,.outline-button){transition:none}
+:root[data-ui-motion=reduced] .research-editor :is(.primary,.outline-button):active:not(:disabled){transform:none}

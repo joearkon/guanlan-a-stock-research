@@ -1,0 +1,24 @@
+/* Shared type roles: independent of route loading order and display density.
+   Intentional !important declarations are confined to type, never data/layout. */
+:root{--type-title:24px;--type-section:18px;--type-body:14px;--type-meta:12px;--text-xs:12px;--text-xs--line-height:20px;--text-sm:14px;--text-sm--line-height:24px;font-family:var(--font-sans);font-size:14px;line-height:24px;font-variant-numeric:tabular-nums lining-nums}
+body{font-family:var(--font-sans);font-size:var(--type-body);line-height:24px;font-weight:400}
+:root :is(button,input,select,textarea){font-family:var(--font-sans)!important;font-size:var(--type-body)!important;line-height:20px}
+:root :is(h1,.page-heading h1,.monitor-heading h1){font-size:var(--type-title)!important;line-height:32px!important;font-weight:600}
+:root :is(h2,.widget-heading h2,.drawer>header h2){font-size:var(--type-section)!important;line-height:28px!important;font-weight:600}
+:root :is(.route-content,.drawer) p{font-size:var(--type-body);line-height:24px}
+:root :is(small,.provenance,.widget-heading p,.page-heading>span,.local-status,.settings-scope,.home-history-warning,.home-history-status){font-size:var(--type-meta)!important;line-height:20px!important}
+:root :is(.data-table,.quotes,.home-personal-table) :is(th,td){font-family:var(--font-sans);font-size:var(--type-body);line-height:20px}
+:root :is(.stat strong,.monitor-metric strong,.home-breadth strong,.snapshot strong){font-size:24px!important;line-height:32px!important}
+:root .quote-price>strong{font-size:28px!important;line-height:36px!important}
+:root :is(.stack-form label,.agent-composer-actions label,.collective-controls label,.concept-toolbar label,.financial-chart-toolbar,.portfolio-toolbar){font-size:var(--type-body);line-height:24px}
+:root :is(.page-tabs>a,.anchor-tabs a,.subnav a,.sidebar nav>a){font-size:var(--type-body);line-height:20px}
+:root .home-personal .widget-heading h2{font-size:var(--type-section);line-height:28px}
+:root .home-personal .home-personal-table strong{font-size:var(--type-body);line-height:20px}
+:root .home-personal .home-personal-table td{padding-top:2px;padding-bottom:2px;height:44px}
+:root .home-personal .home-personal-table small{font-size:var(--type-meta);line-height:20px}
+:root .home-personal .home-tasks-card .empty{font-size:var(--type-body);line-height:24px}
+:root .breadcrumb{min-width:0;overflow:hidden;text-overflow:ellipsis;font-size:12px;line-height:20px}
+:root .breadcrumb strong{overflow:hidden;text-overflow:ellipsis}
+:root .read-status{min-width:0}:root .read-status>button{font-size:12px!important;line-height:20px!important}
+:root :is(.segmented,.page-tabs,.widget-actions){flex-wrap:wrap}
+@media(max-width:700px){.topbar{gap:6px}.topbar .breadcrumb{flex:1}.topbar .primary{padding-left:8px;padding-right:8px}.page-heading{height:auto}.home-personal .widget-heading{flex-wrap:wrap}.home-personal .widget-heading>div{min-width:0}.anchor-tabs a{padding:10px}.bulk-bar{align-items:center}.bulk-bar button{min-height:32px}.read-status>button{text-align:right}}
