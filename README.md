@@ -1,5 +1,10 @@
 # 观澜 · A 股研究工作台
 
+<picture>
+  <source media="(prefers-reduced-motion: reduce)" srcset="docs/images/guanlan-brand-poster.png">
+  <img src="docs/images/guanlan-brand.gif" alt="观澜 Local Harness：把看盘、复盘与研究串起来，使用自己的 AI Agent。" width="1200">
+</picture>
+
 **用自己的 AI Agent，把看盘、复盘和产业研究串起来。**
 
 观澜将市场情绪、题材梯队、个股异动、资金披露与公司证据放在同一个工作台。适合每天看盘、收盘复盘，并希望把关注理由持续记录下来的用户。

@@ -1,0 +1,22 @@
+{
+  "name": "guanlan-readme-brand-motion",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Isolated README brand artwork tooling; not part of the Guanlan runtime",
+  "license": "SEE LICENSE IN ../../LICENSE",
+  "scripts": {
+    "studio": "remotion studio src/index.tsx",
+    "poster": "remotion still src/index.tsx GuanlanBrand ../images/guanlan-brand-poster.png --frame=0",
+    "render": "remotion render src/index.tsx GuanlanBrand ../images/guanlan-brand.gif --codec=gif --every-nth-frame=2",
+    "check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@remotion/cli": "4.0.543",
+    "@types/react": "18.3.18",
+    "@types/react-dom": "18.3.5",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "remotion": "4.0.543",
+    "typescript": "5.9.3"
+  }
+}

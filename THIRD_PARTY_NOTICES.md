@@ -12,6 +12,8 @@
 
 ## 前端直接运行依赖
 
+README 品牌动效的 Remotion 制作工具位于独立的 [`docs/brand-motion`](docs/brand-motion/README.md)，不属于前端运行依赖，也未纳入下方前端锁文件清单。该目录单独锁定制作依赖并说明工具原许可；README 仅展示生成的图片。
+
 | 包 | 锁定版本 | 许可声明 |
 | --- | --- | --- |
 | `@radix-ui/react-dialog` | 1.3.1 | MIT |
