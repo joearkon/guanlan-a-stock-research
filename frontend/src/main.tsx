@@ -93,9 +93,9 @@ function LayoutContent({user}:{user:any}){
     {isMonitor&&<div className="subnav">{monitorLinks().map(([to,label])=><NavLink key={to} to={to}>{label}</NavLink>)}</div>}
     <NavLink to="/market-observation" aria-label="复盘" data-tour="review" className={isReview?'active':''}><History/><SidebarLabel>复盘</SidebarLabel></NavLink>
     {isReview&&<ReviewNavigation/>}
+    <NavLink to="/stock" aria-label="个股档案" data-tour="stock-dossier"><ChartNoAxesCombined/><SidebarLabel>个股档案</SidebarLabel></NavLink>
     <NavLink to="/industry" aria-label="产业价值研究" data-tour="industry"><Layers3/><SidebarLabel>产业价值研究</SidebarLabel></NavLink>
     {location.pathname.startsWith('/industry')&&<IndustryTree/>}
-    <NavLink to="/stock" aria-label="个股档案" data-tour="stock-dossier"><ChartNoAxesCombined/><SidebarLabel>个股档案</SidebarLabel></NavLink>
     <NavLink to="/battle-dashboard" aria-label="我的作战看板" data-tour="battle"><LayoutDashboard/><SidebarLabel>我的作战看板</SidebarLabel></NavLink>
     <NavLink to="/watchlist" aria-label="我的股票" data-tour="stocks" className={isStocks?'active':''}><Star/><SidebarLabel>我的股票</SidebarLabel></NavLink>
     {isStocks&&<div className="subnav"><NavLink to="/watchlist" className={/watchlist|holdings/.test(location.pathname)?'active':''}>自选与持仓</NavLink><NavLink to="/my-research">我的研究</NavLink><NavLink to="/notifications">提醒</NavLink></div>}

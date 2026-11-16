@@ -1,5 +1,9 @@
 import {expect,test,vi} from 'vitest';
 import {monitorLinks,isMonitorPath} from './monitor-navigation';
+
+test('monitor navigation places fund pulse before auction while retaining all existing destinations',()=>{
+ expect(monitorLinks(true)).toEqual([['/monitor','实时动态'],['/relay','异动接力'],['/fund-pulse','资金脉冲'],['/auction','竞价盘中']]);
+});
 test('fund pulse stays out of public navigation until source acceptance, then joins monitoring on desktop and mobile',()=>{
  expect(monitorLinks(false).map(x=>x[0])).not.toContain('/fund-pulse');
  expect(monitorLinks(true)).toContainEqual(['/fund-pulse','资金脉冲']);
