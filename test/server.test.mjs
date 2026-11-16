@@ -4,6 +4,12 @@ async function setup(t){const dir=fs.mkdtempSync(path.join(os.tmpdir(),'gl-http-
 const post=(f,path,body={},cookie='',origin=f.base)=>fetch(f.base+path,{method:'POST',headers:{origin,'x-gl':'1','content-type':'application/json',...(cookie?{cookie}:{})},body:JSON.stringify(body)});
 async function login(f){const response=await post(f,'/api/auth/password/login',{email:'qa@example.invalid',password:'not-a-real-password'});assert.equal(response.status,200);return response.headers.get('set-cookie').split(';')[0];}
 const waitFor=async fn=>{for(let i=0;i<60;i++){const value=await fn();if(value)return value;await new Promise(r=>setTimeout(r,10));}assert.fail('not settled');};
+
+test('event board context requires login and forwards only an explicit shared GET, never a model request',async t=>{
+ const f=await setup(t),p='/api/data/event-context?codes=000001,000002&day=2026-11-16';assert.equal((await fetch(f.base+p)).status,401);const cookie=await login(f),before=f.remote.length;
+ assert.equal((await fetch(f.base+p,{headers:{cookie}})).status,200);assert.equal(f.remote.length,before+1);assert.equal(f.remote.at(-1).path,'/api/data/event-context');assert.equal(f.remote.at(-1).method,'GET');
+ const after=f.remote.length;assert.equal((await post(f,p,{},cookie)).status,403);assert.equal(f.remote.length,after);assert.deepEqual(f.runs,[]);
+});
 test('local service rejects cross-site model requests and keeps cloud session credentials out of responses',async t=>{
  const f=await setup(t);assert.equal((await post(f,'/api/local-ai/probes',{engine:'codex'},'','https://evil.example')).status,403);
  assert.equal((await fetch(f.base+'/api/v2/free?view=home')).status,401);
