@@ -1,0 +1,6 @@
+.screener-load-more{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px 12px;margin:8px 0;min-height:32px;color:var(--muted);text-align:center}
+.screener-load-more p{width:100%;margin:0;color:var(--accent)}
+.screener-load-more button{min-height:44px}
+html[data-navigation-layout=mobile] .screener-page .screener-table-scroll{max-height:none;overflow-x:auto;overscroll-behavior-y:auto}
+html[data-navigation-layout=mobile] .screener-page .screener-table{overflow-anchor:none}
+html[data-navigation-layout=mobile] .screener-page .screener-table th{position:static}
