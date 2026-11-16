@@ -66,6 +66,8 @@ DeepSeek密钥使用Windows CurrentUser DPAPI加密，接口不回显，不上�
 
 ## 数据与安全
 
+资料出处、资金指标和费用边界见[数据来源说明](DATA-SOURCES.md)。外部客户端可用的线上工具与后续补齐顺序见[MCP 能力与路线图](MCP-ROADMAP.md)，不要与本地运行时的本轮证据工具混淆。
+
 ```text
 .local/
 ├── research.sqlite   # 账号隔离的资料、配置、任务与回执
