@@ -1,0 +1,47 @@
+/* Route-local reading density: preserve type roles and coarse-pointer targets. */
+:root .route-content:has(>.monitor-page),:root .route-content:has(>.relay-page.collective-page){padding-inline:12px}
+:root .monitor-page .monitor-grid{gap:12px}
+:root .monitor-page .widget{padding:12px}
+:root .monitor-page .monitor-filters{gap:8px 12px;margin:8px 0}
+:root .monitor-page .board-toolbar{gap:8px 12px;margin:8px 0}
+:root .monitor-page .monitor-panel-foot{gap:8px;padding-top:8px}
+:root .monitor-page .event-context-toolbar{padding:4px 0;gap:4px 8px}
+:root .monitor-page .event-context-snapshot{margin:0 0 4px;line-height:20px}
+:root .monitor-page .relay-event-list .relay-event{padding-block:6px;min-height:0;column-gap:8px}
+:root .monitor-page .relay-event-list .relay-event:before{top:16px}
+:root .monitor-page .relay-event-content p{line-height:20px;margin:2px 0}
+:root .monitor-page .relay-event-content .text-button{min-height:24px;line-height:20px;padding-block:0}
+:root .monitor-page .event-board-context{padding-top:0}
+:root .monitor-page .event-board-line button{min-height:24px;padding-block:0}
+:root .monitor-page .event-board-more{margin:0}
+:root .monitor-page .event-board-more summary{min-height:20px;line-height:20px}
+:root .relay-event-change.up{color:var(--up)}
+:root .relay-event-change.down{color:var(--down)}
+/* The ladder badge is a fact, not a full-size action button. */
+:root .monitor-page .limit-board-list .board-structure>.fact-chip{display:inline-flex;align-items:center;box-sizing:border-box;height:24px;min-height:24px;padding:0 6px;line-height:20px}
+:root .monitor-page .limit-board-list .data-table :is(th,td){padding:4px 8px;height:auto}
+:root .monitor-page .limit-board-list .stock-link{padding-block:0}
+:root .monitor-page .monitor-market-grid .limit-board-list .quote-scroll{max-height:600px}
+/* Controls share a baseline; they must not consume a second row for labels. */
+:root .relay-page.collective-page>.relay-snapshot-notice{margin:6px 0;padding:6px 12px}
+:root .relay-page.collective-page>.provenance{margin:6px 0}
+:root .relay-page.collective-page>.collective-controls{align-items:center;gap:8px 16px;margin:8px 0}
+:root .relay-page.collective-page>.collective-controls>label{flex-direction:row;align-items:center;gap:8px;min-width:0}
+:root .relay-page.collective-page>.collective-controls :is(select,input){max-width:100%;min-width:0;min-height:36px;padding:6px 10px}
+:root .relay-page.collective-page>.collective-controls input{width:240px}
+@media(min-width:701px){
+ :root .monitor-page .relay-event-list .relay-event{grid-template-columns:56px minmax(0,1fr)}
+ @container(min-width:480px){:root .monitor-page .relay-event-list .relay-event:has(.event-board-context){grid-template-columns:56px minmax(0,1fr) minmax(170px,.85fr)}}
+}
+@media(max-width:700px){
+ :root .monitor-page .widget{padding:10px}
+ :root .monitor-page .relay-event-list .relay-event{row-gap:2px;padding-block:8px}
+ :root .relay-page.collective-page>.collective-controls{gap:8px}
+ :root .relay-page.collective-page>.collective-controls>label{flex:1 0 100%;width:100%;display:grid;grid-template-columns:64px minmax(0,1fr)}
+ :root .relay-page.collective-page>.collective-controls :is(select,input){width:100%}
+}
+@media(pointer:coarse){
+ :root .monitor-page .relay-event-content .text-button,:root .monitor-page .event-board-line button,:root .monitor-page .event-context-toolbar button{min-height:44px;min-width:44px}
+ :root .monitor-page .event-board-more summary{box-sizing:border-box;min-height:44px;padding-block:12px}
+ :root .relay-page.collective-page>.collective-controls :is(select,input){min-height:44px}
+}

@@ -18,6 +18,7 @@ export function EventBoardContextFeed({day,codes,children}:{day:string;codes:str
  function close(){setSelected(null);if(closeTimer.current!==null)clearTimeout(closeTimer.current);closeTimer.current=setTimeout(()=>{setDrawerMounted(false);closeTimer.current=null;},250);}
  return <BoardContext.Provider value={{data,pending:q.isPending&&q.isFetching,open}}>
   <div className="event-context-toolbar"><span>当前目录归属 · 成分股中位涨幅（非板块指数）</span><button type="button" disabled={q.isFetching||!codeText} onClick={()=>{setModel('');setRevision(r=>r+1);}}>更新板块快照</button></div>
+  {data&&<small className="event-board-time event-context-snapshot" role="note" aria-label="板块快照时间口径">{shortStamp(data.collectedAt)}{data.mode==='close'?' 收盘资料':' 采集'}{data.stale?' · 旧快照':''} · 非事件时点 · 适用于下方行业与板块</small>}
   {q.isFetching&&<p className="event-context-status" role="status">正在读取共享板块快照，原异动记录不变。</p>}
   {q.error&&<p className="event-context-error" role="status">{data?'更新失败，保留上次板块快照和原日期。':'板块资料读取失败，原异动记录保留。'}{(q.error as any).status===409?' 原快照已失效，请更新板块快照。':''}</p>}
   {children}
@@ -32,7 +33,6 @@ export default function EventBoardContext({code}:{code:string}){
  return <aside className="event-board-context" aria-label="行业与板块上下文">
   {row?.industry?boardLine(row.industry,'行业'):<div className="event-board-missing">{pending&&!row?'正在核对行业／板块…':row?.industryStatus==='conflict'?'行业归属冲突':'行业归属未核验'}</div>}
   {row?.boards?.[0]?boardLine(row.boards[0],'板块'):!pending&&<div className="event-board-missing">板块归属未核验</div>}
-  {row?.boards?.length>1&&<details className="event-board-more"><summary>更多关联{row.additionalBoards?`（另有${row.additionalBoards}项未展开）`:''}</summary>{row.boards.slice(1).map((b:any)=>boardLine(b,'板块'))}</details>}
-  {data&&<small className="event-board-time">{shortStamp(data.collectedAt)}{data.mode==='close'?' 收盘资料':' 采集'}{data.stale?' · 旧快照':''} · 非事件时点</small>}
+  {row?.boards?.length>1&&<details className="event-board-more"><summary title={row.additionalBoards?`除以下已返回关联外，另有${row.additionalBoards}项未展开`:undefined}>更多关联{row.additionalBoards?` · 另${row.additionalBoards}项`:''}</summary>{row.boards.slice(1).map((b:any)=>boardLine(b,'板块'))}</details>}
  </aside>;
 }

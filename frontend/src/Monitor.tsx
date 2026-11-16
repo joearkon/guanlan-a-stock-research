@@ -21,6 +21,7 @@ import LimitBoardList,{YesterdayBoards} from './LimitBoardList';
 import MonitorDetail from './MonitorDetail';
 import StockQuoteDrawer from './StockQuoteDrawer';
 import MonitorAlertButton from './MonitorAlertButton';
+import './monitor-density.css';
 const clockText=(value:any)=>/^\d{14}$/.test(value||'')?String(value).slice(8).replace(/(\d{2})(\d{2})(\d{2})/,'$1:$2:$3'):value||'未覆盖';
 export default function Monitor(){
  const account=useProfileActions(),[params,setParams]=useSearchParams(),scope=['all','watch','positions'].includes(params.get('scope')||'')?params.get('scope')||'all':'all';

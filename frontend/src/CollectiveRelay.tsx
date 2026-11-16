@@ -17,6 +17,7 @@ import './funding-observation.css';
 import {ThemeFrequencyBadge,ThemeContinuity} from './ThemeFrequency';
 import {OfficialRuleEditor as BoardAlertEditor} from './OfficialServices';
 import MonitorAlertButton from './MonitorAlertButton';
+import './monitor-density.css';
 const sources:any={auto:'自动 · 主行业细分优先，概念作关联',ths:'同花顺概念 × 三级主行业',dc:'东财概念 × 三级主行业',sina:'新浪概念 × 三级主行业',sw:'申万三级主行业'};
 const time=(s:any)=>/^\d{14}$/.test(s||'')?`${s.slice(0,4)}-${s.slice(4,6)}-${s.slice(6,8)} ${s.slice(8,10)}:${s.slice(10,12)}:${s.slice(12,14)}`:s?new Date(s).toLocaleString('zh-CN',{timeZone:'Asia/Shanghai',hour12:false}):'未取得';
 function Members({board,model,view,direction}:{board:any,model:any,view:string,direction:string}){
