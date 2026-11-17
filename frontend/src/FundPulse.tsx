@@ -37,20 +37,25 @@ export function FundPulsePanel({data,error,refreshing=false,onRefresh,onKind,kin
  const choices=(data?.trend?.directory||[]).filter((r:any)=>(r.name+' '+r.code).toLowerCase().includes(search.trim().toLowerCase()));
  const openTrend=(r:any)=>setTarget({kind,code:r.code,name:r.name,model:data.trend.model});
  const subject=(r:any)=><span className="pulse-subject" title={r.name+' '+r.code}>{kind==='stock'?<StockLink code={r.code} name={r.name}/>:<strong>{r.name}</strong>}<small>{r.code}</small></span>;
- const rankingControls=<div className="pulse-ranking-head"><div className="pulse-switch">{[['inflow','流入'],['outflow','流出']].map(([k,label])=><button type="button" key={k} aria-pressed={direction===k} onClick={()=>setDirection(k)}>{label}</button>)}</div><span>{delta?`相邻有效采样${data?.interval_seconds?' · '+number(data.interval_seconds/60,1)+'分钟':''}，不等于当日累计或该时段真实新增资金`:archived?'快照时点累计净额前10（仅可用数据），不是当前实时排行':'当日累计可用净额前10；全目录排序后取榜，不叠加行业与概念'}</span></div>;
- const views=<div className="pulse-view-head"><nav aria-label="资金视图" className="pulse-switch pulse-tabs">{Object.entries(titles).map(([k,label])=><button type="button" key={k} aria-pressed={tab===k} onClick={()=>setTab(k)}>{label as string}</button>)}</nav><span className="pulse-view-basis">更新频率：交易时段计划每{data?.cadence_minutes??30}分钟采样，非逐笔实时。</span></div>;
+ const directions=<div className="pulse-switch pulse-directions" role="group" aria-label="资金方向">{[['inflow','流入'],['outflow','流出']].map(([k,label])=><button type="button" key={k} aria-pressed={direction===k} onClick={()=>setDirection(k)}>{label}</button>)}</div>;
+ const rankingBasis=delta?`相邻有效采样${data?.interval_seconds?' · '+number(data.interval_seconds/60,1)+'分钟':''}，不等于当日累计或该时段真实新增资金`:archived?'快照时点累计净额前10（仅可用数据），不是当前实时排行':'当日累计可用净额前10；全目录排序后取榜，不叠加行业与概念';
+ const rankingControls=<div className="pulse-ranking-head">{directions}<span>{rankingBasis}</span></div>;
+ const views=<nav aria-label="资金视图" className="pulse-switch pulse-tabs">{Object.entries(titles).map(([k,label])=><button type="button" key={k} aria-pressed={tab===k} onClick={()=>setTab(k)}>{label as string}</button>)}</nav>;
  const metrics=tab==='daily'&&<div className="pulse-switch fund-metric-switch" aria-label="榜单指标">{[['net','累计净额'],['change','相邻变化']].map(([k,label])=><button key={k} type="button" aria-pressed={metric===k} disabled={k==='change'&&!canChange} title={k==='change'&&!canChange?'本类资金源验收或有效相邻采样待补齐':undefined} onClick={()=>setMetric(k)}>{label}</button>)}{!canChange&&<span className="pulse-time">相邻变化待源验收或有效采样；累计快照仍可核对。</span>}</div>;
+ const toolbar=<section className="pulse-control-deck" aria-label="资金排行工具栏">
+  <div className="pulse-control-main"><div className="pulse-view-head">{views}</div>{tab==='daily'&&<>{metrics}{!waitingArchived&&directions}</>}</div>
+  {showTrend&&<div className="fund-trend-tools"><label><span className="pulse-field-label">查找行业 / 概念</span><input value={search} onChange={e=>{setSearch(e.target.value);setBoard('');}} placeholder="如：半导体、光刻胶"/></label><label><span className="pulse-field-label">已收录目录</span><select value={board} onChange={e=>setBoard(e.target.value)}><option value="">选择板块（{choices.length}）</option>{choices.map((r:any)=><option key={r.code} value={r.code}>{r.name} · {r.code}</option>)}</select></label><button type="button" className="outline-button" disabled={!board} onClick={()=>{const r=choices.find((r:any)=>r.code===board);if(r)openTrend(r);}}>查看趋势</button></div>}
+  <div className="pulse-control-caption">{tab==='daily'&&!waitingArchived&&<span className="pulse-ranking-basis">{rankingBasis}</span>}<p className="pulse-view-basis">更新频率：交易时段计划每{data?.cadence_minutes??30}分钟采样，非逐笔实时。</p></div>
+ </section>;
  return <section className="fund-pulse-page">
-  <header className="pulse-header"><div><h1>资金脉冲 <small className="pulse-beta">Beta（测试）</small></h1><p>资金桶统计观察，不代表机构持仓或买卖信号</p></div>{onRefresh&&<button type="button" onClick={onRefresh} disabled={refreshing} className="outline-button"><RefreshCw size={15} className={refreshing?'spin':''}/>读取共享更新</button>}</header>
-  <nav aria-label="资金范围" className="pulse-switch">{Object.entries(kinds).map(([k,label])=><button type="button" key={k} aria-pressed={kind===k} onClick={()=>{onKind?.(k);setSelected(null);}}>{label as string}</button>)}</nav>
+  <header className="pulse-header"><div className="pulse-heading"><div className="pulse-title-row"><h1>资金脉冲 <small className="pulse-beta">Beta（测试）</small></h1><nav aria-label="资金范围" className="pulse-switch pulse-kind-switch">{Object.entries(kinds).map(([k,label])=><button type="button" key={k} aria-pressed={kind===k} onClick={()=>{onKind?.(k);setSelected(null);}}>{label as string}</button>)}</nav></div><p>资金桶统计观察，不代表机构持仓或买卖信号</p></div>{onRefresh&&<button type="button" aria-label="读取共享更新" title="读取共享更新" onClick={onRefresh} disabled={refreshing} className="outline-button pulse-refresh"><RefreshCw size={15} className={refreshing?'spin':''}/><span>读取共享更新</span></button>}</header>
   {error&&<p role="status" className="pulse-warning">读取失败，保留已读版本及排序。可手动重试；不会重新抓取市场。</p>}
   <div className="pulse-retained" style={{minHeight:retainedHeight}}><LocalRefresh label={'资金'+(kinds[kind]||'资料')} busy={refreshing&&!!data} loading={!data&&!error}><div ref={retainedRef} className="pulse-retained-content">
   {pending?<>
    <div className="pulse-validation" role="status"><strong>数据验证中</strong><span>{data.reason?`${kinds[kind]}尚无可展示的完整快照，取数排查中；不影响其他类别查看。盘中源验收中，不借其他类别或旧日数据补造。`:'功能预览已开放；盘中源验收中，尚未开放排行。不展示未验收的资金数值，收盘探测不算真实盘中通过。'}</span></div>
-   {views}{metrics}
+   {toolbar}
    <section className="pulse-preview-content" aria-label={titles[tab]}>
     <h2>{kinds[kind]} · {titles[tab]}</h2>
-    {tab==='daily'&&<div className="pulse-switch">{[['inflow','流入'],['outflow','流出']].map(([k,label])=><button type="button" key={k} aria-pressed={direction===k} onClick={()=>setDirection(k)}>{label}</button>)}</div>}
     {tab==='daily'&&!delta&&<><h3>等待可核对的{direction==='inflow'?'流入':'流出'}排行</h3><p>按同源、同日主力净额正负值分别排序，全目录校验后取前10。不把行业与概念金额相加，不用行情涨幅推算资金。</p></>}
     {tab==='daily'&&delta&&<><h3>等待有效采样基准</h3><p>相邻有效采样不足，暂不显示{direction==='inflow'?'流入':'流出'}变化。脉冲是同源净额的相邻差额，不是当日累计，也不跨午休或数据缺口补0。</p></>}
     {tab==='checkpoints'&&<><p>计划留档时点如下，均为北京时间；实际采集窗口和完成时间以回执为准，不用当前滚动数据倒填旧快照。</p><div className="pulse-checkpoints">{['午盘 · 11:30','下午 · 14:30','收盘就绪 · 15:05'].map(label=><div className="pulse-preview-checkpoint" key={label}><strong>{label}</strong><small>待验收</small></div>)}</div></>}
@@ -61,9 +66,7 @@ export function FundPulsePanel({data,error,refreshing=false,onRefresh,onKind,kin
    {archived&&<SnapshotState data={data}/>}
    <div className="pulse-meta"><strong>{data.day} · {kinds[kind]}</strong><span>东方财富 · 主力净额 · 人民币</span><span>目录覆盖 {data.coverage?.received} / {data.coverage?.expected}</span>{!archived&&data.stale&&<strong className="pulse-warning">旧快照，非当前实时</strong>}</div>
    {archived&&(data.net_missing_count??0)>0&&<p className="pulse-warning">资金净额缺失 {data.net_missing_count} 项；仅对 {data.net_available_count??0} 项可用数据排名，缺失不计为0。</p>}
-   {views}
-   {showTrend&&<div className="fund-trend-tools"><label>查找行业 / 概念<input value={search} onChange={e=>{setSearch(e.target.value);setBoard('');}} placeholder="如：半导体、光刻胶"/></label><label>已收录目录<select value={board} onChange={e=>setBoard(e.target.value)}><option value="">选择板块（{choices.length}）</option>{choices.map((r:any)=><option key={r.code} value={r.code}>{r.name} · {r.code}</option>)}</select></label><button type="button" className="outline-button" disabled={!board} onClick={()=>{const r=choices.find((r:any)=>r.code===board);if(r)openTrend(r);}}>查看趋势</button></div>}
-   {tab==='daily'&&<div className="pulse-ranking-toolbar">{metrics}{!waitingArchived&&rankingControls}</div>}
+   {toolbar}
    {waitingArchived&&<p className="pulse-empty" role="status">等待两次已验收、同源同日且间隔有效的完整采样；当前快照不能生成资金脉冲。</p>}
    {tab==='checkpoints'&&<div className="pulse-checkpoints">{[['lunch','午盘'],['1430','14:30'],['close','收盘就绪']].map(([id,label])=>{const item=data.checkpoints?.find((c:any)=>c.stage===id);return <button type="button" key={id} disabled={!item} aria-pressed={selected?.stage===id} onClick={()=>setSelected(item)}><strong>{label}{item&&<span className="pulse-checkpoint-state">已收录</span>}</strong><small>{item?stamp(item.completed_at):'未留档'}</small></button>;})}</div>}
    {!waitingArchived&&(tab!=='checkpoints'||selected)&&<>

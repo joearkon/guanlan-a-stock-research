@@ -26,3 +26,18 @@ test('changing category while adjacent-change mode is selected survives the next
  expect(()=>r.rerender(<FundPulsePanel kind="concept"/>)).not.toThrow();expect(screen.getByRole('status',{name:'正在加载资金概念'})).toBeTruthy();expect(screen.queryByText('半导体')).toBeNull();
  r.rerender(<FundPulsePanel kind="concept" data={{...data,kind:'concept'}}/>);expect(screen.getByRole('button',{name:'累计净额'}).getAttribute('aria-pressed')).toBe('true');
 });
+
+test('ranking controls and board lookup share one labelled toolbar without losing selections',()=>{
+ render(<FundPulsePanel kind="industry" data={{...data,trend:{...data.trend,directory:[{code:'BK1000',name:'半导体'}]}}}/>);
+ const toolbar=within(screen.getByRole('region',{name:'资金排行工具栏'}));
+ fireEvent.click(toolbar.getByRole('button',{name:'相邻变化'}));fireEvent.click(toolbar.getByRole('button',{name:'流出'}));
+ fireEvent.change(toolbar.getByLabelText('查找行业 / 概念'),{target:{value:'半导体'}});
+ fireEvent.change(toolbar.getByLabelText('已收录目录'),{target:{value:'BK1000'}});
+ expect((toolbar.getByRole('button',{name:'查看趋势'}) as HTMLButtonElement).disabled).toBe(false);
+ expect(screen.getByText('-1.00')).toBeTruthy();
+ fireEvent.click(toolbar.getByRole('button',{name:'时点快照'}));expect(toolbar.queryByRole('combobox')).toBeNull();
+ fireEvent.click(toolbar.getByRole('button',{name:'实时排行'}));
+ expect((toolbar.getByLabelText('查找行业 / 概念') as HTMLInputElement).value).toBe('半导体');
+ expect(toolbar.getByRole('button',{name:'相邻变化'}).getAttribute('aria-pressed')).toBe('true');
+ expect(toolbar.getByRole('button',{name:'流出'}).getAttribute('aria-pressed')).toBe('true');
+});
