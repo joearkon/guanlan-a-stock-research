@@ -12,6 +12,7 @@
 .pulse-meta{display:flex;flex-wrap:wrap;gap:5px 16px;border-top:1px solid var(--line);margin-top:12px;padding:10px 0;font-size:12px;color:var(--muted)}.pulse-meta strong{color:var(--heading)}
 .pulse-tabs{padding:6px 0}.pulse-time{overflow-wrap:anywhere}.pulse-warning{color:var(--accent);font-size:12px;line-height:1.7}
 .pulse-view-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.pulse-view-basis{font-size:12px;color:var(--muted);line-height:1.6}.fund-metric-switch{align-items:center}
+.fund-trend-plot{background:var(--surface);border:1px solid var(--line);border-radius:8px;overflow:hidden}
 .pulse-ranking-head{display:flex;align-items:center;gap:12px;margin:10px 0}.pulse-ranking-head>span{font-size:12px;color:var(--muted)}
 .pulse-table-wrap{border:1px solid var(--line);border-radius:8px;overflow-x:auto;overflow-y:visible}
 .fund-pulse-page table{border-collapse:collapse;width:100%;table-layout:fixed;font-size:14px}.fund-pulse-page th,.fund-pulse-page td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums;vertical-align:middle}.fund-pulse-page th{color:var(--muted);font-weight:500;background:var(--surface)}.fund-pulse-page th:first-child,.fund-pulse-page td:first-child{text-align:left;width:38%}.fund-pulse-page tr:last-child td{border-bottom:0}.fund-pulse-page td small,.pulse-subject small{display:block;font-size:12px;color:var(--muted);margin-top:3px}
