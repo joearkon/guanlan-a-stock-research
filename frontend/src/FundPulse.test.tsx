@@ -5,6 +5,14 @@ import {QueryClient,QueryClientProvider} from '@tanstack/react-query';
 import {PreferenceProvider} from './personal-preferences';
 import FundPulse,{FundPulsePanel} from './FundPulse';
 afterEach(()=>{cleanup();vi.unstubAllGlobals();});
+test('initial data uses the shared table skeleton and refreshing preserves data under local feedback',()=>{
+ const r=render(<FundPulsePanel kind="industry" refreshing/>);expect(screen.getByRole('status',{name:'正在加载资金行业'})).toBeTruthy();expect(screen.getByRole('region',{name:'资金行业内容'}).getAttribute('aria-busy')).toBe('true');
+ r.rerender(<FundPulsePanel kind="industry" data={archived} refreshing/>);expect(screen.getByText('归档行业')).toBeTruthy();expect(screen.getByRole('status',{name:'正在更新资金行业'})).toBeTruthy();expect(screen.queryByRole('status',{name:'正在加载资金行业'})).toBeNull();
+});
+test('switching to a shorter pulse view retains the measured region height instead of collapsing the document',()=>{
+ const measure=vi.spyOn(HTMLElement.prototype,'getBoundingClientRect').mockImplementation(function(this:HTMLElement){const height=this.classList.contains('pulse-retained-content')?(this.querySelector('table')?720:240):0;return {x:0,y:0,width:600,height,top:0,left:0,right:600,bottom:height,toJSON(){return {};}};});
+ try{const r=render(<FundPulsePanel kind="industry" data={archived}/>),body=r.container.querySelector('.pulse-retained') as HTMLElement;expect(body.style.minHeight).toBe('720px');fireEvent.click(screen.getByRole('button',{name:'资金脉冲'}));expect(body.style.minHeight).toBe('720px');expect(screen.getByText(/等待两次已验收/)).toBeTruthy();}finally{measure.mockRestore();}
+});
 const row={id:'1:600519',code:'600519',name:'贵州茅台',net:5000000,pulse:-100000,pct:1.3,missing:[]};
 const data:any={day:'2026-11-16',provider:'eastmoney',kind:'stock',version:'qa-v1',captured_at:'2026-11-16T02:05:00Z',completed_at:'2026-11-16T02:06:00Z',anchor:{source_at:'2026-11-16T02:06:00Z'},interval_seconds:300,coverage:{received:5929,expected:5929,complete:true},ranks:{inflow:[row],outflow:[],pulseIn:[],pulseOut:[row]},missing_count:1,missing:[{...row,id:'0:000001',name:'缺口样本',code:'000001',net:null,missing:['net']}],ledger:{days:['2026-11-09','2026-11-10','2026-11-11','2026-11-12','2026-11-13'],missing_days:['2026-11-10'],rows:[{...row,inflow_days:2,outflow_days:1,net:null,recorded_net:5000000}]},checkpoints:[]};
 test('daily ranks and interval pulse are separate with source time and capture time explicitly distinguished',()=>{
@@ -14,9 +22,13 @@ test('daily ranks and interval pulse are separate with source time and capture t
  expect(screen.getByText('相邻采样净额变化 / 万元')).toBeTruthy();expect(screen.getByText('-10.00')).toBeTruthy();
  expect(screen.getByText(/不等于当日累计/)).toBeTruthy();expect(screen.getByText(/采集窗口/)).toBeTruthy();
 });
-test('ledger retains missing days and partial total, never renders missing as zero or fabricates high-low rotation',()=>{
- render(<FundPulsePanel data={data}/>);fireEvent.click(screen.getByRole('button',{name:'近5日台账'}));
- expect(screen.getByText(/缺档：2026-11-10/)).toBeTruthy();expect(screen.getByText('已收录 +500.00')).toBeTruthy();
+test('fund pulse is marked beta and has only ranks, pulse and checkpoints, never the removed five-day ledger',()=>{
+ render(<FundPulsePanel data={data}/>);
+ expect(screen.getByRole('heading',{level:1,name:'资金脉冲 Beta（测试）'})).toBeTruthy();
+ expect(screen.queryByRole('button',{name:'近5日台账'})).toBeNull();
+ expect(screen.queryByRole('button',{name:'个股'})).toBeNull();
+ expect(screen.queryByText(/近5日台账按/)).toBeNull();
+ expect(screen.queryByText(/已收录 \+500.00/)).toBeNull();
  expect(screen.getByText(/不生成高低切标签/)).toBeTruthy();
 });
 test('checkpoint buttons explicitly identify missing archives, not relabel current data as past snapshots',()=>{
@@ -33,8 +45,7 @@ test('pending validation keeps each feature explorable without exposing candidat
  expect(screen.queryByText('贵州茅台')).toBeNull();
  fireEvent.click(screen.getByRole('button',{name:'资金脉冲'}));
  expect(screen.getByText(/相邻有效采样不足/)).toBeTruthy();
- fireEvent.click(screen.getByRole('button',{name:'近5日台账'}));
- expect(screen.getByText(/不补造历史金额或上榜次数/)).toBeTruthy();
+ expect(screen.queryByRole('button',{name:'近5日台账'})).toBeNull();
  fireEvent.click(screen.getByRole('button',{name:'时点快照'}));
  expect(screen.getAllByText('待验收').length).toBe(3);
  expect(screen.getByText(/11:30/)).toBeTruthy();expect(screen.getByText(/15:05/)).toBeTruthy();
@@ -62,10 +73,14 @@ test('preview release does not query unpublished API or render previously cached
  client.clear();
 });
 const archived={...data,schema:1,version:'a'.repeat(64),kind:'industry',status:'archived_snapshot',not_realtime:true,validation:{qualified:false,scope:'kind'},net_missing_count:100,net_available_count:396,coverage:{received:496,expected:496,complete:true},ranks:{...data.ranks,inflow:[{...row,id:'BK1000',code:'BK1000',name:'归档行业'}]},pulse_status:'waiting_validated_samples',ledger_status:'waiting_close_archives'};
+test('a captured checkpoint explicitly says recorded alongside its real completion time',()=>{
+ render(<FundPulsePanel kind="industry" data={{...archived,checkpoints:[{stage:'lunch',completed_at:'2026-11-17T03:30:07Z',data:archived}]}}/>);fireEvent.click(screen.getByRole('button',{name:'时点快照'}));
+ expect(screen.getByRole('button',{name:/午盘.*已收录.*11:30:07/}).getAttribute('disabled')).toBeNull();expect(screen.getAllByText('未留档')).toHaveLength(2);
+});
 test('archived board data is visible without stock acceptance, with explicit expiry, missing values and snapshot time',()=>{
  render(<FundPulsePanel data={archived} kind="industry"/>);expect(screen.getByText('归档行业')).toBeTruthy();expect(screen.getByText('已采集快照 · 非实时')).toBeTruthy();expect(screen.getByText('已过期')).toBeTruthy();expect(screen.getByText(/资金净额缺失 100 项/)).toBeTruthy();expect(screen.getByText('快照主力净额 / 万元')).toBeTruthy();expect(screen.getByText(/盘中连续性待验收/)).toBeTruthy();
  fireEvent.click(screen.getByRole('button',{name:'资金脉冲'}));expect(screen.queryByRole('table')).toBeNull();expect(screen.getByText(/等待两次已验收/)).toBeTruthy();
- fireEvent.click(screen.getByRole('button',{name:'近5日台账'}));expect(screen.queryByRole('table')).toBeNull();expect(screen.getByText(/尚无完整收盘台账/)).toBeTruthy();
+ expect(screen.queryByRole('button',{name:'近5日台账'})).toBeNull();
 });
 test('snapshot expiry changes locally without a market request or automatic reordering',async()=>{
  vi.useFakeTimers();vi.setSystemTime(new Date('2026-11-17T02:00:00Z'));
@@ -74,10 +89,10 @@ test('snapshot expiry changes locally without a market request or automatic reor
 test('a mismatched-kind payload cannot display another universe under the selected heading',()=>{
  render(<FundPulsePanel data={archived} kind="concept"/>);expect(screen.queryByText('归档行业')).toBeNull();expect(screen.queryByRole('table')).toBeNull();
 });
-test('independent category reads start with industry and stock absence does not erase a cached board snapshot',async()=>{
+test('independent category reads offer only industry and concept without requesting stocks',async()=>{
  const client=new QueryClient({defaultOptions:{queries:{retry:false,gcTime:0}}}),requests:string[]=[];
  vi.stubGlobal('fetch',async(input:any)=>{const url=String(input),kind=new URL(url,'https://x').searchParams.get('kind');requests.push(kind||'');return Response.json(kind==='stock'?{status:'pending_source_validation',kind,reason:'complete_snapshot_missing'}:{...archived,kind});});
- render(<PreferenceProvider account="qa-categories"><QueryClientProvider client={client}><FundPulse preview={false}/></QueryClientProvider></PreferenceProvider>);await screen.findByText('归档行业');expect(requests).toEqual(['industry']);fireEvent.click(screen.getByRole('button',{name:'个股'}));await screen.findByText(/个股尚无可展示的完整快照/);expect(screen.queryByText('归档行业')).toBeNull();fireEvent.click(screen.getByRole('button',{name:'行业'}));await screen.findByText('归档行业');expect(client.getQueryData(['fund-pulse','qa-categories','industry'])).toBeTruthy();client.clear();
+ render(<PreferenceProvider account="qa-categories"><QueryClientProvider client={client}><FundPulse preview={false}/></QueryClientProvider></PreferenceProvider>);await screen.findByText('归档行业');expect(requests).toEqual(['industry']);expect(screen.queryByRole('button',{name:'个股'})).toBeNull();fireEvent.click(screen.getByRole('button',{name:'概念'}));await act(async()=>{await new Promise(r=>setTimeout(r,15));});expect(requests).toEqual(['industry','concept']);fireEvent.click(screen.getByRole('button',{name:'行业'}));await screen.findByText('归档行业');expect(client.getQueryData(['fund-pulse','qa-categories','industry'])).toBeTruthy();expect(requests).not.toContain('stock');client.clear();
 });
 test('an unknown API payload is a local read failure rather than an empty valid funds snapshot',async()=>{
  const client=new QueryClient({defaultOptions:{queries:{retry:false,gcTime:0}}});vi.stubGlobal('fetch',async()=>Response.json({}));render(<PreferenceProvider account="qa-invalid"><QueryClientProvider client={client}><FundPulse preview={false}/></QueryClientProvider></PreferenceProvider>);await screen.findByText(/资金资料暂不可用/);expect(screen.queryByRole('table')).toBeNull();client.clear();

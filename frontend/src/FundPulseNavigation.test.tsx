@@ -15,7 +15,7 @@ test('fund pulse remains in monitoring and is reachable from mobile More without
  expect(within(nav).getByRole('link',{name:'盯盘'}).getAttribute('aria-current')).toBe('page');
  fireEvent.click(within(nav).getByRole('button',{name:'更多'}));
  const menu=await screen.findByRole('dialog',{name:'全部功能'});
- expect(within(menu).getByRole('link',{name:'资金脉冲'}).getAttribute('href')).toBe('/fund-pulse');
+ expect(within(menu).getByRole('link',{name:'资金脉冲 Beta（测试）'}).getAttribute('href')).toBe('/fund-pulse');
  expect(within(menu).getByRole('link',{name:/本地 AI Agent/})).toBeTruthy();
  expect(requests).toEqual([]);client.clear();
 });
