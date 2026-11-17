@@ -1,14 +1,19 @@
-import {lazy,Suspense,useState} from 'react';
+import {lazy,Suspense,useEffect,useRef,useState} from 'react';
+import {Maximize2} from 'lucide-react';
 import {useQuery} from '@tanstack/react-query';
 import {getJSON,number,tone} from './api';
 import {usePreferences} from './personal-preferences';
 import {Skeleton,Drawer} from './components';
-import {clock,reasonText,sparkPaths,type FundPoint} from './fund-trend-data';
+import {clock,reasonText,type FundPoint} from './fund-trend-data';
 const Chart=lazy(()=>import('./FundTrendChart'));
+const MiniChart=lazy(()=>import('./FundTrendChart').then(m=>({default:m.FundMiniChart})));
 export type FundTarget={kind:string,code:string,name:string,model:string};
 const amount=(n:any)=>typeof n==='number'&&Number.isFinite(n)?(n>0?'+':'')+number(n/10000):'—';
 export function FundSpark({points,name,onClick}:{points:FundPoint[],name:string,onClick:()=>void}){
- const p=sparkPaths(points);return <button type="button" className="fund-spark" aria-label={'查看'+name+'资金趋势'} onClick={onClick}><svg viewBox="0 0 112 40" aria-hidden="true"><line x1="4" x2="108" y1={p.zero} y2={p.zero} className="fund-spark-zero"/>{p.segments.map((d,i)=><path key={i} d={d}/>)}{p.dots.map(([cx,cy],i)=><circle key={i} cx={cx} cy={cy} r="1.8"/>)}</svg><span>{p.dots.length>1?'查看趋势':p.dots.length?'单点快照':'暂无采样'}</span></button>;
+ const node=useRef<HTMLButtonElement>(null),[visible,setVisible]=useState(false),count=points.filter(p=>Number.isFinite(p.net)).length;
+ useEffect(()=>{if(!node.current)return;if(typeof IntersectionObserver==='undefined'){setVisible(true);return;}const observer=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)){setVisible(true);observer.disconnect();}},{rootMargin:'80px'});observer.observe(node.current);return()=>observer.disconnect();},[]);
+ const placeholder=<span className="fund-mini-placeholder">{count?'走势预览':'暂无采样'}</span>;
+ return <button ref={node} type="button" className="fund-spark" aria-label={'查看'+name+'资金趋势'} title="累计净额 · 点击放大" onClick={onClick}>{visible&&count?<Suspense fallback={placeholder}><MiniChart points={points} name={name}/></Suspense>:placeholder}<Maximize2 size={11} className="fund-mini-expand" aria-hidden="true"/>{count===1&&<span className="fund-mini-single">单点</span>}</button>;
 }
 function TrendContent({target}:{target:FundTarget}){
  const {account}=usePreferences(),[metric,setMetric]=useState<'net'|'change'>('net');

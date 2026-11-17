@@ -9,16 +9,16 @@ test('initial data uses the shared table skeleton and refreshing preserves data 
  const r=render(<FundPulsePanel kind="industry" refreshing/>);expect(screen.getByRole('status',{name:'正在加载资金行业'})).toBeTruthy();expect(screen.getByRole('region',{name:'资金行业内容'}).getAttribute('aria-busy')).toBe('true');
  r.rerender(<FundPulsePanel kind="industry" data={archived} refreshing/>);expect(screen.getByText('归档行业')).toBeTruthy();expect(screen.getByRole('status',{name:'正在更新资金行业'})).toBeTruthy();expect(screen.queryByRole('status',{name:'正在加载资金行业'})).toBeNull();
 });
-test('switching to a shorter pulse view retains the measured region height instead of collapsing the document',()=>{
+test('switching to a shorter checkpoint view retains the measured region height instead of collapsing the document',()=>{
  const measure=vi.spyOn(HTMLElement.prototype,'getBoundingClientRect').mockImplementation(function(this:HTMLElement){const height=this.classList.contains('pulse-retained-content')?(this.querySelector('table')?720:240):0;return {x:0,y:0,width:600,height,top:0,left:0,right:600,bottom:height,toJSON(){return {};}};});
- try{const r=render(<FundPulsePanel kind="industry" data={archived}/>),body=r.container.querySelector('.pulse-retained') as HTMLElement;expect(body.style.minHeight).toBe('720px');fireEvent.click(screen.getByRole('button',{name:'资金脉冲'}));expect(body.style.minHeight).toBe('720px');expect(screen.getByText(/等待两次已验收/)).toBeTruthy();}finally{measure.mockRestore();}
+ try{const r=render(<FundPulsePanel kind="industry" data={archived}/>),body=r.container.querySelector('.pulse-retained') as HTMLElement;expect(body.style.minHeight).toBe('720px');fireEvent.click(screen.getByRole('button',{name:'时点快照'}));expect(body.style.minHeight).toBe('720px');expect(screen.queryByRole('table')).toBeNull();}finally{measure.mockRestore();}
 });
 const row={id:'1:600519',code:'600519',name:'贵州茅台',net:5000000,pulse:-100000,pct:1.3,missing:[]};
 const data:any={day:'2026-11-16',provider:'eastmoney',kind:'stock',version:'qa-v1',captured_at:'2026-11-16T02:05:00Z',completed_at:'2026-11-16T02:06:00Z',anchor:{source_at:'2026-11-16T02:06:00Z'},interval_seconds:300,coverage:{received:5929,expected:5929,complete:true},ranks:{inflow:[row],outflow:[],pulseIn:[],pulseOut:[row]},missing_count:1,missing:[{...row,id:'0:000001',name:'缺口样本',code:'000001',net:null,missing:['net']}],ledger:{days:['2026-11-09','2026-11-10','2026-11-11','2026-11-12','2026-11-13'],missing_days:['2026-11-10'],rows:[{...row,inflow_days:2,outflow_days:1,net:null,recorded_net:5000000}]},checkpoints:[]};
 test('daily ranks and interval pulse are separate with source time and capture time explicitly distinguished',()=>{
  render(<FundPulsePanel data={data}/>);
  expect(screen.getByText('当日主力净额 / 万元')).toBeTruthy();expect(screen.getByText('+500.00')).toBeTruthy();
- fireEvent.click(screen.getByRole('button',{name:'资金脉冲'}));fireEvent.click(screen.getByRole('button',{name:'流出'}));
+ fireEvent.click(screen.getByRole('button',{name:'相邻变化'}));fireEvent.click(screen.getByRole('button',{name:'流出'}));
  expect(screen.getByText('相邻采样净额变化 / 万元')).toBeTruthy();expect(screen.getByText('-10.00')).toBeTruthy();
  expect(screen.getByText(/不等于当日累计/)).toBeTruthy();expect(screen.getByText(/采集窗口/)).toBeTruthy();
 });
@@ -43,7 +43,7 @@ test('pending validation keeps each feature explorable without exposing candidat
  render(<FundPulsePanel data={{...data,status:'pending_source_validation'}}/>);
  expect(screen.getByText('数据验证中')).toBeTruthy();
  expect(screen.queryByText('贵州茅台')).toBeNull();
- fireEvent.click(screen.getByRole('button',{name:'资金脉冲'}));
+ fireEvent.click(screen.getByRole('button',{name:'相邻变化'}));
  expect(screen.getByText(/相邻有效采样不足/)).toBeTruthy();
  expect(screen.queryByRole('button',{name:'近5日台账'})).toBeNull();
  fireEvent.click(screen.getByRole('button',{name:'时点快照'}));
@@ -73,12 +73,12 @@ test('preview release does not query unpublished API or render previously cached
  client.clear();
 });
 const archived={...data,schema:1,version:'a'.repeat(64),kind:'industry',status:'archived_snapshot',not_realtime:true,validation:{qualified:false,scope:'kind'},net_missing_count:100,net_available_count:396,coverage:{received:496,expected:496,complete:true},ranks:{...data.ranks,inflow:[{...row,id:'BK1000',code:'BK1000',name:'归档行业'}]},pulse_status:'waiting_validated_samples',ledger_status:'waiting_close_archives'};
-test('retained history exposes small charts and separates cumulative from adjacent changes',()=>{
+test('retained history exposes small charts and separates cumulative from adjacent changes',async()=>{
  const trend={model:'b'.repeat(64),samples:2,directory:[{code:'BK1000',name:'归档行业',available:2}],change_available:true};
  const item={...archived.ranks.inflow[0],pulse:10000,trend:{points:[{at:'2026-11-16T05:00:07Z',net:0,break_before:true},{at:'2026-11-16T05:30:07Z',net:10000,break_before:false}]}};
  render(<FundPulsePanel kind="industry" data={{...archived,trend,ranks:{...archived.ranks,inflow:[item],pulseIn:[item]}}}/>);
- expect(screen.getByRole('button',{name:'查看归档行业资金趋势'}).querySelector('svg')).toBeTruthy();
- fireEvent.click(screen.getByRole('button',{name:'资金脉冲'}));expect(screen.queryByText(/等待两次已验收/)).toBeNull();
+ expect(await screen.findByRole('img',{name:'归档行业累计资金走势，按实际时间采样，缺口断线'})).toBeTruthy();
+ expect(screen.queryByText(/等待两次已验收/)).toBeNull();expect(screen.getByRole('button',{name:'实时排行'})).toBeTruthy();
  expect(screen.getByRole('button',{name:'累计净额'}).getAttribute('aria-pressed')).toBe('true');
  fireEvent.click(screen.getByRole('button',{name:'相邻变化'}));expect(screen.getByText('相邻采样净额变化 / 万元')).toBeTruthy();expect(screen.getByText('+1.00')).toBeTruthy();
  fireEvent.click(screen.getByRole('button',{name:'时点快照'}));expect(screen.queryByRole('button',{name:'查看归档行业资金趋势'})).toBeNull();
@@ -97,7 +97,7 @@ test('a captured checkpoint explicitly says recorded alongside its real completi
 });
 test('archived board data is visible without stock acceptance, with explicit expiry, missing values and snapshot time',()=>{
  render(<FundPulsePanel data={archived} kind="industry"/>);expect(screen.getByText('归档行业')).toBeTruthy();expect(screen.getByText('已采集快照 · 非实时')).toBeTruthy();expect(screen.getByText('已过期')).toBeTruthy();expect(screen.getByText(/资金净额缺失 100 项/)).toBeTruthy();expect(screen.getByText('快照主力净额 / 万元')).toBeTruthy();expect(screen.getByText(/盘中连续性待验收/)).toBeTruthy();
- fireEvent.click(screen.getByRole('button',{name:'资金脉冲'}));expect(screen.queryByRole('table')).toBeNull();expect(screen.getByText(/等待两次已验收/)).toBeTruthy();
+ expect(screen.getByRole('button',{name:'相邻变化'}).hasAttribute('disabled')).toBe(true);expect(screen.getByRole('table')).toBeTruthy();expect(screen.getByText(/相邻变化待源验收或有效采样/)).toBeTruthy();
  expect(screen.queryByRole('button',{name:'近5日台账'})).toBeNull();
 });
 test('snapshot expiry changes locally without a market request or automatic reordering',async()=>{
