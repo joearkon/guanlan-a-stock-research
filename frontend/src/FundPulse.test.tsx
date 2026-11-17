@@ -73,6 +73,24 @@ test('preview release does not query unpublished API or render previously cached
  client.clear();
 });
 const archived={...data,schema:1,version:'a'.repeat(64),kind:'industry',status:'archived_snapshot',not_realtime:true,validation:{qualified:false,scope:'kind'},net_missing_count:100,net_available_count:396,coverage:{received:496,expected:496,complete:true},ranks:{...data.ranks,inflow:[{...row,id:'BK1000',code:'BK1000',name:'归档行业'}]},pulse_status:'waiting_validated_samples',ledger_status:'waiting_close_archives'};
+test('retained history exposes small charts and separates cumulative from adjacent changes',()=>{
+ const trend={model:'b'.repeat(64),samples:2,directory:[{code:'BK1000',name:'归档行业',available:2}],change_available:true};
+ const item={...archived.ranks.inflow[0],pulse:10000,trend:{points:[{at:'2026-11-16T05:00:07Z',net:0,break_before:true},{at:'2026-11-16T05:30:07Z',net:10000,break_before:false}]}};
+ render(<FundPulsePanel kind="industry" data={{...archived,trend,ranks:{...archived.ranks,inflow:[item],pulseIn:[item]}}}/>);
+ expect(screen.getByRole('button',{name:'查看归档行业资金趋势'}).querySelector('svg')).toBeTruthy();
+ fireEvent.click(screen.getByRole('button',{name:'资金脉冲'}));expect(screen.queryByText(/等待两次已验收/)).toBeNull();
+ expect(screen.getByRole('button',{name:'累计净额'}).getAttribute('aria-pressed')).toBe('true');
+ fireEvent.click(screen.getByRole('button',{name:'相邻变化'}));expect(screen.getByText('相邻采样净额变化 / 万元')).toBeTruthy();expect(screen.getByText('+1.00')).toBeTruthy();
+ fireEvent.click(screen.getByRole('button',{name:'时点快照'}));expect(screen.queryByRole('button',{name:'查看归档行业资金趋势'})).toBeNull();
+});
+test('a spark opens the frozen board model and the drawer can be closed without a market write',async()=>{
+ const requests:string[]=[];vi.stubGlobal('fetch',async(input:any)=>{requests.push(String(input));return new Response(JSON.stringify({error:'expected unavailable'}),{status:503,headers:{'content-type':'application/json'}});});
+ const client=new QueryClient({defaultOptions:{queries:{retry:false,gcTime:0}}}),item={...archived.ranks.inflow[0],trend:{points:[]}};
+ render(<PreferenceProvider account="qa-trend"><QueryClientProvider client={client}><FundPulsePanel kind="industry" data={{...archived,trend:{model:'b'.repeat(64),samples:1,directory:[]},ranks:{...archived.ranks,inflow:[item]}}}/></QueryClientProvider></PreferenceProvider>);
+ fireEvent.click(screen.getByRole('button',{name:'查看归档行业资金趋势'}));expect(screen.getByRole('dialog',{name:'归档行业 · 资金趋势'})).toBeTruthy();
+ await screen.findByText(/趋势读取失败/);expect(requests).toHaveLength(1);expect(requests[0]).toContain('code=BK1000');expect(requests[0]).toContain('model='+'b'.repeat(64));expect(screen.getByText('归档行业')).toBeTruthy();
+ fireEvent.click(screen.getByRole('button',{name:'关闭抽屉'}));await act(async()=>{await new Promise(r=>setTimeout(r,300));});expect(screen.queryByRole('dialog')).toBeNull();client.clear();
+});
 test('a captured checkpoint explicitly says recorded alongside its real completion time',()=>{
  render(<FundPulsePanel kind="industry" data={{...archived,checkpoints:[{stage:'lunch',completed_at:'2026-11-17T03:30:07Z',data:archived}]}}/>);fireEvent.click(screen.getByRole('button',{name:'时点快照'}));
  expect(screen.getByRole('button',{name:/午盘.*已收录.*11:30:07/}).getAttribute('disabled')).toBeNull();expect(screen.getAllByText('未留档')).toHaveLength(2);

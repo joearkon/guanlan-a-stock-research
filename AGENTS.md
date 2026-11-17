@@ -1,5 +1,7 @@
 # 观澜 Local Harness
 
+- 2026-11-17资金趋势2026.11.17.9：只读共享归档，行业／概念按全目录保留点，列表小折线、搜索目录、Drawer大图与原始表。累计net和相邻change分开，model固定版本；上午漏批、午休、缺净额断线不补0，14:30→15:05按35分钟。相邻差不是新增资金或加速度；无本类验收不开放change。手机表格500px最小宽、仅自身横滑，外层原生纵滚，44px目标保留，时间轴hideOverlap；不能缩金额硬塞或加内层纵滚。API路径仍/api/data/fund-pulse，view=trend带kind/code/model，本地白名单不扩、服务/Agent/资料不改。ECharts原许可和NOTICE随frontend/public/licenses保留，使用说明见docs/FUND-TRENDS.md，实际验收与发布状态见CHANGELOG。
+
 - 2026-11-17批次2026.11.17.8同步均线/MACD价量筛选，多选AND、显式应用、原方案、日线前复权与跨日统一基准；盘中拒用技术条件，缺同日/前日/同价关联不补0。共享后台计划19:30后收录，手机44px和原页面滚动保留。SaaS886/1692、Harness145/56与TS构建通过，候选/正式两端各12组320/390/1440明暗通过；无真实用户写入/模型，故障503及旧统计CSP单列。仅静态与共用契约同步，本地服务/Agent/登录/个人存储无变化。SaaS03a2184f-dfa9-4f27-9978-f6bd0bc75ed9 100%；当前指标初批实际11/16对照11/13，不能冒称今日或夜间自动验收。详见CHANGELOG和docs/TECHNICAL-SCREENING.md。
 
 - 2026-11-17批次2026.11.17.6已同步资金页精简与加载稳定：只行业/概念，无个股按钮和请求，无五日台账；保留原归档/后台计划，其他个股页不动。monitorLinks显示资金脉冲 Beta（测试），main/Mobile同源标签；checkpoint有item才已收录+真实时间，无档未留档。LocalRefresh/Skeleton复用components，Panel不再以kind重挂，按kind重置页签但外壳保留；pulse-retained用自然内容测量+高水位minHeight，宽度变化重新测，局部保持文档高度，不动画金额、不加纵滚，减弱动态沿原CSS。SaaS884/H135/TS/构建通过，两端候选/正式各12组320/390/1440明暗核对首次延迟骨架、刷新旧值、页签Y/scrollY<=2px和documentHeight不缩、午盘已收录/缺档、无stock请求/无ledger。首次Harness移动测量因自动点击避让固定底栏而滚动，证据保留，改为先将目标居中再严验原坐标门槛，未为测试改业务。实际38931入口CHkCXmzV、SHA6c5c49dd6431127a62205d513a277866be1e913c85ad6ff4f6070d3feb8f6bc6，旧入口保留，服务305716仍11:17:56未再重启；源码无本地Agent/账号/存储变化。午盘行业11:30:07/496缺0、概念11:32:09/554缺0已从共享接口读到，连续性与下午时点仍待。MCP-ROADMAP同步实际线上五研究工具/六范围预选与17/10工具发现，属于说明，不是本地证据MCP新增工具；SaaS .7与MCP独立发布，无OpenClaw操作。见CHANGELOG与docs/FUND-PULSE-SNAPSHOTS.md。

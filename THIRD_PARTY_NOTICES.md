@@ -8,6 +8,7 @@
 | --- | --- |
 | Vibe-Research运行适配的两个文件 | [MIT许可全文](vendor/vibe-research/LICENSE)，Copyright (c) 2026 simonlin1212；修改范围见[NOTICE](NOTICE.md) |
 | TradingView Lightweight Charts | [Apache-2.0全文](frontend/public/licenses/lightweight-charts-LICENSE.txt)与[NOTICE](frontend/public/licenses/lightweight-charts-NOTICE.txt)，版权与页面归属声明保留 |
+| Apache ECharts（资金趋势） | 复用已锁定的6.1.0，保留上游[许可全文](frontend/public/licenses/echarts-LICENSE.txt)及[NOTICE](frontend/public/licenses/echarts-NOTICE.txt)，页面图表许可入口可访问 |
 | OCR构建资源 | 构建脚本从已安装依赖准备，不进Git；Tesseract.js和核心许可证随生成资源保留 |
 
 ## 前端直接运行依赖

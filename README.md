@@ -59,6 +59,19 @@ npm start
 
 ![热点题材：支撑卡片、梯队入口与异动记录](docs/images/monitor-relay.png)
 
+**资金脉冲 Beta：** 查看行业／概念快照排行，小折线点开看大图，也可搜索全目录。累计净额与相邻变化分开，漏采、缺值与午休断线；这不是实时逐笔资金流。见[资金趋势用法与时间口径](docs/FUND-TRENDS.md)。
+
+![资金趋势：快照排行与可点击的小折线](docs/images/fund-trend-list.png)
+
+<details>
+<summary>查看手机资金趋势大图与原始采样</summary>
+
+切换累计净额／相邻变化，逐批核对金额和缺口。手机表格可横滑查看完整列，关闭大图回到原列表。
+
+![手机大图：相邻变化、时间口径与原始采样](docs/images/fund-trend-detail-mobile.png)
+
+</details>
+
 <details>
 <summary>查看实时动态：市场读数、盘中事件与昨日梯队</summary>
 
