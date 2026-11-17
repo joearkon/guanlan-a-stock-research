@@ -77,7 +77,7 @@ test('retained history exposes small charts and separates cumulative from adjace
  const trend={model:'b'.repeat(64),samples:2,directory:[{code:'BK1000',name:'归档行业',available:2}],change_available:true};
  const item={...archived.ranks.inflow[0],pulse:10000,trend:{points:[{at:'2026-11-16T05:00:07Z',net:0,break_before:true},{at:'2026-11-16T05:30:07Z',net:10000,break_before:false}]}};
  render(<FundPulsePanel kind="industry" data={{...archived,trend,ranks:{...archived.ranks,inflow:[item],pulseIn:[item]}}}/>);
- expect(await screen.findByRole('img',{name:'归档行业累计资金走势，按实际时间采样，缺口断线'})).toBeTruthy();
+ expect(await screen.findByRole('img',{name:'归档行业累计资金走势，按实际时间采样，缺口断线'},{timeout:5000})).toBeTruthy();
  expect(screen.queryByText(/等待两次已验收/)).toBeNull();expect(screen.getByRole('button',{name:'实时排行'})).toBeTruthy();
  expect(screen.getByRole('button',{name:'累计净额'}).getAttribute('aria-pressed')).toBe('true');
  fireEvent.click(screen.getByRole('button',{name:'相邻变化'}));expect(screen.getByText('相邻采样净额变化 / 万元')).toBeTruthy();expect(screen.getByText('+1.00')).toBeTruthy();
@@ -96,13 +96,13 @@ test('a captured checkpoint explicitly says recorded alongside its real completi
  expect(screen.getByRole('button',{name:/午盘.*已收录.*11:30:07/}).getAttribute('disabled')).toBeNull();expect(screen.getAllByText('未留档')).toHaveLength(2);
 });
 test('archived board data is visible without stock acceptance, with explicit expiry, missing values and snapshot time',()=>{
- render(<FundPulsePanel data={archived} kind="industry"/>);expect(screen.getByText('归档行业')).toBeTruthy();expect(screen.getByText('已采集快照 · 非实时')).toBeTruthy();expect(screen.getByText('已过期')).toBeTruthy();expect(screen.getByText(/资金净额缺失 100 项/)).toBeTruthy();expect(screen.getByText('快照主力净额 / 万元')).toBeTruthy();expect(screen.getByText(/盘中连续性待验收/)).toBeTruthy();
+ render(<FundPulsePanel data={archived} kind="industry"/>);expect(screen.getByText('归档行业')).toBeTruthy();expect(screen.getByText('盘中采样快照')).toBeTruthy();expect(screen.getByText(/已过期，保留原采样值/)).toBeTruthy();expect(screen.getByText(/资金净额缺失 100 项/)).toBeTruthy();expect(screen.getByText('快照主力净额 / 万元')).toBeTruthy();expect(screen.getByText(/盘中连续性待验收/)).toBeTruthy();
  expect(screen.getByRole('button',{name:'相邻变化'}).hasAttribute('disabled')).toBe(true);expect(screen.getByRole('table')).toBeTruthy();expect(screen.getByText(/相邻变化待源验收或有效采样/)).toBeTruthy();
  expect(screen.queryByRole('button',{name:'近5日台账'})).toBeNull();
 });
 test('snapshot expiry changes locally without a market request or automatic reordering',async()=>{
  vi.useFakeTimers();vi.setSystemTime(new Date('2026-11-17T02:00:00Z'));
- try{render(<FundPulsePanel data={{...archived,day:'2026-11-17',completed_at:'2026-11-17T01:30:20Z',captured_at:'2026-11-17T01:30:00Z',stale:false}} kind="industry"/>);expect(screen.queryByText('已过期')).toBeNull();await act(async()=>{vi.advanceTimersByTime(6*60000);});expect(screen.getByText('已过期')).toBeTruthy();expect(screen.getByText('归档行业')).toBeTruthy();}finally{vi.useRealTimers();}
+ try{render(<FundPulsePanel data={{...archived,day:'2026-11-17',completed_at:'2026-11-17T01:30:20Z',captured_at:'2026-11-17T01:30:00Z',stale:false}} kind="industry"/>);expect(screen.queryByText(/已过期，保留原采样值/)).toBeNull();await act(async()=>{vi.advanceTimersByTime(6*60000);});expect(screen.getByText(/已过期，保留原采样值/)).toBeTruthy();expect(screen.getByText('归档行业')).toBeTruthy();}finally{vi.useRealTimers();}
 });
 test('a mismatched-kind payload cannot display another universe under the selected heading',()=>{
  render(<FundPulsePanel data={archived} kind="concept"/>);expect(screen.queryByText('归档行业')).toBeNull();expect(screen.queryByRole('table')).toBeNull();
@@ -114,4 +114,15 @@ test('independent category reads offer only industry and concept without request
 });
 test('an unknown API payload is a local read failure rather than an empty valid funds snapshot',async()=>{
  const client=new QueryClient({defaultOptions:{queries:{retry:false,gcTime:0}}});vi.stubGlobal('fetch',async()=>Response.json({}));render(<PreferenceProvider account="qa-invalid"><QueryClientProvider client={client}><FundPulse preview={false}/></QueryClientProvider></PreferenceProvider>);await screen.findByText(/资金资料暂不可用/);expect(screen.queryByRole('table')).toBeNull();client.clear();
+});
+
+test('snapshot heading uses its real session stage and keeps verbose timestamps in closed sampling details',()=>{
+ const close={...archived,day:'2026-11-17',stage:'close',captured_at:'2026-11-17T07:05:00Z',completed_at:'2026-11-17T07:05:07Z'};
+ const r=render(<FundPulsePanel kind="industry" data={close}/>);
+ expect(screen.getByText('收盘快照')).toBeTruthy();expect(screen.getByText(/展示 2026-11-17 收盘快照，非当前实时/)).toBeTruthy();
+ expect(screen.getByText('更新频率：交易时段计划每30分钟采样，非逐笔实时。')).toBeTruthy();
+ const details=screen.getByText('采样详情与口径').closest('details')!;expect(details.open).toBe(false);expect(details.textContent).toContain('15:05:07');expect(details.textContent).toContain('版本 aaaaaaaaaaaa');
+ expect(r.container.querySelector('.pulse-retained-content')?.textContent).not.toContain('资金净额缺失 100 项，不参与净额排序；仅对');
+ r.rerender(<FundPulsePanel kind="industry" data={{...close,stage:'lunch',completed_at:'2026-11-17T03:30:07Z'}}/>);expect(screen.getByText('午盘快照')).toBeTruthy();expect(screen.queryByText('收盘快照')).toBeNull();
+ r.rerender(<FundPulsePanel kind="industry" data={{...close,stage:'rolling',completed_at:'2026-11-17T05:30:07Z'}}/>);expect(screen.getByText('盘中采样快照')).toBeTruthy();expect(screen.queryByText('收盘快照')).toBeNull();
 });

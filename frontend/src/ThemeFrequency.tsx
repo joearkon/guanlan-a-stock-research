@@ -6,14 +6,17 @@ type Props={data?:any;error?:unknown;retry?:()=>void};
 const validFrequency=(d:any)=>d?.schema===2&&d?.rankLimit===10&&Array.isArray(d.days)&&Array.isArray(d.missingDays)&&Array.isArray(d.rows)&&typeof d.day==='string'&&typeof d.until==='string';
 const rowFor=(data:any,code:string,direction:string)=>{const all=[...(data?.rows||[]),...(data?.extras||[])],same=all.find((r:any)=>r.code===code&&r.direction===direction);if(same)return same;const opposite=all.find((r:any)=>r.code===code&&r.direction!==direction);return opposite?{...empty(direction),code,name:opposite.name,opposite}:undefined;};
 const empty=(direction:string)=>({direction,dates:[],ranks:{},count5:0,count10:0,bothDates:[]});
+const cutoff=(s:string)=>s?.replace(/^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2}).*/,'$1-$2-$3 $4:$5')||'待准备';
+function FrequencyState({input}:{input:any}){return input?.status==='pending'?<p className="provenance" role="status">频次摘要准备中，不按0天处理；后台将从已保存榜单补齐。</p>:input?.status==='catching_up'?<p className="provenance" role="status">频次同步中：已确认截至 {cutoff(input.until)}；主榜单截至 {cutoff(input.requestedUntil)}。以下仅为已保存记录，不冒充最新频次。</p>:null;}
 
-function Distribution({data,row,error,retry}:{data:any;row:any;error?:unknown;retry?:()=>void}){
+function Distribution({data,row,error,retry,input}:{data:any;row:any;error?:unknown;retry?:()=>void;input?:any}){
  const primary=row||empty('rise'),other=primary.opposite||empty(primary.direction==='rise'?'fall':'rise');
  const up=primary.direction==='rise'?primary:other,down=primary.direction==='fall'?primary:other;
  return <>
-  {!!error&&<p className="local-error">上榜频次读取失败，已取得的日期保留。{retry&&<button onClick={retry}>重试频次</button>}</p>}
+  {!!error&&<p className="local-error" role="alert">上榜频次读取失败，已取得的日期保留。</p>}
+  <FrequencyState input={input||data}/>
   {retry&&<button className="outline-button" onClick={retry}>重新读取上榜频次</button>}
-  {!data?<p>前10上榜频次尚待准备，不按0天处理。</p>:<>
+  {!data?input?.status==='pending'?null:<p>前10上榜频次尚待准备，不按0天处理。</p>:<>
    <p className="provenance">截至 {data.until.replace(/^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2}).*/,'$1-$2-$3 $4:$5')} · 热点榜前10 · {data.provider}。{data.provisional?'当日统计中。':'已归档观察。'}</p>
    <p>当前{primary.direction==='fall'?'向下':'向上'}方向：近5日已确认上榜 {primary.count5} 天，近10日 {primary.count10} 天；累计出现，不要求连续。</p>
    <div className="theme-frequency-comparison">
@@ -38,8 +41,8 @@ export function ThemeFrequencyBadge({data:input,board,direction,error,retry}:Pro
  const data=validFrequency(input)?input:undefined,[open,setOpen]=useState(false);
  const row=rowFor(data,board.code,direction)||empty(direction);
  return <>
-  <button type="button" className="theme-frequency-badge" aria-label={'查看'+board.name+'上榜日期'} onClick={()=>setOpen(true)}>{data?<>前10 · 近5日 {row.count5}天 · 近10日 {row.count10}天{data.missingDays.length?' *':''}</>:'前10上榜频次待准备'}</button>
-  <Drawer open={open} onOpenChange={setOpen} title={board.name+' · 上榜日期'}><Distribution data={data} row={row} error={error} retry={retry}/></Drawer>
+  <button type="button" className="theme-frequency-badge" aria-label={'查看'+board.name+'上榜日期'} onClick={()=>setOpen(true)}>{data?<>前10 · 近5日 {row.count5}天 · 近10日 {row.count10}天{data.missingDays.length?' *':''}{data.status==='catching_up'?' · 同步中':''}</>:'前10上榜频次待准备'}</button>
+  <Drawer open={open} onOpenChange={setOpen} title={board.name+' · 上榜日期'}><Distribution data={data} row={row} error={error} retry={retry} input={input}/></Drawer>
  </>;
 }
 export function ThemeContinuity({data:input,error,retry}:Props){
@@ -48,7 +51,8 @@ export function ThemeContinuity({data:input,error,retry}:Props){
  return <section className="theme-continuity" aria-label="题材持续性">
   <header><div><h3>题材持续性</h3><p className="provenance">仅统计热点榜前10，累计出现不代表持续走强。{data?.day&&<>观察截至 {data.day}；{data.provisional?'当日统计中':'已归档'}。</>}</p></div><label>观察范围<select aria-label="持续性观察范围" value={window} onChange={e=>{setWindow(Number(e.target.value));setLimit(20);}}><option value={5}>近5个交易日</option><option value={10}>近10个交易日</option></select></label></header>
   {!!error&&<p className="local-error">持续性资料读取失败，已有结果保留。{retry&&<button onClick={retry}>重试持续性</button>}</p>}
-  {!data?<p className="provenance">持续性摘要尚待准备，不按无持续题材处理。</p>:<>
+  <FrequencyState input={input}/>
+  {!data?input?.status==='pending'?null:<p className="provenance">持续性摘要尚待准备，不按无持续题材处理。</p>:<>
    <p className="provenance">{data.scope}{data.missingDays.length>0&&<> 缺档：{data.missingDays.join('、')}。</>}</p>
    <div className="theme-continuity-scroll"><table><thead><tr><th>方向 / 板块</th><th>前10·近5日</th><th>前10·近10日</th><th>反向前10·5/10日</th><th>双向·所选窗</th><th>最近上榜</th><th>日期分布</th></tr></thead><tbody>{rows.slice(0,limit).map((r:any)=><tr key={r.direction+r.code}>
     <th scope="row">{r.name}<small>{r.direction==='fall'?'向下':'向上'} · {r.code}</small></th><td>{r.count5}天</td><td>{r.count10}天</td><td>{r.opposite?.count5??'—'} / {r.opposite?.count10??'—'}天</td><td>{r.bothDates?.filter((d:string)=>data.days.slice(-window).includes(d)).length||0}天</td><td>{r.lastDay}</td><td><button className="outline-button" aria-label={'查看'+r.name+'上榜日期'} onClick={()=>setChosen(r)}>查看分布</button></td>
@@ -56,6 +60,6 @@ export function ThemeContinuity({data:input,error,retry}:Props){
    {rows.length>limit&&<button className="outline-button" onClick={()=>setLimit(n=>n+20)}>继续显示20个题材</button>}
    {!rows.length&&<p>已存档范围内暂无此方向的前10记录，缺档不作推断。</p>}
   </>}
-  <Drawer open={!!chosen} onOpenChange={v=>!v&&setChosen(null)} title={(chosen?.name||'题材')+' · 上榜日期'}>{chosen&&<Distribution data={data} row={chosen} error={error} retry={retry}/>}</Drawer>
+  <Drawer open={!!chosen} onOpenChange={v=>!v&&setChosen(null)} title={(chosen?.name||'题材')+' · 上榜日期'}>{chosen&&<Distribution data={data} row={chosen} error={error} retry={retry} input={input}/>}</Drawer>
  </section>;
 }

@@ -26,6 +26,15 @@ test('mini area option draws an actual ECharts SVG, not a hand-built icon',async
  const {init,use}=await import('echarts/core'),{LineChart}=await import('echarts/charts'),{SVGRenderer}=await import('echarts/renderers'),{GridComponent}=await import('echarts/components');use([LineChart,SVGRenderer,GridComponent]);const chart=init(null,undefined,{renderer:'svg',ssr:true,width:220,height:72});try{chart.setOption(miniTrendOption([p('01:30',0,true),p('03:30',200,true),p('05:00',100,true),p('05:30',150)],'dark') as any);const svg=chart.renderToSVGString();expect(svg).toContain('fill-opacity="0.09"');expect(svg).toContain('09:30');expect(svg).not.toContain('NaN');}finally{chart.dispose();}
 });
 
+test('compact phone preview renders real disconnected samples without squeezing desktop axis labels into 44 pixels',async()=>{
+ const points=[p('01:30',0,true),p('03:30',200,true),p('05:00',100,true),p('05:30',150)];
+ const option=miniTrendOption(points,'dark',true);
+ expect(option.xAxis.axisLabel.show).toBe(false);expect(option.yAxis.axisLabel.show).toBe(false);
+ expect(option.series.map(s=>s.data.length)).toEqual([1,1,2]);expect(option.series[0].data[0][1]).toBe(0);
+ const {init,use}=await import('echarts/core'),{LineChart}=await import('echarts/charts'),{SVGRenderer}=await import('echarts/renderers'),{GridComponent}=await import('echarts/components');use([LineChart,SVGRenderer,GridComponent]);
+ const chart=init(null,undefined,{renderer:'svg',ssr:true,width:154,height:44});try{chart.setOption(option as any);const svg=chart.renderToSVGString();expect(svg).toContain('fill-opacity="0.09"');expect(svg).not.toContain('09:30');expect(svg).not.toContain('NaN');}finally{chart.dispose();}
+});
+
 test('detail chart colors the selected money metric and fills only its disconnected samples',()=>{
  const points=[{...p('05:00',200000000,true),change:10000000},{...p('05:30',180000000),change:-20000000}];
  const net=trendOption(points,'net','dark'),change=trendOption(points,'change','dark');
