@@ -10,6 +10,7 @@ export const fundPresets=[
 const extra=new Set(['window','scope','signal','minInstitutionDays','minInstitutionNetWan','netPositive','fundSort']);
 export function cleanFundCriteria(input={}){
  if(!input||typeof input!=='object'||Array.isArray(input))throw Error('资金条件格式不正确');
+ if(input.technical)throw Error('技术指标请在价量筛选中使用，资金足迹不忽略此条件');
  const base={};for(const [k,v]of Object.entries(input))if(!extra.has(k))base[k]=v;
  const out={...fundDefaults,...cleanObservationCriteria(base)};
  for(const [k,choices]of Object.entries({window:['5','10'],scope:['daily','multi'],signal:['any','divergence','opposed','turned','repair'],netPositive:['0','1'],fundSort:['buyDays','netWan','lastNetWan','pct','pullback','turnover','closedReturn2d']}))if(input[k]!=null){if(!choices.includes(String(input[k])))throw Error('资金条件无效：'+k);out[k]=String(input[k]);}

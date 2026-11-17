@@ -1,6 +1,7 @@
 // A screener changes the observation range, never a trading or theme rule.
 export const observationDefaults={mode:'close',board:'all',basis:'current',excludeST:'1',aboveOpen:'any',sealed:'any',sort:'pct',direction:'desc'};
 export const observationRanges=[['Pct','涨幅（%）'],['Amount','成交额（亿元）'],['Turnover','换手率（%）'],['VolumeRatio','量比'],['MarketCap','总市值（亿元）'],['Price','价格（元）'],['Pullback','较日内高点回撤（%）']];
+export const observationTechnicals=[['aboveMa5','收盘价高于5日均线'],['aboveMa10','收盘价高于10日均线'],['aboveMa20','收盘价高于20日均线'],['crossMa5','当日上穿5日均线'],['crossMa10','当日上穿10日均线'],['crossMa20','当日上穿20日均线'],['ma5Rising','5日均线向上'],['maBull','均线多头排列（5＞10＞20）'],['macdGolden','MACD当日金叉'],['difCrossZero','DIF当日上穿零轴'],['macdRedGrowing','MACD红柱增强']];
 export const observationPresets=[
  {id:'main-limit',name:'主板涨停',description:'主板、排除ST；按来源涨停价核对当前封板',criteria:{board:'main',sealed:'yes'}},
  {id:'main-strong',name:'主板强势 >5%',description:'当前涨幅严格超过5%，不要求封板',criteria:{board:'main',minPct:5}},
@@ -15,6 +16,7 @@ export function cleanObservationCriteria(input={}){
  if(!input||typeof input!=='object'||Array.isArray(input))throw Error('筛选条件格式不正确');
  const out={...observationDefaults},enums={mode:['close','live'],board:['all','main','chinext','star','growth','bse'],basis:['current','peak'],excludeST:['0','1'],aboveOpen:['any','yes','no'],sealed:['any','yes','no'],sort:['pct','peakPct','amount','turnover','volumeRatio','marketCap','price','pullback','code'],direction:['asc','desc']};
  for(const [key,value]of Object.entries(input)){
+  if(key==='technical'){if(value==null||value==='')continue;if(typeof value!=='string'||value.length>200)throw Error('技术指标条件无效');const selected=value.split(',');if(selected.some(k=>!observationTechnicals.some(([id])=>id===k))||new Set(selected).size!==selected.length)throw Error('技术指标条件无效');out.technical=observationTechnicals.filter(([id])=>selected.includes(id)).map(([id])=>id).join(',');continue;}
   if(key in enums){if(!enums[key].includes(String(value)))throw Error('筛选条件无效：'+key);out[key]=String(value);continue;}
   if(key==='groupProvider'||key==='groupCode'){if(value==null)continue;if(typeof value!=='string'||(key==='groupProvider'?!['','sw','ths','dc','sina'].includes(value):!/^[-\w.:~]{0,100}$/.test(value)))throw Error('板块身份无效');if(value)out[key]=value;continue;}
   if(key==='search'){if(typeof value!=='string'||value.length>40||/[<>\x00-\x1f]/.test(value))throw Error('检索文字不正确');out.search=value.trim();continue;}
@@ -25,5 +27,6 @@ export function cleanObservationCriteria(input={}){
  }
  for(const [key]of observationRanges)if(out['min'+key]!=null&&out['max'+key]!=null&&out['min'+key]>out['max'+key])throw Error('下限不能大于上限');
  if(!!out.groupProvider!==!!out.groupCode)throw Error('请选择完整行业或概念身份');
+ if(out.technical&&out.mode!=='close')throw Error('技术指标仅支持盘后收盘，请切换收盘口径或取消技术条件');
  return out;
 }
