@@ -13,3 +13,16 @@ test('one real-time ranking entry replaces duplicate tabs while both money bases
 test('pending source preview has the same two views and no invented ranking',()=>{
  render(<FundPulsePanel kind="industry" data={{status:'pending_source_validation'}}/>);expect(within(screen.getByRole('navigation',{name:'资金视图'})).getAllByRole('button')).toHaveLength(2);fireEvent.click(screen.getByRole('button',{name:'相邻变化'}));expect(screen.getByText(/相邻有效采样不足/)).toBeTruthy();expect(screen.queryByRole('table')).toBeNull();
 });
+
+test('board trend is immediately after its identity and the money columns still match their headers',()=>{
+ render(<FundPulsePanel kind="industry" data={data}/>);
+ const table=screen.getByRole('table');expect(within(table).getAllByRole('columnheader').map(e=>e.textContent)).toEqual(['名称 / 代码','累计趋势','快照主力净额 / 万元','快照涨跌幅']);
+ const cells=within(table).getAllByRole('row')[1].querySelectorAll('td');expect(cells[0].textContent).toContain('半导体');expect(within(cells[1]).getByRole('button',{name:'查看半导体资金趋势'})).toBeTruthy();expect(cells[2].textContent).toBe('+20.00');expect(cells[3].textContent).toBe('+1.00%');
+ fireEvent.click(screen.getByRole('button',{name:'相邻变化'}));fireEvent.click(screen.getByRole('button',{name:'流出'}));const delta=within(table).getAllByRole('row')[1].querySelectorAll('td');expect(delta[2].textContent).toBe('-1.00');expect(delta[3].textContent).toBe('+1.00%');
+});
+
+test('changing category while adjacent-change mode is selected survives the next category loading state',()=>{
+ const r=render(<FundPulsePanel kind="industry" data={data}/>);fireEvent.click(screen.getByRole('button',{name:'相邻变化'}));
+ expect(()=>r.rerender(<FundPulsePanel kind="concept"/>)).not.toThrow();expect(screen.getByRole('status',{name:'正在加载资金概念'})).toBeTruthy();expect(screen.queryByText('半导体')).toBeNull();
+ r.rerender(<FundPulsePanel kind="concept" data={{...data,kind:'concept'}}/>);expect(screen.getByRole('button',{name:'累计净额'}).getAttribute('aria-pressed')).toBe('true');
+});
