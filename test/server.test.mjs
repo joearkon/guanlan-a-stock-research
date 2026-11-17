@@ -10,6 +10,9 @@ test('event board context requires login and forwards only an explicit shared GE
  assert.equal((await fetch(f.base+p,{headers:{cookie}})).status,200);assert.equal(f.remote.length,before+1);assert.equal(f.remote.at(-1).path,'/api/data/event-context');assert.equal(f.remote.at(-1).method,'GET');
  const after=f.remote.length;assert.equal((await post(f,p,{},cookie)).status,403);assert.equal(f.remote.length,after);assert.deepEqual(f.runs,[]);
 });
+test('fund snapshot reads require login and forward only shared GETs while rejecting source collection or model writes',async t=>{
+ const f=await setup(t),p='/api/data/fund-pulse?kind=industry';assert.equal((await fetch(f.base+p)).status,401);const cookie=await login(f),before=f.remote.length;assert.equal((await fetch(f.base+p,{headers:{cookie}})).status,200);assert.equal(f.remote.length,before+1);assert.equal(f.remote.at(-1).path,'/api/data/fund-pulse');assert.equal(f.remote.at(-1).method,'GET');const n=f.remote.length;assert.equal((await post(f,p,{},cookie)).status,403);assert.equal(f.remote.length,n);assert.deepEqual(f.runs,[]);
+});
 test('local service rejects cross-site model requests and keeps cloud session credentials out of responses',async t=>{
  const f=await setup(t);assert.equal((await post(f,'/api/local-ai/probes',{engine:'codex'},'','https://evil.example')).status,403);
  assert.equal((await fetch(f.base+'/api/v2/free?view=home')).status,401);

@@ -16,3 +16,7 @@ test('explicit preview build makes the entry reachable without declaring live da
  try{const nav=await import('./monitor-navigation');expect(nav.monitorLinks()).toContainEqual(['/fund-pulse','资金脉冲']);expect(nav.isMonitorPath('/fund-pulse')).toBe(true);expect(nav.fundPulsePreview).toBe(true);}
  finally{vi.unstubAllEnvs();vi.resetModules();}
 });
+test('snapshot mode exposes independent archived reads without hiding the monitoring entry',async()=>{
+ vi.stubEnv('VITE_FUND_PULSE_ENABLED','snapshots');vi.resetModules();
+ try{const nav=await import('./monitor-navigation');expect(nav.fundPulseEnabled).toBe(true);expect(nav.fundPulsePreview).toBe(false);expect(nav.monitorLinks()).toContainEqual(['/fund-pulse','资金脉冲']);}finally{vi.unstubAllEnvs();vi.resetModules();}
+});

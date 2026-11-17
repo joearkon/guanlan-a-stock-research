@@ -20,6 +20,7 @@ test('desktop and mobile keep stock before industry and fund pulse before auctio
  follows(within(menu).getByRole('link',{name:'个股档案'}),within(menu).getByRole('link',{name:'产业价值研究'}));
  follows(within(menu).getByRole('link',{name:'资金脉冲'}),within(menu).getByRole('link',{name:'竞价盘中'}));
  expect(requests.every(r=>r.method==='GET')).toBe(true);
- expect(requests.some(r=>/fund-pulse|\/probe|\/jobs/.test(r.url))).toBe(false);
+ expect(requests.some(r=>/\/probe|\/jobs/.test(r.url))).toBe(false);
+ expect(requests.filter(r=>r.url.includes('/api/data/fund-pulse')).every(r=>r.method==='GET'&&r.url.includes('kind=industry'))).toBe(true);
  vi.unstubAllGlobals();
 });
