@@ -49,6 +49,9 @@ const entries = [
   ['utilities', '公用事业', 'theme-utilities-v1.webp', ['公用事业', '水务', '水力发电', '水电', '燃气', '电力运营']],
   ['precision-machinery', '精密机械与金属制品', 'theme-precision-machinery-v1.webp', ['机械设备', '金属制品', '轴承', '齿轮', '减速器', '丝杠', '工程机械器件', '通用设备', '专用设备']],
   ['diversified', '综合产业', 'theme-diversified-v1.webp', ['综合', '综合Ⅲ']],
+  ['web-portal', '门户网站', 'theme-web-portal-v1.webp', ['门户网站']],
+  ['chip-packaging', '集成电路封测', 'theme-chip-packaging-v1.webp', ['集成电路封测', '芯片封测']],
+  ['it-services', 'IT服务', 'theme-it-services-v1.webp', ['IT服务', 'IT服务Ⅲ', 'IT服务III']],
 ];
 
 export const themeArtwork = Object.freeze(Object.fromEntries(entries.map(([id, label, filename]) => [

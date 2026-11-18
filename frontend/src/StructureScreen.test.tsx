@@ -13,3 +13,11 @@ test('structure evidence is read from the pinned model and distinguishes replay 
 test('incomplete shared history is displayed as preparation, not zero matching patterns',async()=>{
  mount(async(url:any)=>Response.json(String(url).includes('/schemes')?{version:0,schemes:[]}:{...data,structure:{...data.structure,status:'preparing',availableSessions:24,readyRows:0,attached:0,missing:5571},rows:[],total:0,counts:{matched:0,missing:5571,unmet:0}}));await screen.findByText(/结构历史准备中/);expect(screen.getByText(/24.*80/)).toBeTruthy();expect(screen.getByText(/不代表全市场没有符合结构/)).toBeTruthy();
 });
+
+test('compact structure receipt keeps cutoff and missing coverage visible while expanding methodology on request',async()=>{
+ mount(async(url:any)=>Response.json(String(url).includes('/schemes')?{version:0,schemes:[]}:data));await screen.findByRole('button',{name:'查看结构样本行情详情'});
+ const receipt=screen.getByRole('status'),details=receipt.querySelector('details');
+ expect(receipt.textContent).toContain('2026-11-17');expect(receipt.textContent).toContain('缺数据 2');
+ expect(details).toBeTruthy();expect(details?.open).toBe(false);
+ fireEvent.click(within(receipt).getByText('结构口径与来源'));expect(details?.textContent).toContain('不倒填');
+});
