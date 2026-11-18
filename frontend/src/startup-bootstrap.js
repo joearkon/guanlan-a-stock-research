@@ -1,0 +1,2 @@
+// Runs from the HTML head, before React's module graph. Only identity is read.
+(()=>{if(window.__guanlanStartupV1||!/^\/next(?:\/|$)/.test(location.pathname))return;try{const controller=new AbortController(),state={at:Date.now(),controller,promise:null,error:null};window.__guanlanStartupV1=state;state.promise=fetch('/api/me',{credentials:'same-origin',signal:AbortSignal.any([controller.signal,AbortSignal.timeout(20000)])}).catch(error=>{state.error=error;return null;});}catch{delete window.__guanlanStartupV1;}})();

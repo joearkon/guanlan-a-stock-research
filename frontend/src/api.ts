@@ -4,9 +4,21 @@ export const queryClient=new QueryClient({defaultOptions:{queries:{staleTime:600
 const versions=new Map<string,{etag:string,value:any}>();
 export const sessionExpiredSignal='guanlan.local.session-expired';
 let accountGeneration=0;
-export function clearResourceCache(){accountGeneration++;versions.clear();}
+type StartupRead={at:number;controller:AbortController;promise:Promise<Response|null>;error?:unknown};
+declare global{interface Window{__guanlanStartupV1?:StartupRead}}
+const startupControllers=new Set<AbortController>();
+function discardStartup(){if(typeof window!=='undefined'){window.__guanlanStartupV1?.controller.abort();delete window.__guanlanStartupV1;}for(const c of startupControllers)c.abort();startupControllers.clear();}
+function startupResponse(url:string,signal?:AbortSignal):Promise<Response|null>|null{
+ if(url!=='/api/me'||typeof window==='undefined')return null;const read=window.__guanlanStartupV1;if(!read)return null;delete window.__guanlanStartupV1;
+ if(!Number.isFinite(read.at)||Date.now()-read.at>15000||Date.now()<read.at||signal?.aborted){read.controller.abort();return null;}
+ startupControllers.add(read.controller);const abort=()=>read.controller.abort();signal?.addEventListener('abort',abort,{once:true});
+ return read.promise.then(response=>{if(read.error)throw read.error;return response;}).finally(()=>{startupControllers.delete(read.controller);signal?.removeEventListener('abort',abort);});
+}
+export function clearResourceCache(){accountGeneration++;versions.clear();discardStartup();}
 export async function getJSON(url:string,signal?:AbortSignal){
- const generation=accountGeneration,cached=versions.get(url),r=await fetch(url,{credentials:'same-origin',headers:cached?{'If-None-Match':cached.etag}:{},signal:signal?AbortSignal.any([signal,AbortSignal.timeout(20000)]):AbortSignal.timeout(20000)});
+ const generation=accountGeneration,cached=versions.get(url),startup=startupResponse(url,signal),early=startup?await startup:null;
+ if(generation!==accountGeneration||signal?.aborted)throw new DOMException('账号已切换或读取已取消','AbortError');
+ const r=early||await fetch(url,{credentials:'same-origin',headers:cached?{'If-None-Match':cached.etag}:{},signal:signal?AbortSignal.any([signal,AbortSignal.timeout(20000)]):AbortSignal.timeout(20000)});
  if(generation!==accountGeneration)throw new DOMException('账号已切换，未读取旧账户回执','AbortError');
  if(r.status===304&&cached)return cached.value;
  if(!r.ok){if(r.status===401&&url!=='/api/me'&&typeof window!=='undefined')window.dispatchEvent(new Event(sessionExpiredSignal));const e:any=Error(r.status===401?'登录已过期，请重新登录':'资料读取失败，可单独重试');e.status=r.status;throw e;}
