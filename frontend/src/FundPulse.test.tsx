@@ -109,7 +109,7 @@ test('a mismatched-kind payload cannot display another universe under the select
 });
 test('independent category reads offer only industry and concept without requesting stocks',async()=>{
  const client=new QueryClient({defaultOptions:{queries:{retry:false,gcTime:0}}}),requests:string[]=[];
- vi.stubGlobal('fetch',async(input:any)=>{const url=String(input),kind=new URL(url,'https://x').searchParams.get('kind');requests.push(kind||'');return Response.json(kind==='stock'?{status:'pending_source_validation',kind,reason:'complete_snapshot_missing'}:{...archived,kind});});
+ vi.stubGlobal('fetch',async(input:any)=>{const url=String(input),params=new URL(url,'https://x').searchParams,kind=params.get('kind');if(params.get('view')!=='health')requests.push(kind||'');return Response.json(kind==='stock'?{status:'pending_source_validation',kind,reason:'complete_snapshot_missing'}:{...archived,kind});});
  render(<PreferenceProvider account="qa-categories"><QueryClientProvider client={client}><FundPulse preview={false}/></QueryClientProvider></PreferenceProvider>);await screen.findByText('归档行业');expect(requests).toEqual(['industry']);expect(screen.queryByRole('button',{name:'个股'})).toBeNull();fireEvent.click(screen.getByRole('button',{name:'概念'}));await act(async()=>{await new Promise(r=>setTimeout(r,15));});expect(requests).toEqual(['industry','concept']);fireEvent.click(screen.getByRole('button',{name:'行业'}));await screen.findByText('归档行业');expect(client.getQueryData(['fund-pulse','qa-categories','industry'])).toBeTruthy();expect(requests).not.toContain('stock');client.clear();
 });
 test('an unknown API payload is a local read failure rather than an empty valid funds snapshot',async()=>{

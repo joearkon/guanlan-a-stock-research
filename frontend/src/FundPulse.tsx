@@ -7,6 +7,7 @@ import {fundPulsePreview} from './monitor-navigation';
 import StockLink from './StockLink';
 import {LocalRefresh,Skeleton} from './components';
 import {FundSpark,FundTrendDrawer,type FundTarget} from './FundTrend';
+import FundHealth from './FundHealth';
 import './fund-pulse.css';
 const money=(n:any)=>typeof n==='number'&&Number.isFinite(n)?(n>0?'+':'')+number(n/10000):'—';
 const stamp=(s:any)=>s?new Date(s).toLocaleString('zh-CN',{timeZone:'Asia/Shanghai',hour12:false}):'未提供';
@@ -23,13 +24,16 @@ function SnapshotState({data}:{data:any}){
  const minute=Number.isFinite(end)?new Date(end+28800000).toISOString().slice(11,16):'',stage=data.stage==='close'||minute>='15:00'?'收盘快照':data.stage==='lunch'?'午盘快照':'盘中采样快照';
  return <div className="pulse-validation pulse-snapshot-status" role="status"><strong>{stage}</strong><span>展示 {data.day} {stage}，非当前实时。{stage==='盘中采样快照'&&expired&&<b>已过期，保留原采样值。</b>}</span></div>;
 }
-export function FundPulsePanel({data,error,refreshing=false,onRefresh,onKind,kind='stock'}:{data?:any,error?:string,refreshing?:boolean,onRefresh?:()=>void,onKind?:(k:string)=>void,kind?:string}){
- const [tab,setTab]=useState('daily'),[direction,setDirection]=useState('inflow'),[selected,setSelected]=useState<any>(null);
+export function FundPulsePanel({data,error,healthError,refreshing=false,onRefresh,onKind,kind='stock'}:{data?:any,error?:string,healthError?:string,refreshing?:boolean,onRefresh?:()=>void,onKind?:(k:string)=>void,kind?:string}){
+ const [tab,setTab]=useState('daily'),[direction,setDirection]=useState('inflow'),[selected,setSelected]=useState<any>(null),[showHistory,setShowHistory]=useState(false);
  const [metric,setMetric]=useState('net'),[search,setSearch]=useState(''),[board,setBoard]=useState(''),[target,setTarget]=useState<FundTarget|null>(null);
  const retainedRef=useRef<HTMLDivElement>(null),widthRef=useRef(0),[retainedHeight,setRetainedHeight]=useState(560);
  useEffect(()=>{setTab('daily');setDirection('inflow');setSelected(null);setMetric('net');setSearch('');setBoard('');setTarget(null);},[kind]);
  useLayoutEffect(()=>{const element=retainedRef.current;if(!element)return;const measure=()=>{const rect=element.getBoundingClientRect(),widthChanged=Math.abs(rect.width-widthRef.current)>1;widthRef.current=rect.width;setRetainedHeight(prior=>Math.max(560,widthChanged?Math.ceil(rect.height):Math.max(prior,Math.ceil(rect.height))));};measure();if(typeof ResizeObserver==='undefined')return;const observer=new ResizeObserver(measure);observer.observe(element);return ()=>observer.disconnect();},[tab,kind,data,error]);
  if(data?.kind&&data.kind!==kind)data={status:'pending_source_validation',kind};
+ const original=data,oldDay=!!data?.monitor?.today&&data?.status==='archived_snapshot'&&data.day!==(data.monitor.expected_day||data.monitor.today);
+ useEffect(()=>{setShowHistory(false);setSelected(null);},[kind,original?.day]);
+ if(oldDay&&!showHistory)data={status:'pending_source_validation',kind,reason:'today_snapshot_missing',cadence_minutes:original.cadence_minutes};
  const history=!!data?.trend?.model,pending=data?.status==='pending_source_validation',archived=data?.status==='archived_snapshot',canChange=!archived||!!data?.trend?.change_available,view=tab==='checkpoints'?selected?.data:data;
  const delta=tab==='daily'&&metric==='change',waitingArchived=archived&&delta&&!canChange,showTrend=history&&tab!=='checkpoints';
  const key=delta?(direction==='inflow'?'pulseIn':'pulseOut'):direction;
@@ -50,6 +54,9 @@ export function FundPulsePanel({data,error,refreshing=false,onRefresh,onKind,kin
  return <section className="fund-pulse-page">
   <header className="pulse-header"><div className="pulse-heading"><div className="pulse-title-row"><h1>资金脉冲 <small className="pulse-beta">Beta（测试）</small></h1><nav aria-label="资金范围" className="pulse-switch pulse-kind-switch">{Object.entries(kinds).map(([k,label])=><button type="button" key={k} aria-pressed={kind===k} onClick={()=>{onKind?.(k);setSelected(null);}}>{label as string}</button>)}</nav></div><p>资金桶统计观察，不代表机构持仓或买卖信号</p></div>{onRefresh&&<button type="button" aria-label="读取共享更新" title="读取共享更新" onClick={onRefresh} disabled={refreshing} className="outline-button pulse-refresh"><RefreshCw size={15} className={refreshing?'spin':''}/><span>读取共享更新</span></button>}</header>
   {error&&<p role="status" className="pulse-warning">读取失败，保留已读版本及排序。可手动重试；不会重新抓取市场。</p>}
+  <FundHealth value={original?.monitor}/>
+  {healthError&&<p role="status" className="pulse-warning">监控状态读取失败，保留上次回执与原时间；不能据此判定采集是否恢复。行情列表不受影响。</p>}
+  {oldDay&&<div className="pulse-history-control"><span>{showHistory?'历史快照 · '+original.day:'今日暂无完整快照；历史资料不作为当前排行。'}</span><button type="button" className="outline-button" onClick={()=>{setShowHistory(v=>!v);setSelected(null);}}>{showHistory?'返回今日状态':'查看历史快照（'+original.day+'）'}</button></div>}
   <div className="pulse-retained" style={{minHeight:retainedHeight}}><LocalRefresh label={'资金'+(kinds[kind]||'资料')} busy={refreshing&&!!data} loading={!data&&!error}><div ref={retainedRef} className="pulse-retained-content">
   {pending?<>
    <div className="pulse-validation" role="status"><strong>数据验证中</strong><span>{data.reason?`${kinds[kind]}尚无可展示的完整快照，取数排查中；不影响其他类别查看。盘中源验收中，不借其他类别或旧日数据补造。`:'功能预览已开放；盘中源验收中，尚未开放排行。不展示未验收的资金数值，收盘探测不算真实盘中通过。'}</span></div>
@@ -58,7 +65,7 @@ export function FundPulsePanel({data,error,refreshing=false,onRefresh,onKind,kin
     <h2>{kinds[kind]} · {titles[tab]}</h2>
     {tab==='daily'&&!delta&&<><h3>等待可核对的{direction==='inflow'?'流入':'流出'}排行</h3><p>按同源、同日主力净额正负值分别排序，全目录校验后取前10。不把行业与概念金额相加，不用行情涨幅推算资金。</p></>}
     {tab==='daily'&&delta&&<><h3>等待有效采样基准</h3><p>相邻有效采样不足，暂不显示{direction==='inflow'?'流入':'流出'}变化。脉冲是同源净额的相邻差额，不是当日累计，也不跨午休或数据缺口补0。</p></>}
-    {tab==='checkpoints'&&<><p>计划留档时点如下，均为北京时间；实际采集窗口和完成时间以回执为准，不用当前滚动数据倒填旧快照。</p><div className="pulse-checkpoints">{['午盘 · 11:30','下午 · 14:30','收盘就绪 · 15:05'].map(label=><div className="pulse-preview-checkpoint" key={label}><strong>{label}</strong><small>待验收</small></div>)}</div></>}
+    {tab==='checkpoints'&&<><p>{original?.monitor?.today} · 均为北京时间；不借昨日或当前滚动数据倒填。</p><div className="pulse-checkpoints">{[['lunch','午盘 · 11:30'],['1430','下午 · 14:30'],['close','收盘就绪 · 15:05']].map(([id,label])=><div className="pulse-preview-checkpoint" key={id}><strong>{label}</strong><small>{original?.checkpoint_status?.find((c:any)=>c.stage===id)?.state==='missing'?'到点未收录':original?.monitor?'等待计划时点':'待验收'}</small></div>)}</div></>}
    </section>
    <p className="pulse-time">共享后台按交易日计划每30分钟采集，三个时点另存；页面切换不触发市场抓取。数据验收完成前不开放数值读取。</p>
    <details className="pulse-notes"><summary>口径、缺口与观察标签</summary><p>主力净额是来源按成交金额分桶估算的净买入额，不等同于真实新增资金。拟用东方财富行业、概念与个股资金资料；资金字段时间与关联行情更新时间不同，将分别说明。全部时刻按北京时间展示。</p><p>缺数据保留缺口，不当作0。缺少同源近5日价格依据时不生成高低切标签；标签仅作观察，不证明资金转移。</p></details>
@@ -88,5 +95,7 @@ export function FundPulsePanel({data,error,refreshing=false,onRefresh,onKind,kin
 export default function FundPulse({preview=fundPulsePreview}:{preview?:boolean}={}){
  const {account}=usePreferences(),[kind,setKind]=useState('industry');
  const q=useQuery({queryKey:['fund-pulse',account,kind],queryFn:async({signal})=>checkedSnapshot(await getJSON('/api/data/fund-pulse?kind='+kind,signal),kind),enabled:!preview&&account!=='guest',retry:false,refetchOnWindowFocus:false,refetchOnReconnect:false,refetchInterval:false});
- return <FundPulsePanel data={preview?{status:'pending_source_validation'}:q.data} error={preview?undefined:q.error?.message} refreshing={!preview&&q.isFetching} onRefresh={preview?undefined:()=>q.refetch()} kind={kind} onKind={setKind}/>;
+ const health=useQuery({queryKey:['fund-pulse-health',account,kind],queryFn:async({signal})=>{const value=await getJSON('/api/data/fund-pulse?kind='+kind+'&view=health',signal);if(value?.kind!==kind||!value.monitor||typeof value.monitor.state!=='string')throw Error('监控状态未核验');return value;},enabled:!preview&&account!=='guest'&&!!q.data,retry:false,refetchOnWindowFocus:false,refetchOnReconnect:false,refetchInterval:300000,refetchIntervalInBackground:false});
+ const monitor=health.data?.monitor&&(!q.data?.monitor?.reported_at||!health.data.monitor.reported_at||health.data.monitor.reported_at>=q.data.monitor.reported_at)?health.data.monitor:q.data?.monitor;
+ return <FundPulsePanel data={preview?{status:'pending_source_validation'}:q.data?{...q.data,monitor}:health.data?{status:'pending_source_validation',kind,reason:'complete_snapshot_missing',monitor}:undefined} error={preview?undefined:q.error?.message} healthError={preview?undefined:health.error?.message} refreshing={!preview&&q.isFetching} onRefresh={preview?undefined:()=>{q.refetch();health.refetch();}} kind={kind} onKind={setKind}/>;
 }
