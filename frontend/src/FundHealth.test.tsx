@@ -12,7 +12,7 @@ test('missing heartbeat does not claim timer stopped or market collection failed
  expect(screen.getByText(/未收到近期采集心跳/)).toBeTruthy();expect(screen.queryByText(/定时器已停止/)).toBeNull();
 });
 test('failed automatic health read explicitly preserves the previous receipt and market values',async()=>{
- const client=new QueryClient({defaultOptions:{queries:{retry:false,gcTime:0}}}),snapshot={...old,provider:'eastmoney',not_realtime:true,version:'a'.repeat(64),captured_at:'2026-11-18T07:05:00Z',kind:'industry',coverage:{received:1,expected:1,complete:true},ranks:{...old.ranks,pulseIn:[],pulseOut:[]},monitor:{state:'snapshot_available',today:'2026-11-18'}};
+ const client=new QueryClient({defaultOptions:{queries:{retry:false,gcTime:0}}}),snapshot={...old,provider:'eastmoney',not_realtime:true,version:'a'.repeat(64),captured_at:'2026-11-18T07:05:00Z',kind:'concept',coverage:{received:1,expected:1,complete:true},ranks:{...old.ranks,pulseIn:[],pulseOut:[]},monitor:{state:'snapshot_available',today:'2026-11-18'}};
  vi.stubGlobal('fetch',async(input:any)=>String(input).includes('view=health')?Response.json({error:'QA unavailable'},{status:503}):Response.json(snapshot));
  render(<PreferenceProvider account="qa-health-failure"><QueryClientProvider client={client}><FundPulse preview={false}/></QueryClientProvider></PreferenceProvider>);
  expect(await screen.findByText(/监控状态读取失败/)).toBeTruthy();expect(screen.getByText('历史概念')).toBeTruthy();client.clear();

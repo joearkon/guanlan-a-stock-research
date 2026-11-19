@@ -12,7 +12,7 @@ import './fund-pulse.css';
 const money=(n:any)=>typeof n==='number'&&Number.isFinite(n)?(n>0?'+':'')+number(n/10000):'—';
 const stamp=(s:any)=>s?new Date(s).toLocaleString('zh-CN',{timeZone:'Asia/Shanghai',hour12:false}):'未提供';
 const titles:any={daily:'实时排行',checkpoints:'时点快照'};
-const kinds:any={industry:'行业',concept:'概念'};
+const kinds:any={concept:'概念',industry:'行业'};
 function checkedSnapshot(value:any,kind:string){
  if(value?.kind===kind&&value.status==='pending_source_validation')return value;
  if(value?.kind!==kind||value.status!=='archived_snapshot'||value.schema!==1||value.provider!=='eastmoney'||value.not_realtime!==true||!/^\d{4}-\d{2}-\d{2}$/.test(value.day)||!/^[a-f0-9]{64}$/.test(value.version)||!Number.isFinite(Date.parse(value.captured_at))||!Number.isFinite(Date.parse(value.completed_at))||!value.coverage?.complete||!Number.isInteger(value.coverage.expected)||value.coverage.received!==value.coverage.expected||!['inflow','outflow','pulseIn','pulseOut'].every(k=>Array.isArray(value.ranks?.[k])&&value.ranks[k].length<=10))throw Error('资金快照格式未核验');
@@ -93,7 +93,7 @@ export function FundPulsePanel({data,error,healthError,refreshing=false,onRefres
  </section>;
 }
 export default function FundPulse({preview=fundPulsePreview}:{preview?:boolean}={}){
- const {account}=usePreferences(),[kind,setKind]=useState('industry');
+ const {account}=usePreferences(),[kind,setKind]=useState('concept');
  const q=useQuery({queryKey:['fund-pulse',account,kind],queryFn:async({signal})=>checkedSnapshot(await getJSON('/api/data/fund-pulse?kind='+kind,signal),kind),enabled:!preview&&account!=='guest',retry:false,refetchOnWindowFocus:false,refetchOnReconnect:false,refetchInterval:false});
  const health=useQuery({queryKey:['fund-pulse-health',account,kind],queryFn:async({signal})=>{const value=await getJSON('/api/data/fund-pulse?kind='+kind+'&view=health',signal);if(value?.kind!==kind||!value.monitor||typeof value.monitor.state!=='string')throw Error('监控状态未核验');return value;},enabled:!preview&&account!=='guest'&&!!q.data,retry:false,refetchOnWindowFocus:false,refetchOnReconnect:false,refetchInterval:300000,refetchIntervalInBackground:false});
  const monitor=health.data?.monitor&&(!q.data?.monitor?.reported_at||!health.data.monitor.reported_at||health.data.monitor.reported_at>=q.data.monitor.reported_at)?health.data.monitor:q.data?.monitor;

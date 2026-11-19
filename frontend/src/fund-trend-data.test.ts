@@ -51,3 +51,28 @@ test('detail tooltip follows theme and keeps the full signed amount while the ax
  expect(dark.tooltip.formatter([{value:[Date.parse('2026-11-17T05:00:00Z'),20000]}])).toBe('13:00:00\n累计净额 20,000 万元');
  expect(light.tooltip.formatter([{value:[Date.parse('2026-11-17T05:30:00Z'),-7500]}])).toBe('13:30:00\n相邻变化 -7,500 万元');
 });
+
+test('lunch is a neutral Beijing-time background, not a data bridge, in both metrics and mini previews',()=>{
+ const points=[p('03:00',100,true),p('03:30',120),p('05:00',160,true),p('05:30',170)];
+ for(const theme of ['dark','light'])for(const metric of ['net','change'] as const){
+  const option=trendOption(points,metric,theme),area=option.series[0].markArea;
+  expect(area?.data).toEqual([[{name:'午休',xAxis:Date.parse('2026-11-17T11:30:00+08:00')},{xAxis:Date.parse('2026-11-17T13:00:00+08:00')}]]);
+  expect(area?.silent).toBe(true);expect(area?.label.show).toBe(true);
+  expect(area?.itemStyle.color).toBe(theme==='dark'?'rgba(161,161,170,0.12)':'rgba(100,116,139,0.10)');
+  expect(option.series.map(s=>s.data.length)).toEqual([2,2]);expect(option.series[1].markArea).toBeUndefined();
+  expect(option.series[1].data[0]).toEqual([Date.parse('2026-11-17T05:00:00Z'),.016]);
+  const mini=miniTrendOption(points,theme,true);expect(mini.series[0].markArea?.data).toEqual(area?.data);expect(mini.series[0].markArea?.label.show).toBe(false);
+ }
+});
+
+test('lunch shading never extends morning-only, afternoon-only or single-point chart bounds',()=>{
+ for(const points of [[p('01:30',10,true),p('03:00',20)],[p('05:00',30,true),p('05:30',40)],[p('03:30',20,true)],[]]){
+  const option=trendOption(points,'net','dark');expect(option.series.every(s=>!s.markArea)).toBe(true);
+ }
+});
+
+test('lunch band is rendered by the actual ECharts SVG renderer behind real disconnected samples',async()=>{
+ const {init,use}=await import('echarts/core'),{LineChart}=await import('echarts/charts'),{SVGRenderer}=await import('echarts/renderers'),{GridComponent,MarkAreaComponent}=await import('echarts/components');use([LineChart,SVGRenderer,GridComponent,MarkAreaComponent]);
+ const chart=init(null,undefined,{renderer:'svg',ssr:true,width:640,height:300});
+ try{chart.setOption(trendOption([p('03:00',100,true),p('03:30',120),p('05:00',160,true),p('05:30',170)],'net','dark') as any);const svg=chart.renderToSVGString();expect(svg).toContain('午休');expect(svg).toContain('fill-opacity="0.12"');expect(svg).not.toContain('NaN');}finally{chart.dispose();}
+});
