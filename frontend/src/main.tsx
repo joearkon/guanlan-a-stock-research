@@ -7,7 +7,7 @@ import {StrictMode,Suspense,lazy,useState,useEffect,Component,type ReactNode} fr
 import {createRoot} from 'react-dom/client';
 import {BrowserRouter,Routes,Route,NavLink,Outlet,useLocation,Link} from 'react-router-dom';
 import {QueryClientProvider,useQuery} from '@tanstack/react-query';
-import {Home,Activity,History,Layers3,Star,MessageCircle,Bell,LoaderCircle,LayoutDashboard,ChartNoAxesCombined} from 'lucide-react';
+import {Home,Activity,History,Layers3,Star,MessageCircle,Bell,LoaderCircle,LayoutDashboard,ChartNoAxesCombined ,FlaskConical} from 'lucide-react';
 import {queryClient,publicQuery} from './api';
 import {Drawer,ThemeToggle,Skeleton} from './components';
 import {initializeTheme} from './theme';
@@ -54,6 +54,7 @@ const Funding=lazy(()=>import('./CollectiveRelay').then(m=>({default:()=> <m.def
 const HomePage=lazy(()=>import('./Home'));
 const Monitor=lazy(()=>import('./Monitor'));
 const FundPulse=lazy(()=>import('./FundPulse'));
+const StrategyLab=lazy(()=>import('./StrategyLab'));
 const StockObservation=lazy(()=>import('./StockObservation'));
 const Relay=lazy(()=>import('./Relay'));
 const Auction=lazy(()=>import('./Auction'));
@@ -84,7 +85,7 @@ function LayoutContent({user}:{user:any}){
  useEffect(()=>{if(!('serviceWorker' in navigator))return;const onMessage=(event:MessageEvent)=>{if(event.data?.type!=='guanlan-open-notification')return;setNoticeId(/^[0-9a-f-]{36}$/i.test(event.data.id||'')?event.data.id:'');setNotice(true);};navigator.serviceWorker.addEventListener('message',onMessage);return()=>navigator.serviceWorker.removeEventListener('message',onMessage);},[]);
  const unread=useQuery({...publicQuery('/api/notifications/summary',30000),enabled:!!user,refetchInterval:60000});
  const isStocks=/^\/(?:watchlist|holdings|notifications|my-research)(?:\/|$)/.test(location.pathname),isReview=/observation|review|emotion|screener/.test(location.pathname),isMonitor=isMonitorPath(location.pathname);
- const name=location.pathname==='/local-ai'?'本地 AI Agent':location.pathname==='/screener'?'条件观测':location.pathname==='/updates'?'版本更新':location.pathname==='/account/usage'?'用量与额度':location.pathname==='/admin'?'管理后台':location.pathname==='/battle-dashboard'?'我的作战看板':location.pathname==='/my-research'?'我的研究':location.pathname==='/account'?'我的账号':location.pathname.includes('security')?'密码与安全邮箱':location.pathname.startsWith('/industry')?'产业价值研究':location.pathname==='/notifications'?'提醒与消息':location.pathname==='/agent'?'问观澜':location.pathname==='/stock'?'个股档案':location.pathname==='/coming-soon'?'产业价值研究':location.pathname==='/funding-observation'?'资金观测':location.pathname==='/review'?'市场观测':location.pathname==='/emotion'?'情绪观测':location.pathname==='/radar-observation'?'雷达观测':location.pathname==='/relay'?'异动接力':location.pathname==='/auction'?'竞价盘中':isMonitor?'实时动态':isStocks?'自选与持仓':isReview?'市场观测':'今日研究台';
+ const name=location.pathname==='/strategy-lab'?'战法研究':location.pathname==='/local-ai'?'本地 AI Agent':location.pathname==='/screener'?'条件观测':location.pathname==='/updates'?'版本更新':location.pathname==='/account/usage'?'用量与额度':location.pathname==='/admin'?'管理后台':location.pathname==='/battle-dashboard'?'我的作战看板':location.pathname==='/my-research'?'我的研究':location.pathname==='/account'?'我的账号':location.pathname.includes('security')?'密码与安全邮箱':location.pathname.startsWith('/industry')?'产业价值研究':location.pathname==='/notifications'?'提醒与消息':location.pathname==='/agent'?'问观澜':location.pathname==='/stock'?'个股档案':location.pathname==='/coming-soon'?'产业价值研究':location.pathname==='/funding-observation'?'资金观测':location.pathname==='/review'?'市场观测':location.pathname==='/emotion'?'情绪观测':location.pathname==='/radar-observation'?'雷达观测':location.pathname==='/relay'?'异动接力':location.pathname==='/auction'?'竞价盘中':isMonitor?'实时动态':isStocks?'自选与持仓':isReview?'市场观测':'今日研究台';
  return <>
   <Sidebar brand={<div className="sidebar-brand-row"><Link to="/" className="brand"><img src="/v2/assets/imgGuanlanLogoMarkHdPng.png?v=dd1f792049fc" alt="观澜品牌标识"/><div><strong>观澜 <span className="brand-beta" title="观澜 v1.0.0-beta.1">内测版</span></strong><small>v1.0.0 · A股研究平台</small></div></Link><MarketStatus calendarUrl={location.pathname==='/'?'/api/data/free?view=home':'/api/data/free?view=watch'}/></div>}>
    <nav aria-label="主导航" data-tour="navigation">
@@ -93,6 +94,7 @@ function LayoutContent({user}:{user:any}){
     {isMonitor&&<div className="subnav">{monitorLinks().map(([to,label])=><NavLink key={to} to={to}>{label}</NavLink>)}</div>}
     <NavLink to="/market-observation" aria-label="复盘" data-tour="review" className={isReview?'active':''}><History/><SidebarLabel>复盘</SidebarLabel></NavLink>
     {isReview&&<ReviewNavigation/>}
+    <NavLink to="/strategy-lab" aria-label="战法研究 Beta（测试）"><FlaskConical/><SidebarLabel>战法研究 <small>Beta（测试）</small></SidebarLabel></NavLink>
     <NavLink to="/stock" aria-label="个股档案" data-tour="stock-dossier"><ChartNoAxesCombined/><SidebarLabel>个股档案</SidebarLabel></NavLink>
     <NavLink to="/industry" aria-label="产业价值研究" data-tour="industry"><Layers3/><SidebarLabel>产业价值研究</SidebarLabel></NavLink>
     {location.pathname.startsWith('/industry')&&<IndustryTree/>}
@@ -105,7 +107,7 @@ function LayoutContent({user}:{user:any}){
   </Sidebar>
   <header className="topbar">
    <MarketStatus calendarUrl={location.pathname==='/'?'/api/data/free?view=home':'/api/data/free?view=watch'}/>
-   <div className="breadcrumb">{location.pathname==='/battle-dashboard'?'个人空间':location.pathname==='/stock'?'个股资料':location.pathname.startsWith('/industry')?'产业研究':isStocks?'我的股票':isReview?'复盘':isMonitor?'盯盘':'首页'}<span>›</span><strong>{location.pathname==='/fund-pulse'?'资金脉冲':name}</strong></div>
+   <div className="breadcrumb">{location.pathname==='/strategy-lab'?'研究工具':location.pathname==='/battle-dashboard'?'个人空间':location.pathname==='/stock'?'个股资料':location.pathname.startsWith('/industry')?'产业研究':isStocks?'我的股票':isReview?'复盘':isMonitor?'盯盘':'首页'}<span>›</span><strong>{location.pathname==='/fund-pulse'?'资金脉冲':name}</strong></div>
    <SiteSearch key={'search:'+(user?.id||'guest')} onPick={code=>openStock?.({code})}/>
    <time>北京时间 {clock}</time>
    <ThemeToggle/>
@@ -130,6 +132,7 @@ function App(){return <QueryClientProvider client={queryClient}><BrowserRouter b
  <Route path="emotion" element={<LegacyReview kind="emotion"/>}/><Route path="radar-observation" element={<Radar/>}/>
  <Route path="monitor" element={<Monitor/>}/><Route path="relay" element={<Relay/>}/><Route path="auction" element={<Auction/>}/><Route path="screener" element={<StockObservation/>}/>
  {fundPulseEnabled&&<Route path="fund-pulse" element={<FundPulse/>}/>}
+ <Route path="strategy-lab" element={<StrategyLab/>}/>
  <Route path="stock" element={<Stock/>}/><Route path="my-research" element={<MyResearch/>}/><Route path="notifications" element={<Notifications/>}/>
  <Route path="agent" element={<Agent/>}/><Route path="admin" element={<OpsConsole/>}/><Route path="account/usage" element={<AccountUsage/>}/>
  <Route path="updates" element={<ReleaseNotes/>}/>

@@ -1,7 +1,7 @@
 import {useEffect,useState} from 'react';
 import {Link,useLocation} from 'react-router-dom';
 import {motion} from 'motion/react';
-import {Home,Activity,Layers3,Star,Grid2X2,History,ChartNoAxesCombined,LayoutDashboard,Bell,BookOpen,Wallet,Search,Filter,UserRound,Settings2,HelpCircle,ChevronLeft,type LucideIcon} from 'lucide-react';
+import {Home,Activity,Layers3,Star,Grid2X2,History,ChartNoAxesCombined,LayoutDashboard,Bell,BookOpen,Wallet,Search,Filter,UserRound,Settings2,HelpCircle,ChevronLeft,FlaskConical,type LucideIcon} from 'lucide-react';
 import {Drawer} from './components';
 import {AiIcon} from './AiAction';
 import {PrivacyToggle} from './Privacy';
@@ -17,7 +17,7 @@ import LocalAIStatus from './LocalAIStatus';
 const groups:{title:string;links:[string,string,LucideIcon][]}[]=[
  {title:'首页与盯盘',links:[['/','今日研究台',Home],...monitorLinks().map(([to,label]):[string,string,LucideIcon]=>[to,label,Activity])]},
  {title:'复盘与观测',links:[['/market-observation','市场观测',History],['/screener','条件观测',Filter],['/funding-observation','资金观测',ChartNoAxesCombined],['/radar-observation','雷达观测',Search]]},
- {title:'研究与个人工作区',links:[['/stock','个股档案',ChartNoAxesCombined],['/industry','产业价值研究',Layers3],['/battle-dashboard','我的作战看板',LayoutDashboard],['/watchlist','我的自选',Star],['/holdings','我的持仓',Wallet],['/my-research','我的研究',BookOpen],['/notifications','提醒与消息',Bell]]}
+ {title:'研究与个人工作区',links:[['/strategy-lab','战法研究 Beta（测试）',FlaskConical],['/stock','个股档案',ChartNoAxesCombined],['/industry','产业价值研究',Layers3],['/battle-dashboard','我的作战看板',LayoutDashboard],['/watchlist','我的自选',Star],['/holdings','我的持仓',Wallet],['/my-research','我的研究',BookOpen],['/notifications','提醒与消息',Bell]]}
 ];
 
 export default function MobileNavigation({user}:{user:any}){
