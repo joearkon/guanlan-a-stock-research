@@ -16,10 +16,16 @@ test('missing required metrics stay missing, not zero or failed; order stable',(
  expect(result.missing.map(x=>x.code)).toEqual(['600002']);
  expect(result.matches.map(x=>x.code)).toEqual(['600001','600003']);
 });
-test('date mismatch, unresolved parameters and unavailable sequence templates cannot screen',()=>{
+test('date mismatch, unresolved parameters and unavailable repair templates cannot screen',()=>{
  expect(()=>screenStrategy(model,'2026-11-24',templates[0].rule)).toThrow(/日期/);
  expect(()=>screenStrategy(model,day,{...templates[0].rule,needs:['承接定义']})).toThrow(/待确认/);
- expect(()=>screenStrategy(model,day,templates[2].rule)).toThrow(/连续过程/);
+ expect(()=>screenStrategy(model,day,templates[3].rule)).toThrow(/连续过程/);
+});
+test('divergence screens verified sequences and preserves missing/excluded reasons',()=>{
+ const m={...model,sequence:{schema:'first-divergence-close-v1',day},rows:model.rows.map((r,i)=>({...r,sequence:{status:['match','missing','excluded'][i],reason:['回封已核对','首板归档缺失','多次分歧'][i]}}))};
+ const r=screenStrategy(m,day,templates[2].rule);expect(r.matches.map(x=>x.code)).toEqual(['600001']);expect(r.missing[0].gap).toBe('首板归档缺失');expect(r.excluded[0].gap).toBe('多次分歧');
+ expect(()=>screenStrategy(model,day,templates[2].rule)).toThrow(/过程成品/);
+ expect(()=>screenStrategy({...m,sequence:{...m.sequence,day:'2026-11-20'}},day,templates[2].rule)).toThrow(/过程成品/);
 });
 test('strict imported rules reject unsupported expressions, coercions, invalid bounds and unknown keys',()=>{
  const rule=templates[1].rule;expect(readStrategyDraft(JSON.stringify(rule))).toEqual(rule);
