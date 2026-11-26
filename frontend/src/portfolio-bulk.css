@@ -1,0 +1,14 @@
+.portfolio-bulk-bar{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;padding:10px 12px;border-bottom:1px solid var(--line);font-size:14px}
+.portfolio-bulk-check{display:inline-flex;align-items:center;gap:8px;min-height:36px;cursor:pointer;font-size:14px;color:var(--body)}
+.portfolio-bulk-check input,.portfolio-row-check input{width:18px;height:18px;min-height:0;flex:none;accent-color:var(--accent)}
+.portfolio-row-check{display:inline-flex;align-items:center;justify-content:center;min-width:36px;min-height:36px;flex:none;cursor:pointer}
+.portfolio-bulk-remove{color:var(--up)}
+.portfolio-bulk-confirm p{font-size:14px;line-height:1.7;margin:12px 0}
+.portfolio-bulk-confirm ul{list-style:none;padding:0;margin:12px 0;border-block:1px solid var(--line)}
+.portfolio-bulk-confirm li{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px;overflow-wrap:anywhere}
+.portfolio-bulk-confirm li:last-child{border-bottom:0}
+.portfolio-bulk-confirm li span{color:var(--muted);font-size:12px}
+.portfolio-bulk-actions{display:flex;flex-wrap:wrap;gap:8px}
+html[data-navigation-layout=mobile] .portfolio-quote-list[data-bulk-selection=true] .portfolio-quotes .quote-col-name{width:180px}
+@media(max-width:767px){.portfolio-bulk-bar{padding:8px;gap:6px 10px}.portfolio-bulk-bar button,.portfolio-bulk-check,.portfolio-bulk-actions button,.portfolio-row-check{min-height:44px}.portfolio-row-check{min-width:44px}.portfolio-bulk-confirm{font-size:16px}}
+html[data-navigation-layout=mobile] .portfolio-bulk-bar button,html[data-navigation-layout=mobile] .portfolio-bulk-check,html[data-navigation-layout=mobile] .portfolio-bulk-actions button,html[data-navigation-layout=mobile] .portfolio-row-check{min-height:44px}
