@@ -1,19 +1,26 @@
 import {useQuery} from '@tanstack/react-query';
 import {Drawer,LocalRefresh} from './components';import {getJSON,number,pct} from './api';
 import './structure-evidence.css';
-export type StructureTarget={code:string;name:string;day:string;model:string};
-export const structureNames={turning:'转强观察',breakout:'突破确认'};
+import Pattern15Evidence,{Pattern15Receipt,Pattern15Cell,isPattern15,type PatternKind} from './Pattern15Evidence';
+export type StructureTarget={code:string;name:string;day:string;model:string;kind?:PatternKind};
+export const structureNames={turning:'转强观察',breakout:'突破确认','second-wave':'前强二波','high-divergence':'高位分歧观察'};
 const missingNames={history_60_sessions:'连续60个交易日历史不足（含新股或停牌缺档）',prices_or_adjustment:'日线价格或复权因子缺失',trading_calendar:'交易日历未核验',same_day_session:'缺少同日交易日资料',duplicate_session:'日线日期重复',daily_identity:'日线日期异常'};
 const date=(value:any)=>value?new Date(value).toLocaleString('zh-CN',{timeZone:'Asia/Shanghai',hour12:false}):'未留存';
 export function StructureReceipt({data}:{data:any}){
  if(!data?.criteria?.structure)return null;const s=data.structure;
+ if(isPattern15(data.criteria.structure))return <Pattern15Receipt data={data}/>;
  return <div className="structure-receipt" role="status">{!s||s.status!=='ready'?<><strong>结构历史准备中</strong><span>{s?`已收录 ${s.availableSessions??0} / ${s.targetSessions??80} 个交易日批次；`:''}需连续60个已完成交易日及复权资料。缺数据不代表全市场没有符合结构。</span></>:<><strong>低位转强 · {structureNames[data.criteria.structure]} · 测试</strong><span>截至 {data.day} 收盘 · 可核对 {s.attached??s.readyRows} / {s.expectedRows} 只 · 缺数据 {s.missing??s.missingRows} 只 · 非盘中信号</span></>}<details><summary>结构口径与来源</summary><p>{s?.source||'来源待核验'} · 至少60个连续交易日 · 前复权。</p><p>共享后台准备；不因浏览或筛选重复抓取。低点需后续2个已完成交易日确认，不倒填当时可知的信号。</p></details></div>;
 }
-export function StructureCell({row,onOpen}:{row:any;onOpen:()=>void}){
+export function StructureCell({row,onOpen,kind}:{row:any;onOpen:()=>void;kind?:string}){
+ if(isPattern15(kind))return <Pattern15Cell row={row} kind={kind} onOpen={onOpen}/>;
  const s=row.structure,stage=s?.signals?.turning?'转强观察':s?.signals?.breakout?'突破确认':s?.status==='ready'?'未满足结构':'缺结构数据';
  return <div className="structure-cell"><strong>{stage}</strong>{s?.signals?.turning||s?.signals?.breakout?<small>突破参考 {number(s.breakoutLevel)} · 距5日线 {pct(s.distanceMa5Pct)}</small>:null}<button type="button" className="outline-button" aria-label={'查看'+row.name+'结构依据'} onClick={onOpen}>依据</button></div>;
 }
 export default function StructureEvidence({target,onClose}:{target:StructureTarget|null;onClose:()=>void}){
+ if(target?.kind)return <Pattern15Evidence target={{...target,kind:target.kind}} onClose={onClose}/>;
+ return <LegacyStructureEvidence target={target} onClose={onClose}/>;
+}
+function LegacyStructureEvidence({target,onClose}:{target:StructureTarget|null;onClose:()=>void}){
  const url=target?'/api/data/stock-observation?'+new URLSearchParams({mode:'close',structureDetail:target.code,model:target.model}):'';
  const q=useQuery({queryKey:['structure-evidence',url],enabled:!!target,retry:false,queryFn:async({signal})=>{const b=await getJSON(url,signal);if(b.code!==target?.code||b.model!==target?.model||b.day!==target?.day)throw Error('结构依据版本不一致，请返回结果重新读取');return b;}});
  const b=q.data,s=b?.structure,p=b?.parameters;

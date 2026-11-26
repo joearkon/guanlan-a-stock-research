@@ -4,3 +4,5 @@
 .strategy-evidence{max-width:580px;white-space:normal;font-size:12px;line-height:1.7;color:var(--muted)}.strategy-evidence summary{color:var(--accent);cursor:pointer;display:flex;align-items:center;min-height:36px}.strategy-evidence ul{padding-left:16px}.strategy-evidence p{margin:6px 0}.strategy-evidence li{font-variant-numeric:tabular-nums}
 .strategy-table-scroll td{vertical-align:top}.strategy-table-scroll :is(th,td):last-child{text-align:left;width:40%;min-width:280px}
 @media(max-width:700px){.strategy-evidence summary{min-height:44px}.strategy-evidence{min-width:220px}}
+.short-cycle-rules{display:grid;gap:8px;margin:12px 0}.short-cycle-rules>div{display:grid;grid-template-columns:90px minmax(0,1fr);gap:12px}.short-cycle-rules dt{color:var(--muted);font-size:12px}.short-cycle-rules dd{margin:0;line-height:1.7;font-size:14px}.strategy-lab .strategy-gaps p{margin:6px 0;line-height:1.7}.strategy-lab .screener-pagination{display:flex;justify-content:flex-end;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px}
+@media(max-width:480px){.short-cycle-rules>div{grid-template-columns:72px minmax(0,1fr);gap:8px}}
