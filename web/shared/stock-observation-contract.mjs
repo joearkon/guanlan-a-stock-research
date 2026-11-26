@@ -20,6 +20,7 @@ export function cleanObservationCriteria(input={}){
  if(!input||typeof input!=='object'||Array.isArray(input))throw Error('筛选条件格式不正确');
  const out={...observationDefaults},enums={mode:['close','live'],board:['all','main','chinext','star','growth','bse'],basis:['current','peak'],excludeST:['0','1'],aboveOpen:['any','yes','no'],sealed:['any','yes','no'],sort:['pct','peakPct','amount','turnover','volumeRatio','marketCap','price','pullback','code'],direction:['asc','desc']};
  for(const [key,value]of Object.entries(input)){
+  if(key==='structureWindow'){if(!['10','15'].includes(String(value)))throw Error('战法窗口仅支持10或15个交易日');out.structureWindow=String(value);continue;}
   if(key==='structure'){if(value==null||value==='')continue;if(!['turning','breakout','second-wave','high-divergence'].includes(value))throw Error('结构条件无效');out.structure=value;continue;}
   if(key==='technical'){if(value==null||value==='')continue;if(typeof value!=='string'||value.length>200)throw Error('技术指标条件无效');const selected=value.split(',');if(selected.some(k=>!observationTechnicals.some(([id])=>id===k))||new Set(selected).size!==selected.length)throw Error('技术指标条件无效');out.technical=observationTechnicals.filter(([id])=>selected.includes(id)).map(([id])=>id).join(',');continue;}
   if(key in enums){if(!enums[key].includes(String(value)))throw Error('筛选条件无效：'+key);out[key]=String(value);continue;}
@@ -33,6 +34,7 @@ export function cleanObservationCriteria(input={}){
  for(const [key]of observationRanges)if(out['min'+key]!=null&&out['max'+key]!=null&&out['min'+key]>out['max'+key])throw Error('下限不能大于上限');
  if(!!out.groupProvider!==!!out.groupCode)throw Error('请选择完整行业或概念身份');
  if(out.technical&&out.mode!=='close')throw Error('技术指标仅支持盘后收盘，请切换收盘口径或取消技术条件');
+ if(out.structureWindow&&!['second-wave','high-divergence'].includes(out.structure))throw Error('10/15日窗口仅支持前强二波或高位分歧');
  if(out.structure&&out.mode!=='close')throw Error('结构筛选仅支持盘后收盘，请切换收盘口径或取消结构条件');
  return out;
 }

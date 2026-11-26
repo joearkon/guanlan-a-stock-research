@@ -23,3 +23,15 @@ test('a failed explicit refresh keeps the prior dated candidates visible',async(
  mount();fireEvent.click(screen.getByRole('button',{name:'前强二波'}));fireEvent.click(screen.getByRole('button',{name:'确认规则并读取候选'}));await screen.findByRole('button',{name:'查看二波样本行情详情'});vi.stubGlobal('fetch',vi.fn(async()=>Response.json({error:'fixture failure'},{status:503})));
  fireEvent.click(screen.getByRole('button',{name:'确认规则并读取候选'}));await screen.findByText(/读取失败，保留原日期与候选/);expect(screen.getByRole('button',{name:'查看二波样本行情详情'})).toBeTruthy();expect(screen.getByText(/上次有效结果/)).toBeTruthy();
 });
+
+test('changing the shape window revokes confirmation and reads ten sessions only after confirmation',async()=>{
+ const reads=mount();fireEvent.click(screen.getByRole('button',{name:'前强二波'}));fireEvent.click(screen.getByRole('button',{name:'确认规则并读取候选'}));await screen.findByRole('button',{name:'查看二波样本行情详情'});const n=reads.length;
+ fireEvent.change(screen.getByLabelText('形态窗口'),{target:{value:'10'}});expect(screen.queryByRole('button',{name:'查看二波样本行情详情'})).toBeNull();expect(reads.length).toBe(n);
+ vi.stubGlobal('fetch',vi.fn(async(url:any)=>{reads.push(String(url));return Response.json({...data,structureWindow:10,criteria:{...data.criteria,structureWindow:'10'},pattern15:{...data.pattern15,requiredSessions:10}});}));
+ fireEvent.click(screen.getByRole('button',{name:'确认规则并读取候选'}));await screen.findByRole('button',{name:'查看二波样本行情详情'});expect(reads.at(-1)).toContain('structureWindow=10');expect(screen.getByText(/最近10个已完成交易日/)).toBeTruthy();
+});
+
+test('historical results require an explicit action and retain their original date',async()=>{
+ mount();const calls:string[]=[];vi.stubGlobal('fetch',vi.fn(async(url:any)=>{calls.push(String(url));const historic=String(url).includes('history=complete');return Response.json({...data,day:historic?'2026-11-25':day,requestedDay:day,historical:historic,latestComplete:{day:'2026-11-25',model:'b'.repeat(64),sessions:15},pattern15:historic?data.pattern15:{status:'preparing',availableSessions:14},rows:historic?data.rows:[],total:historic?1:0});}));
+ fireEvent.click(screen.getByRole('button',{name:'前强二波'}));fireEvent.click(screen.getByRole('button',{name:'确认规则并读取候选'}));const button=await screen.findByRole('button',{name:'查看最近完整交易日（2026-11-25）'});expect(calls.every(x=>!x.includes('history='))).toBe(true);fireEvent.click(button);await screen.findByText(/历史收盘.*2026-11-25.*不是今日候选/);expect(calls.at(-1)).toContain('history=complete');expect(screen.getByRole('button',{name:'返回最新交易日'})).toBeTruthy();
+});
