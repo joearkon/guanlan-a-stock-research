@@ -5,6 +5,14 @@ const post=(f,path,body={},cookie='',origin=f.base)=>fetch(f.base+path,{method:'
 async function login(f){const response=await post(f,'/api/auth/password/login',{email:'qa@example.invalid',password:'not-a-real-password'});assert.equal(response.status,200);return response.headers.get('set-cookie').split(';')[0];}
 const waitFor=async fn=>{for(let i=0;i<60;i++){const value=await fn();if(value)return value;await new Promise(r=>setTimeout(r,10));}assert.fail('not settled');};
 
+test('only explicitly confirmed observation plans may sync; local profile and AI stay local',async t=>{
+ const f=await setup(t),p='/api/research/observation-plans';assert.equal((await fetch(f.base+p)).status,401);const cookie=await login(f),before=f.remote.length;
+ assert.equal((await fetch(f.base+p,{headers:{cookie}})).status,200);assert.equal(f.remote.at(-1).path,p);
+ const put=consent=>fetch(f.base+p,{method:'PUT',headers:{origin:f.base,'x-gl':'1','content-type':'application/json',cookie},body:JSON.stringify({accountId:7,version:0,plans:[],syncConsent:consent})});
+ const readCount=f.remote.length;assert.equal((await put(false)).status,400);assert.equal(f.remote.length,readCount);assert.equal((await put(true)).status,200);assert.equal(f.remote.at(-1).method,'PUT');
+ assert.equal((await post(f,p,{},cookie)).status,405);assert.deepEqual(f.runs,[]);await fetch(f.base+'/api/profile',{headers:{cookie}});assert.equal(f.remote.filter(x=>x.path==='/api/profile').length,0);assert.equal(f.remote.length,before+2);
+});
+
 test('event board context requires login and forwards only an explicit shared GET, never a model request',async t=>{
  const f=await setup(t),p='/api/data/event-context?codes=000001,000002&day=2026-11-16';assert.equal((await fetch(f.base+p)).status,401);const cookie=await login(f),before=f.remote.length;
  assert.equal((await fetch(f.base+p,{headers:{cookie}})).status,200);assert.equal(f.remote.length,before+1);assert.equal(f.remote.at(-1).path,'/api/data/event-context');assert.equal(f.remote.at(-1).method,'GET');

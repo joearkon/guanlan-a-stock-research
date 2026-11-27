@@ -78,6 +78,11 @@ export function createApp({dataDir=path.join(project,'.local'),remoteFetch=fetch
    store.setSetting(account,'engine',value);return json(res,200,{selection:value,platformFallback:false});
   }
   if(p==='/api/local-ai/workbuddy-path'&&m==='POST'){const input=await body(req);const status=await setWorkBuddyLocation(dataDir,input.path);detectionCache.delete('codebuddy');return json(res,200,status);}
+  if(p==='/api/research/observation-plans'){
+   if(!['GET','PUT'].includes(m)||url.search)return json(res,405,{error:'观察单仅支持读取或显式确认同步。'});
+   const headers={cookie:session.remoteCookie};let input;if(m==='PUT'){input=await body(req);if(input.accountId!==session.user.id)return json(res,403,{error:'账号已切换，请重新读取观察单核对。'});if(input.syncConsent!==true||!Number.isSafeInteger(input.version)||input.version<0||!Array.isArray(input.plans)||input.plans.length>20||Buffer.byteLength(JSON.stringify(input))>200000)return json(res,400,{error:'请确认仅观察单随账号同步，且不超过20条。'});Object.assign(headers,{origin:cloud,'content-type':'application/json','x-gl':'1'});}
+   const response=await remoteFetch(cloud+p,{method:m,headers,...(input?{body:JSON.stringify(input)}:{}),redirect:'error',signal:AbortSignal.timeout(15000)});let value;try{value=await response.json();}catch{return json(res,502,{error:'观察单同步回执不可读，请重新读取核对；不要重复提交。'});}return json(res,response.status,value);
+  }
   if(p==='/api/profile'){if(m==='GET')return json(res,200,{...store.profile(account),storage:'local'});if(m==='PUT'){const input=await body(req);if(!input.profile||typeof input.profile!=='object'||!Number.isInteger(input.version))throw fail('invalid_request','资料格式无效。');return json(res,200,store.saveProfile(account,input.profile,input.version));}}
   if(p==='/api/preferences'){
    if(m==='GET')return json(res,200,{preferences:store.setting(account,'preferences')?.value??{},storage:'local'});

@@ -1,5 +1,6 @@
 import {DatabaseSync} from 'node:sqlite';import fs from 'node:fs';import path from 'node:path';import {createHash,randomUUID} from 'node:crypto';
 import {fail,normalizeEngine,validateReport} from './core.mjs';
+import {readObservationRequest,checkObservationAnswer} from '../web/shared/observation-plan-ai.mjs';
 const hash=value=>createHash('sha256').update(JSON.stringify(value)).digest('hex');
 const parse=value=>value?JSON.parse(value):null;
 const failureHints={deepseek_auth_failed:'DeepSeek 密钥无效或已失效，请在「本机 AI 配置」更新并主动测试。',deepseek_balance_insufficient:'DeepSeek 本人 API 余额不足，请在本人开放平台核对账单。',deepseek_rate_limited:'DeepSeek 当前限流，请稍后由你主动发起新测试。',deepseek_unavailable:'DeepSeek 服务暂不可用，请稍后核对供方状态。',deepseek_network_failed:'DeepSeek 网络连接未确认，可能已产生费用；请检查本机网络并核对原任务。',deepseek_incomplete:'DeepSeek 未完整结束回答，部分回执已保留，不能作为完整研究发布。',provider_config_changed:'密钥已更换或移除，请在「本机 AI 配置」重新测试。',agent_auth_changed:'CLI 认证或费用来源已变化，请在「本机 AI 配置」重新检测并测试。',vault_unavailable:'本机密钥加解密失败，请在「本机 AI 配置」核对 Windows 用户及密钥；没有明文回退。',agent_not_authenticated:'本人 CLI 登录未确认，请完成官方登录后在「本机 AI 配置」重新检测。'};
@@ -62,6 +63,8 @@ export class ResearchService {
  result(job,raw){
   if(raw?.providerStatus==='failed')throw fail('report_invalid','供方未完成的回执不能作为完整回答发布；不会重新调用。');
   const nativeText=typeof raw==='string'?raw:raw?.nativeText;
+  const observation=readObservationRequest(job.request.question);
+  if(observation)try{checkObservationAnswer(nativeText,observation);}catch{throw fail('report_invalid','观察单结构未通过校验，原始回执保留，不重新调用。');}
   if(job.request.outputMode!=='structured'&&typeof nativeText==='string'){
    if(!nativeText.trim()||nativeText.length>100000)throw fail('report_invalid','本机没有返回可显示的回答，原始回执保留。');
    return {localHarness:true,outputMode:'native',answer:nativeText,engine:job.engine,billingSource:job.request.providerConfig?.billingSource??raw?.billingSource??null,citations:raw?.citations??[],completeness:'not_assessed',missing:[],asof:job.request.context?.asof??null,dataSources:job.request.evidence.map(e=>({source:e.source,dataDate:e.dataDate,status:'provided',sourceUrl:e.sourceUrl})),diagnostics:{tokens:raw?.telemetry?.tokens??{total:null,input:null,output:null,reasoning:null},attempts:null,engineRuns:1,providerRequests:raw?.telemetry?.providerRequests??null,serverToolUsage:raw?.telemetry?.serverToolUsage??null,toolEvents:raw?.telemetry?.toolEvents??[],logs:[{provider:'local:'+job.engine,status:'ok'}]}};
