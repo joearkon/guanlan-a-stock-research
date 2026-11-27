@@ -80,6 +80,10 @@ export function createApp({dataDir=path.join(project,'.local'),remoteFetch=fetch
    store.setSetting(account,'engine',value);return json(res,200,{selection:value,platformFallback:false});
   }
   if(p==='/api/local-ai/workbuddy-path'&&m==='POST'){const input=await body(req);const status=await setWorkBuddyLocation(dataDir,input.path);detectionCache.delete('codebuddy');return json(res,200,status);}
+  if(p==='/api/data/trade-seats'){
+   if(!['GET','POST'].includes(m))return json(res,405,{error:'只支持共享读取与显式来源核验。'});if([...url.searchParams.keys()].some(k=>k!=='date')||url.searchParams.getAll('date').length>1||url.searchParams.has('date')&&!/^\d{4}-\d{2}-\d{2}$/.test(url.searchParams.get('date')))return json(res,400,{error:'复盘日期无效。'});
+   const response=await remoteFetch(cloud+p+url.search,{method:m,headers:{cookie:session.remoteCookie,...(m==='POST'?{origin:cloud,'x-gl':'1',...(req.headers['x-gl-retry']==='1'?{'x-gl-retry':'1'}:{})}:{})},redirect:'error',signal:AbortSignal.timeout(30000)});return json(res,response.status,await response.json());
+  }
   if(p==='/api/research/candidate-verification'){
    if(!['GET','POST'].includes(m))return json(res,405,{error:'仅支持固定证据读取或显式准备。'});let input;if(m==='POST'){try{if(url.search)throw Error();input=checkVerificationRequest(await body(req));}catch{return json(res,400,{error:'只接受1至3只公开候选的固定身份，不接受个人资料。'});}}else if(url.searchParams.size!==1||url.searchParams.getAll('id').length!==1||!/^[a-f0-9]{64}$/.test(url.searchParams.get('id')||''))return json(res,400,{error:'证据版本无效。'});
    const response=await remoteFetch(cloud+p+url.search,{method:m,headers:{cookie:session.remoteCookie,...(input?{origin:cloud,'content-type':'application/json','x-gl':'1'}:{})},...(input?{body:JSON.stringify(input)}:{}),redirect:'error',signal:AbortSignal.timeout(20000)});return json(res,response.status,await response.json());
