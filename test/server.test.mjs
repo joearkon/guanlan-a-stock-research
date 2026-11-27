@@ -5,6 +5,8 @@ const post=(f,path,body={},cookie='',origin=f.base)=>fetch(f.base+path,{method:'
 async function login(f){const response=await post(f,'/api/auth/password/login',{email:'qa@example.invalid',password:'not-a-real-password'});assert.equal(response.status,200);return response.headers.get('set-cookie').split(';')[0];}
 const waitFor=async fn=>{for(let i=0;i<60;i++){const value=await fn();if(value)return value;await new Promise(r=>setTimeout(r,10));}assert.fail('not settled');};
 
+test('only selected public candidate identities can prepare shared verification; private fields and model proxying are rejected',async t=>{const f=await setup(t),p='/api/research/candidate-verification',input={day:'2026-11-26',model:'a'.repeat(64),codes:['688820'],kind:'second-wave',window:15};assert.equal((await post(f,p,input)).status,401);const cookie=await login(f),n=f.remote.length;assert.equal((await post(f,p,{...input,positions:[]},cookie)).status,400);assert.equal(f.remote.length,n);assert.equal((await post(f,p,input,cookie)).status,200);assert.equal(f.remote.at(-1).method,'POST');assert.deepEqual(JSON.parse(f.remote.at(-1).body),input);assert.equal((await fetch(f.base+p+'?id='+'b'.repeat(64),{headers:{cookie}})).status,200);assert.equal(f.remote.at(-1).method,'GET');assert.deepEqual(f.runs,[]);assert.equal((await fetch(f.base+p+'?id=bad',{headers:{cookie}})).status,400);});
+
 test('only explicitly confirmed observation plans may sync; local profile and AI stay local',async t=>{
  const f=await setup(t),p='/api/research/observation-plans';assert.equal((await fetch(f.base+p)).status,401);const cookie=await login(f),before=f.remote.length;
  assert.equal((await fetch(f.base+p,{headers:{cookie}})).status,200);assert.equal(f.remote.at(-1).path,p);

@@ -1,6 +1,8 @@
 import http from'node:http';import fs from'node:fs';import path from'node:path';import {fileURLToPath,pathToFileURL}from'node:url';import {randomBytes,randomUUID}from'node:crypto';
 import {JobStore,ResearchService}from'./jobs.mjs';import {fail,normalizeEngine,validateReport}from'./core.mjs';import {nativeRunner,engines,engineCatalog,setWorkBuddyLocation}from'./native.mjs';
 import {LocalLibrary}from'./library.mjs';
+import {checkVerificationRequest,validateVerificationPacket,assertVerificationScope} from '../web/shared/candidate-verification.mjs';
+import {readObservationRequest} from '../web/shared/observation-plan-ai.mjs';
 import {connectionState}from'./connection-state.mjs';
 import {ProviderVault,deepSeekCapability}from'./provider-vault.mjs';
 const project=fileURLToPath(new URL('../',import.meta.url)),cloud='https://guanlan-research.kunkun1023.xyz';
@@ -78,6 +80,10 @@ export function createApp({dataDir=path.join(project,'.local'),remoteFetch=fetch
    store.setSetting(account,'engine',value);return json(res,200,{selection:value,platformFallback:false});
   }
   if(p==='/api/local-ai/workbuddy-path'&&m==='POST'){const input=await body(req);const status=await setWorkBuddyLocation(dataDir,input.path);detectionCache.delete('codebuddy');return json(res,200,status);}
+  if(p==='/api/research/candidate-verification'){
+   if(!['GET','POST'].includes(m))return json(res,405,{error:'仅支持固定证据读取或显式准备。'});let input;if(m==='POST'){try{if(url.search)throw Error();input=checkVerificationRequest(await body(req));}catch{return json(res,400,{error:'只接受1至3只公开候选的固定身份，不接受个人资料。'});}}else if(url.searchParams.size!==1||url.searchParams.getAll('id').length!==1||!/^[a-f0-9]{64}$/.test(url.searchParams.get('id')||''))return json(res,400,{error:'证据版本无效。'});
+   const response=await remoteFetch(cloud+p+url.search,{method:m,headers:{cookie:session.remoteCookie,...(input?{origin:cloud,'content-type':'application/json','x-gl':'1'}:{})},...(input?{body:JSON.stringify(input)}:{}),redirect:'error',signal:AbortSignal.timeout(20000)});return json(res,response.status,await response.json());
+  }
   if(p==='/api/research/observation-plans'){
    if(!['GET','PUT'].includes(m)||url.search)return json(res,405,{error:'观察单仅支持读取或显式确认同步。'});
    const headers={cookie:session.remoteCookie};let input;if(m==='PUT'){input=await body(req);if(input.accountId!==session.user.id)return json(res,403,{error:'账号已切换，请重新读取观察单核对。'});if(input.syncConsent!==true||!Number.isSafeInteger(input.version)||input.version<0||!Array.isArray(input.plans)||input.plans.length>20||Buffer.byteLength(JSON.stringify(input))>200000)return json(res,400,{error:'请确认仅观察单随账号同步，且不超过20条。'});Object.assign(headers,{origin:cloud,'content-type':'application/json','x-gl':'1'});}
@@ -121,7 +127,7 @@ export function createApp({dataDir=path.join(project,'.local'),remoteFetch=fetch
   if(p.startsWith('/api/agent/conversations/')&&m==='GET')return json(res,200,store.messages(account,decodeURIComponent(p.split('/').at(-1))));
   if(p==='/api/agent/jobs'&&m==='POST'){
    const input=await body(req),existing=store.get(account,input.turnId),selection=existing?{engine:existing.engine,providerConfig:existing.request.providerConfig}:await activeSelection(account);
-   const bundle=existing?.request.evidence??await evidence(session,input.context);return json(res,202,service.create(account,{...input,engine:selection.engine,providerConfig:selection.providerConfig,evidence:bundle}));
+   const contract=readObservationRequest(input.question);let bundle=existing?.request.evidence;if(!bundle&&contract?.packet){const response=await cloudGet(session,'/api/research/candidate-verification?id='+contract.packet);if(!response.ok)throw fail('invalid_request','固定多源证据不可读，未创建模型任务。');const packet=assertVerificationScope(await validateVerificationPacket(await response.json()),contract);bundle=[{id:'shared:verification:'+packet.id,scope:'public_market',source:'观澜固定多源证据',dataDate:packet.analysisDay,data:packet}];}bundle??=await evidence(session,input.context);return json(res,202,service.create(account,{...input,engine:selection.engine,providerConfig:selection.providerConfig,evidence:bundle}));
   }
   const jobMatch=p.match(/^\/api\/agent\/jobs\/([0-9a-f-]{36})(?:\/(stop|resume|revalidate))?$/i);
   if(jobMatch){const [,id,action]=jobMatch;if(m==='GET'&&!action){const job=service.get(account,id);return json(res,job?200:404,job||{error:'任务不存在。'});}if(m==='POST'&&action)return json(res,200,action==='stop'?await service.stop(account,id):await service.resume(account,id));}

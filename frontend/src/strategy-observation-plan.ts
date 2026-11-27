@@ -1,5 +1,6 @@
-export type PlanSource={day:string;model:string;code:string;name:string;strategy:string;scope:string;windowSessions?:10|15;facts:{label:string;value:string}[];gaps:string[]};
-export type PlanAi={schema:1;code:string;day:string;model:string;judgment:string;support:string[];against:string[];hypotheses:string[];missing:string[]};
+import type {VerificationReceipt} from './CandidateVerification';
+export type PlanSource={day:string;model:string;code:string;name:string;strategy:string;scope:string;windowSessions?:10|15;facts:{label:string;value:string}[];gaps:string[];verification?:VerificationReceipt};
+export type PlanAi={schema:1;code:string;day:string;model:string;judgment:string;support:string[];against:string[];hypotheses:string[];missing:string[];packet?:string;evidenceIds?:string[]};
 export type PlanDraft={id:string;source:PlanSource;observeOn:string|null;sellOn:string|null;trigger:string;cancel:string;ai:PlanAi|null};
 export type PlanReview='not-triggered'|'observed'|'invalid'|'missing';
 export type ObservationPlan=PlanDraft&{mode:'simulation';confirmedAt:string;review:{status:PlanReview;at:string}|null;aiJobId?:string};
@@ -23,9 +24,10 @@ export function createPlanDraft(source:PlanSource,calendar:any):PlanDraft{
 const aiKeys=['schema','code','day','model','judgment','support','against','hypotheses','missing'];
 export function readPlanAi(raw:string,source:PlanSource):PlanAi{
  if(raw.length>9000)throw Error('AI草稿过长');let v:any;try{v=JSON.parse(raw);}catch{throw Error('请粘贴完整JSON，不包含代码围栏');}
- if(!v||Array.isArray(v)||Object.keys(v).some(k=>!aiKeys.includes(k))||aiKeys.some(k=>!(k in v))||v.schema!==1||v.code!==source.code||v.day!==source.day||v.model!==source.model)throw Error('AI草稿字段或股票／日期／快照版本不一致，未导入');
+ if(!v||Array.isArray(v)||Object.keys(v).some(k=>![...aiKeys,...(source.verification?['packet','evidenceIds']:[])].includes(k))||aiKeys.some(k=>!(k in v))||v.schema!==1||v.code!==source.code||v.day!==source.day||v.model!==source.model)throw Error('AI草稿字段或股票／日期／快照版本不一致，未导入');
  if(!text(v.judgment,500)||['support','against','hypotheses','missing'].some(k=>!Array.isArray(v[k])||v[k].length>6||v[k].some((s:any)=>!text(s,300)))||!v.against.length)throw Error('AI草稿需有明确反证，每项最多300字');
- return {schema:1,code:v.code,day:v.day,model:v.model,judgment:v.judgment,support:[...v.support],against:[...v.against],hypotheses:[...v.hypotheses],missing:[...v.missing]};
+ if(source.verification){const known=new Set(source.verification.sections.filter(e=>e.status!=='missing').map(e=>source.code+':'+e.id));if(v.packet!==source.verification.packetId||!Array.isArray(v.evidenceIds)||!v.evidenceIds.length||v.evidenceIds.length>6||new Set(v.evidenceIds).size!==v.evidenceIds.length||v.evidenceIds.some((id:string)=>!known.has(id)))throw Error('AI证据版本或引用不一致，未导入');}
+ return {schema:1,code:v.code,day:v.day,model:v.model,judgment:v.judgment,support:[...v.support],against:[...v.against],hypotheses:[...v.hypotheses],missing:[...v.missing],...(source.verification?{packet:v.packet,evidenceIds:[...v.evidenceIds]}:{})};
 }
 export function planAiQuestion(s:PlanSource,proposal?:{trigger:string;cancel:string}){
  const template={schema:1,code:s.code,day:s.day,model:s.model,judgment:'',support:[],against:[],hypotheses:[],missing:[]};

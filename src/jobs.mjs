@@ -64,7 +64,7 @@ export class ResearchService {
   if(raw?.providerStatus==='failed')throw fail('report_invalid','供方未完成的回执不能作为完整回答发布；不会重新调用。');
   const nativeText=typeof raw==='string'?raw:raw?.nativeText;
   const observation=readObservationRequest(job.request.question);
-  if(observation)try{checkObservationAnswer(nativeText,observation);}catch{throw fail('report_invalid','观察单结构未通过校验，原始回执保留，不重新调用。');}
+  if(observation)try{const packet=observation.packet?job.request.evidence?.find(e=>e.id==='shared:verification:'+observation.packet)?.data:null;if(observation.packet&&!packet)throw Error('missing packet');checkObservationAnswer(nativeText,observation,packet);}catch{throw fail('report_invalid','观察单结构未通过校验，原始回执保留，不重新调用。');}
   if(job.request.outputMode!=='structured'&&typeof nativeText==='string'){
    if(!nativeText.trim()||nativeText.length>100000)throw fail('report_invalid','本机没有返回可显示的回答，原始回执保留。');
    return {localHarness:true,outputMode:'native',answer:nativeText,engine:job.engine,billingSource:job.request.providerConfig?.billingSource??raw?.billingSource??null,citations:raw?.citations??[],completeness:'not_assessed',missing:[],asof:job.request.context?.asof??null,dataSources:job.request.evidence.map(e=>({source:e.source,dataDate:e.dataDate,status:'provided',sourceUrl:e.sourceUrl})),diagnostics:{tokens:raw?.telemetry?.tokens??{total:null,input:null,output:null,reasoning:null},attempts:null,engineRuns:1,providerRequests:raw?.telemetry?.providerRequests??null,serverToolUsage:raw?.telemetry?.serverToolUsage??null,toolEvents:raw?.telemetry?.toolEvents??[],logs:[{provider:'local:'+job.engine,status:'ok'}]}};
