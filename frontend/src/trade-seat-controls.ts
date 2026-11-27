@@ -1,0 +1,9 @@
+const chapterSources=[
+ {publishedAt:'2026-01-06',url:'https://stcn.com/article/detail/3573069.html',publisher:'界面新闻 · 证券时报转载',names:['国泰海通证券股份有限公司上海长宁区江苏路证券营业部','国泰海通证券股份有限公司长宁区江苏路证券营业部']},
+ {publishedAt:'2024-04-16',url:'https://www.stcn.com/article/detail/1177969.html',publisher:'证券时报·数据宝',names:['国泰君安证券股份有限公司上海江苏路证券营业部']},
+];
+export function historicalAssociations(row:any,day:string){const out=row.association?[row.association]:[];const sources=chapterSources.filter(s=>s.publishedAt<=day&&s.names.includes(row.seat));if(sources.length&&!out.some((x:any)=>x.label==='章盟主'))out.push({label:'章盟主',identityConfirmed:false,status:'historical',sources,note:'媒体历史关联，不确认本次交易者，也不代表此人的完整买卖。'});return out;}
+export function associationChoices(rows:any[],day:string){const labels=new Set<string>(chapterSources.some(s=>s.publishedAt<=day)?['章盟主']:[]);for(const r of rows){if(r.label)labels.add(r.label);for(const a of historicalAssociations(r,day))labels.add(a.label);}return [...labels].sort((a,b)=>a.localeCompare(b,'zh-CN'));}
+export function hasAssociation(row:any,label:string,day:string){return !label||row.label===label||historicalAssociations(row,day).some((x:any)=>x.label===label);}
+export function matchesSeat(row:any,query:string,day:string){const q=query.trim().toLocaleLowerCase();return !q||[row.code,row.name,row.seat,row.label,...historicalAssociations(row,day).map((a:any)=>a.label)].some(x=>String(x||'').toLocaleLowerCase().includes(q));}
+export function sortedTradeRows(rows:any[],field:string,dir:string){return [...rows].sort((a,b)=>{const av=a[field],bv=b[field],af=typeof av==='number'&&Number.isFinite(av),bf=typeof bv==='number'&&Number.isFinite(bv);if(!af||!bf)return af?-1:bf?1:String(a.code).localeCompare(String(b.code));return (dir==='asc'?av-bv:bv-av)||String(a.code).localeCompare(String(b.code));});}
